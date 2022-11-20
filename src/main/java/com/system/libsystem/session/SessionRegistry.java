@@ -1,16 +1,23 @@
 package com.system.libsystem.session;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.HashMap;
 import java.util.UUID;
 
 @Component
 public class SessionRegistry {
 
-    private static final HashMap<String, String> SESSIONS = new HashMap<>();
+    private final ValueOperations<String, String> redisSessionStorage;
+
+    @Autowired
+    public SessionRegistry(final RedisTemplate<String, String> redisTemplate) {
+        redisSessionStorage = redisTemplate.opsForValue();
+    }
 
     public String registerSession(final String username) {
         if (username == null) {
@@ -18,13 +25,23 @@ public class SessionRegistry {
         }
 
         final String sessionID = getSessionID();
-        SESSIONS.putIfAbsent(sessionID, username);
+
+        try {
+            redisSessionStorage.set(sessionID, username);
+        } catch (final Exception exception) {
+            exception.printStackTrace();
+        }
 
         return sessionID;
     }
 
     public String getSessionUsername(String sessionID) {
-        return SESSIONS.get(sessionID);
+        try {
+            return redisSessionStorage.get(sessionID);
+        } catch (final Exception exception) {
+            exception.printStackTrace();
+            return null;
+        }
     }
 
     private String getSessionID() {

@@ -29,7 +29,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -50,8 +49,11 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.31</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -67,27 +69,6 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.6.0</version>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<executable>ng</executable>
-					<workingDirectory>src/main/resources/webapp/libsystem-app</workingDirectory>
-					<arguments>
-						<argument>build</argument>
-					</arguments>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
-
 </project>
