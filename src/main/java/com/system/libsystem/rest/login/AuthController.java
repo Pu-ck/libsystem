@@ -1,4 +1,4 @@
-package com.system.libsystem.rest;
+package com.system.libsystem.rest.login;
 
 import com.system.libsystem.dto.ResponseDTO;
 import com.system.libsystem.dto.UserDTO;

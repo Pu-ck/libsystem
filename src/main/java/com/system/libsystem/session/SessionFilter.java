@@ -1,6 +1,7 @@
 package com.system.libsystem.session;
 
 import com.system.libsystem.user.User;
+import com.system.libsystem.user.UserEntity;
 import com.system.libsystem.user.UserService;
 import lombok.RequiredArgsConstructor;
 

@@ -45,8 +45,9 @@ public class Config {
                         HttpServletResponse.SC_UNAUTHORIZED,
                         ex.getMessage())
         ).and();
+
         http.authorizeRequests()
-                .antMatchers("/api/login").permitAll()
+                .antMatchers("/api/login", "/api/registration/**").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(
