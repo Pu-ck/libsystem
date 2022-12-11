@@ -15,6 +15,9 @@ public class RegistrationService {
         UserEntity userEntity = new UserEntity();
         userEntity.setPassword(request.getPassword());
         userEntity.setUsername(request.getUsername());
+        userEntity.setCardNumber(request.getCardNumber());
+        userEntity.setFirstName(request.getFirstName());
+        userEntity.setLastName(request.getLastName());
         return userService.registerUser(userEntity);
     }
 }

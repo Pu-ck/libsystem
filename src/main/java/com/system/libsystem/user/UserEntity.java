@@ -14,8 +14,17 @@ public class UserEntity {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    private Long cardNumber;
+
+    @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false, unique = true)
     private String password;
+
+    @Column(nullable = false)
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
 }
