@@ -1,21 +1,23 @@
 package com.system.libsystem.rest.registration;
 
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/registration")
 @AllArgsConstructor
 public class RegistrationController {
 
     private RegistrationService registrationService;
 
-    @PostMapping("/registration")
+    @PostMapping
     public String register(@RequestBody RegistrationRequest request) {
         return registrationService.register(request);
+    }
+
+    @GetMapping("/confirm")
+    public String confirm(@RequestParam("token") String token) {
+        return registrationService.confirmToken(token);
     }
 
 }

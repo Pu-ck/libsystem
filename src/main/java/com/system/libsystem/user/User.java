@@ -6,6 +6,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,10 +20,11 @@ public class User implements UserDetails {
     private String firstName;
     private String lastName;
     private Long cardNumber;
+    private boolean enabled;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ADMIN"));
+        return List.of(new SimpleGrantedAuthority(UserType.USER.toString()));
     }
 
     @Override
@@ -39,6 +42,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

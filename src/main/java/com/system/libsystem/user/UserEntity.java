@@ -27,4 +27,11 @@ public class UserEntity {
 
     @Column(nullable = false)
     private String lastName;
+
+    @Column(nullable = false)
+    private boolean enabled;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserType userType;
 }
