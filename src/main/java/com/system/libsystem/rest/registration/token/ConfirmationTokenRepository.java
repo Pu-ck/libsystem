@@ -7,7 +7,7 @@ import java.util.Optional;
 
 @Repository
 public interface ConfirmationTokenRepository
-        extends JpaRepository<ConfirmationToken, Long> {
+        extends JpaRepository<ConfirmationTokenEntity, Long> {
 
-    Optional<ConfirmationToken> findByToken(String token);
+    Optional<ConfirmationTokenEntity> findByToken(String token);
 }

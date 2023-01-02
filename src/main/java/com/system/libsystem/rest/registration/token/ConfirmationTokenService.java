@@ -11,11 +11,11 @@ public class ConfirmationTokenService {
 
     private final ConfirmationTokenRepository confirmationTokenRepository;
 
-    public void saveConfirmationToken(ConfirmationToken confirmationToken) {
-        confirmationTokenRepository.save(confirmationToken);
+    public void saveConfirmationToken(ConfirmationTokenEntity confirmationTokenEntity) {
+        confirmationTokenRepository.save(confirmationTokenEntity);
     }
 
-    public Optional<ConfirmationToken> getToken(String token) {
+    public Optional<ConfirmationTokenEntity> getToken(String token) {
         return confirmationTokenRepository.findByToken(token);
     }
 }

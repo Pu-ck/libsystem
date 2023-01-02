@@ -1,6 +1,5 @@
 package com.system.libsystem.session;
 
-import com.system.libsystem.user.User;
 import com.system.libsystem.user.UserEntity;
 import com.system.libsystem.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -41,11 +40,11 @@ public class SessionFilter extends OncePerRequestFilter {
             return;
         }
 
-        final User user = userService.loadUserByUsername(username);
+        final UserEntity userEntity = userService.loadUserByUsername(username);
         final UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                user,
+                userEntity,
                 null,
-                user.getAuthorities()
+                userEntity.getAuthorities()
         );
 
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

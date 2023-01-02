@@ -1,6 +1,6 @@
 package com.system.libsystem.user;
 
-import com.system.libsystem.rest.registration.token.ConfirmationToken;
+import com.system.libsystem.rest.registration.token.ConfirmationTokenEntity;
 import com.system.libsystem.rest.registration.token.ConfirmationTokenService;
 import lombok.RequiredArgsConstructor;
 
@@ -21,15 +21,14 @@ public class UserService implements UserDetailsService {
     private static final int CARD_NUMBER_LENGTH = 10;
 
     @Override
-    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserEntity loadUserByUsername(String username) throws UsernameNotFoundException {
 
         final UserEntity userEntity = userRepository.findByUsername(username);
         if (userEntity != null) {
-            final User user = new User();
-            user.setUsername(userEntity.getUsername());
-            user.setPassword(userEntity.getPassword());
-            user.setEnabled(userEntity.isEnabled());
-            return user;
+            userEntity.setUsername(userEntity.getUsername());
+            userEntity.setPassword(userEntity.getPassword());
+            userEntity.setEnabled(userEntity.isEnabled());
+            return userEntity;
         }
         else {
             throw new UsernameNotFoundException("Unable to find user " + username);
@@ -51,8 +50,8 @@ public class UserService implements UserDetailsService {
         userRepository.save(userEntity);
 
         String token = UUID.randomUUID().toString();
-        ConfirmationToken confirmationToken = new ConfirmationToken(token, userEntity);
-        confirmationTokenService.saveConfirmationToken(confirmationToken);
+        ConfirmationTokenEntity confirmationTokenEntity = new ConfirmationTokenEntity(token, userEntity);
+        confirmationTokenService.saveConfirmationToken(confirmationTokenEntity);
 
         return token;
     }

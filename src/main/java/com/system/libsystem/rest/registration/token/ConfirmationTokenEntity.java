@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Entity
-public class ConfirmationToken {
+public class ConfirmationTokenEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,7 +26,7 @@ public class ConfirmationToken {
     )
     private UserEntity userEntity;
 
-    public ConfirmationToken (String token, UserEntity userEntity) {
+    public ConfirmationTokenEntity(String token, UserEntity userEntity) {
         this.token = token;
         this.userEntity = userEntity;
     }
