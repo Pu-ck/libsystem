@@ -14,10 +14,10 @@ public class MailBuilder {
                 "<p>Registration time: " + registrationTime + "</p>" +
                 "<p><a href=\"" + confirmationAddress + "\">Confirm and enable requested account in system</a></p>";
     }
-    public String getAccountEnabledMailBody(String firstName, String lastName) {
+    public String getAccountEnabledMailBody(String firstName, String lastName, String loginPageAddress) {
         return "Hello " + firstName + " " + lastName + "," +
                 "<p>Your account has been verified, accepted and enabled by the administrator, you can now " +
-                "login to the library system.</p>";
+                "<a href=\"" + loginPageAddress + "\">login</a> to the library system.</p>";
     }
 
     public String getAccountRegisteredMailBody(String userName, String firstName, String lastName, String cardNumber) {

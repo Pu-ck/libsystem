@@ -26,7 +26,7 @@ public class RegistrationService {
     private final MailSender mailSender;
     @Value("${server.confirmation.address}")
     private String userConfirmationAddress;
-    @Value("${server.login.address}")
+    @Value("${application.login.address}")
     private String loginPageAddress;
     @Value("${mail.admin}")
     private String adminMail;
@@ -53,12 +53,14 @@ public class RegistrationService {
                 request.getLastName(),
                 request.getCardNumber().toString(),
                 registrationTime,
-                confirmationAddress), "New account registration request");
+                confirmationAddress),
+                "New account registration request");
         mailSender.send(request.getUsername(), mailBuilder.getAccountRegisteredMailBody(
                 request.getUsername(),
                 request.getFirstName(),
                 request.getLastName(),
-                request.getCardNumber().toString()), "Your account has been created");
+                request.getCardNumber().toString()),
+                "Your account has been created");
 
         return token;
     }
@@ -73,8 +75,8 @@ public class RegistrationService {
 
         mailSender.send(confirmationTokenEntity.getUserEntity().getUsername(), mailBuilder.getAccountEnabledMailBody(
                 confirmationTokenEntity.getUserEntity().getFirstName(),
-                confirmationTokenEntity.getUserEntity().getLastName())
-                , "Account enabled");
+                confirmationTokenEntity.getUserEntity().getLastName(),
+                        loginPageAddress), "Account enabled");
 
         return "Requested account was confirmed and enabled";
     }
