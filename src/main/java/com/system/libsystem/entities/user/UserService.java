@@ -1,7 +1,7 @@
-package com.system.libsystem.user;
+package com.system.libsystem.entities.user;
 
-import com.system.libsystem.rest.registration.token.ConfirmationTokenEntity;
-import com.system.libsystem.rest.registration.token.ConfirmationTokenService;
+import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenEntity;
+import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.core.userdetails.UserDetailsService;

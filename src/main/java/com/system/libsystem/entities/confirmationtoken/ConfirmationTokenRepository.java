@@ -1,4 +1,4 @@
-package com.system.libsystem.rest.registration.token;
+package com.system.libsystem.entities.confirmationtoken;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

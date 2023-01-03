@@ -1,7 +1,7 @@
 package com.system.libsystem.session;
 
-import com.system.libsystem.user.UserEntity;
-import com.system.libsystem.user.UserService;
+import com.system.libsystem.entities.user.UserEntity;
+import com.system.libsystem.entities.user.UserService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpHeaders;

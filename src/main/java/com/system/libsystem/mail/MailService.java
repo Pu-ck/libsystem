@@ -1,4 +1,4 @@
-package com.system.libsystem.rest.registration.mail;
+package com.system.libsystem.mail;
 
 import lombok.RequiredArgsConstructor;
 

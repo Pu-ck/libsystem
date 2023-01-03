@@ -1,6 +1,6 @@
-package com.system.libsystem.rest.registration.token;
+package com.system.libsystem.entities.confirmationtoken;
 
-import com.system.libsystem.user.UserEntity;
+import com.system.libsystem.entities.user.UserEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

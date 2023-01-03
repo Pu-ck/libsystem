@@ -1,4 +1,4 @@
-package com.system.libsystem.user;
+package com.system.libsystem.entities.user;
 
 import lombok.Getter;
 import lombok.Setter;

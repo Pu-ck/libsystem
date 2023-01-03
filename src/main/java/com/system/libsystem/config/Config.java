@@ -1,7 +1,7 @@
 package com.system.libsystem.config;
 
 import com.system.libsystem.session.SessionFilter;
-import com.system.libsystem.user.UserService;
+import com.system.libsystem.entities.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
