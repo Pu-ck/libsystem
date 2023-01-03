@@ -1,0 +1,25 @@
+<form name="form" (ngSubmit)="register()" #f="ngForm">
+    <div>
+        <label for="username">Username</label>
+        <input type="text" name="username" [(ngModel)]="model.username" #username="ngModel" required>
+    </div>
+    <div>
+        <label for="password">Password</label>
+        <input type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required>
+    </div>
+    <div>
+        <label for="firstName">First name</label>
+        <input type="text" name="firstName" [(ngModel)]="model.firstName" #firstName="ngModel" required>
+    </div>
+    <div>
+        <label for="lastName">Last name</label>
+        <input type="text" name="lastName" [(ngModel)]="model.lastName" #lastName="ngModel" required>
+    </div>
+    <div>
+        <label for="cardNumber">Card number</label>
+        <input type="text" name="cardNumber" [(ngModel)]="model.cardNumber" #cardNumber="ngModel" required>
+    </div>
+    <div>
+        <button>Register</button>
+    </div>
+</form>

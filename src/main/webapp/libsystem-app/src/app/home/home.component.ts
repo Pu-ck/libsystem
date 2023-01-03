@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -8,16 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private http: HttpClient) { }
+  constructor() { }
 
   ngOnInit(): void {
-    this.http.get<any>("/api/list").subscribe(res => {
-      if (res) {
-        console.log('List ', res);
-      } else {
-        alert("Unable to retrive the test list!")
-      }
-    });
-
   }
+
 }

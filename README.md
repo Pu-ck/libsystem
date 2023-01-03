@@ -1,2 +1,2 @@
 # lib-system
-Full-stack library system with Spring and Angular
+Full-stack library system with Spring Boot and Angular

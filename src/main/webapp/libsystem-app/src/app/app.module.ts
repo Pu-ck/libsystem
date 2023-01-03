@@ -9,11 +9,13 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { RequestInterceptor } from './request.interceptor';
 import { RouterModule } from '@angular/router';
+import { RegistrationComponent } from './registration/registration.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
+    RegistrationComponent,
     HomeComponent
   ],
   imports: [
