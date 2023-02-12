@@ -15,10 +15,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
+    private static final int CARD_NUMBER_LENGTH = 10;
+
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
-    private static final int CARD_NUMBER_LENGTH = 10;
 
     @Override
     public UserEntity loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -29,12 +30,11 @@ public class UserService implements UserDetailsService {
             userEntity.setPassword(userEntity.getPassword());
             userEntity.setEnabled(userEntity.isEnabled());
             return userEntity;
-        }
-        else {
+        } else {
             throw new UsernameNotFoundException("Unable to find user " + username);
         }
     }
-    
+
     public String registerUser(UserEntity userEntity) {
 
         if (userRepository.findByUsername(userEntity.getUsername()) != null) {

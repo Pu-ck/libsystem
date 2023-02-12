@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MailBuilder {
     public String getAccountConfirmationMailBody(String userName, String firstName, String lastName, String cardNumber,
-                                                  String registrationTime, String confirmationAddress) {
+                                                 String registrationTime, String confirmationAddress) {
         return "New account registration request, " +
                 "<p>First name: " + firstName + "</p>" +
                 "<p>Last name: " + lastName + "</p>" +
@@ -14,6 +14,7 @@ public class MailBuilder {
                 "<p>Registration time: " + registrationTime + "</p>" +
                 "<p><a href=\"" + confirmationAddress + "\">Confirm and enable requested account in system</a></p>";
     }
+
     public String getAccountEnabledMailBody(String firstName, String lastName, String loginPageAddress) {
         return "Hello " + firstName + " " + lastName + "," +
                 "<p>Your account has been verified, accepted and enabled by the administrator, you can now " +

@@ -48,18 +48,18 @@ public class RegistrationService {
         String confirmationAddress = userConfirmationAddress + token;
 
         mailSender.send(adminMail, mailBuilder.getAccountConfirmationMailBody(
-                request.getUsername(),
-                request.getFirstName(),
-                request.getLastName(),
-                request.getCardNumber().toString(),
-                registrationTime,
-                confirmationAddress),
+                        request.getUsername(),
+                        request.getFirstName(),
+                        request.getLastName(),
+                        request.getCardNumber().toString(),
+                        registrationTime,
+                        confirmationAddress),
                 "New account registration request");
         mailSender.send(request.getUsername(), mailBuilder.getAccountRegisteredMailBody(
-                request.getUsername(),
-                request.getFirstName(),
-                request.getLastName(),
-                request.getCardNumber().toString()),
+                        request.getUsername(),
+                        request.getFirstName(),
+                        request.getLastName(),
+                        request.getCardNumber().toString()),
                 "Your account has been created");
 
         return token;
@@ -68,7 +68,7 @@ public class RegistrationService {
     @Transactional
     public String confirmToken(String token) {
         ConfirmationTokenEntity confirmationTokenEntity = confirmationTokenService.getToken(token).orElseThrow(() ->
-                        new IllegalStateException("Confirmation token not found"));
+                new IllegalStateException("Confirmation token not found"));
 
         userService.enableUser(
                 confirmationTokenEntity.getUserEntity().getUsername());
@@ -76,7 +76,7 @@ public class RegistrationService {
         mailSender.send(confirmationTokenEntity.getUserEntity().getUsername(), mailBuilder.getAccountEnabledMailBody(
                 confirmationTokenEntity.getUserEntity().getFirstName(),
                 confirmationTokenEntity.getUserEntity().getLastName(),
-                        loginPageAddress), "Account enabled");
+                loginPageAddress), "Account enabled");
 
         return "Requested account was confirmed and enabled";
     }

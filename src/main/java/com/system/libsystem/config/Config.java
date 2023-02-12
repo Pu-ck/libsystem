@@ -41,9 +41,9 @@ public class Config {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable();
         http = http.exceptionHandling().authenticationEntryPoint(
-                (request, response, ex) -> response.sendError(
+                (request, response, exception) -> response.sendError(
                         HttpServletResponse.SC_UNAUTHORIZED,
-                        ex.getMessage())
+                        exception.getMessage())
         ).and();
 
         http.authorizeRequests()
