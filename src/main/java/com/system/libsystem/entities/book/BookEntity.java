@@ -26,7 +26,7 @@ public class BookEntity {
     private String publisher;
 
     @Column(nullable = false)
-    private String library;
+    private int quantity;
 
     @Column(nullable = false)
     private String yearOfPrint;

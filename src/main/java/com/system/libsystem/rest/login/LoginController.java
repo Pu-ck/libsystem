@@ -1,9 +1,7 @@
 package com.system.libsystem.rest.login;
 
-import com.system.libsystem.dto.ResponseDTO;
-import com.system.libsystem.dto.UserDTO;
 import com.system.libsystem.session.SessionRegistry;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,21 +12,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/login")
+@AllArgsConstructor
 public class LoginController {
-    @Autowired
-    public AuthenticationManager authenticationManager;
-    @Autowired
-    public SessionRegistry sessionRegistry;
+
+    private AuthenticationManager authenticationManager;
+    private SessionRegistry sessionRegistry;
 
     @PostMapping
-    public ResponseEntity<ResponseDTO> login(@RequestBody UserDTO user) {
+    public ResponseEntity<LoginSessionRequest> login(@RequestBody LoginRequest loginRequest) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
-        final String sessionID = sessionRegistry.registerSession(user.getUsername());
-        ResponseDTO responseDTO = new ResponseDTO();
-        responseDTO.setSessionID(sessionID);
+        final String sessionID = sessionRegistry.registerSession(loginRequest.getUsername());
+        LoginSessionRequest loginSessionRequest = new LoginSessionRequest();
+        loginSessionRequest.setSessionID(sessionID);
 
-        return ResponseEntity.ok(responseDTO);
+        return ResponseEntity.ok(loginSessionRequest);
     }
 }

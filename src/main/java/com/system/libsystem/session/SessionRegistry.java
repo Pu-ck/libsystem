@@ -21,7 +21,7 @@ public class SessionRegistry {
 
     public String registerSession(final String username) {
         if (username == null) {
-            throw new RuntimeException("Username must be provided");
+            throw new IllegalStateException("Username must be provided");
         }
 
         final String sessionID = getSessionID();

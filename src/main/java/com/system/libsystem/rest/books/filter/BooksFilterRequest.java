@@ -14,6 +14,5 @@ public class BooksFilterRequest {
     private final String author;
     private final String genre;
     private final String publisher;
-    private final String library;
     private final String yearOfPrint;
 }

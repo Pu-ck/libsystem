@@ -5,6 +5,8 @@ import com.system.libsystem.entities.book.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class BooksFilterService {
@@ -13,27 +15,26 @@ public class BooksFilterService {
     private String filterPropertyValue;
     private String filterPropertyType;
 
-    public BookEntity filter(BooksFilterRequest request) {
+    public List<BookEntity> filterByBookProperty(BooksFilterRequest request) {
 
-        if (request.getAuthor() != null) {
-            filterPropertyValue = request.getAuthor();
-            filterPropertyType = "author";
-        } else if (request.getTitle() != null) {
+        if (request.getTitle().length() > 0) {
             filterPropertyValue = request.getTitle();
             filterPropertyType = "title";
-        } else if (request.getLibrary() != null) {
-            filterPropertyValue = request.getLibrary();
-            filterPropertyType = "library";
-        } else if (request.getPublisher() != null) {
+        } else if (request.getAuthor().length() > 0) {
+            filterPropertyValue = request.getAuthor();
+            filterPropertyType = "author";
+        } else if (request.getGenre().length() > 0) {
+            filterPropertyValue = request.getGenre();
+            filterPropertyType = "genre";
+        } else if (request.getPublisher().length() > 0) {
             filterPropertyValue = request.getPublisher();
             filterPropertyType = "publisher";
-        } else if (request.getYearOfPrint() != null) {
+        } else if (request.getYearOfPrint().length() > 0) {
             filterPropertyValue = request.getYearOfPrint();
             filterPropertyType = "yearOfPrint";
         }
 
-        return bookService.getBookByBookProperty(filterPropertyValue, filterPropertyType).orElseThrow(() ->
-                new IllegalStateException("Specified book not found"));
+        return bookService.getBookByBookProperty(filterPropertyValue, filterPropertyType);
     }
 
 }
