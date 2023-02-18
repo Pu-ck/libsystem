@@ -6,17 +6,19 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/books")
+@RequestMapping("/home/books")
 public class BooksFilterController {
 
     private final BooksFilterService booksFilterService;
 
     @GetMapping
-    public List<BookEntity> filterByBookProperty(@RequestBody BooksFilterRequest request) {
-        return booksFilterService.filterByBookProperty(request);
+    @ResponseBody
+    public List<BookEntity> filterByBooksProperties(@RequestParam Map<String, String> requestParameters) {
+        return booksFilterService.filterByBookProperties(requestParameters);
     }
 
 }

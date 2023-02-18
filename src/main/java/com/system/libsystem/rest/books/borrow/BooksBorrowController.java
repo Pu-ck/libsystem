@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/books")
+@RequestMapping("/home/books")
 public class BooksBorrowController {
 
 }

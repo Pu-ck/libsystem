@@ -31,4 +31,7 @@ public class BookEntity {
     @Column(nullable = false)
     private String yearOfPrint;
 
+    @Column(nullable = false)
+    private String description;
+
 }

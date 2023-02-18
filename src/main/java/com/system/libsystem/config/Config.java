@@ -1,7 +1,7 @@
 package com.system.libsystem.config;
 
-import com.system.libsystem.session.SessionFilter;
 import com.system.libsystem.entities.user.UserService;
+import com.system.libsystem.session.SessionFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -47,13 +48,17 @@ public class Config {
         ).and();
 
         http.authorizeRequests()
-                .antMatchers("/api/login", "/api/registration/**").permitAll()
+                .antMatchers("/home/login", "/home/registration/**", "/home/logout").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(
                 sessionFilter,
                 UsernamePasswordAuthenticationFilter.class
         );
+
+        http.logout().clearAuthentication(true).logoutRequestMatcher(new AntPathRequestMatcher("/home/logout"))
+                .logoutSuccessUrl("/home/login").deleteCookies("JSESSIONID")
+                .invalidateHttpSession(true);
 
         return http.build();
     }
