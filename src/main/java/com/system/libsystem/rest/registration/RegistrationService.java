@@ -6,7 +6,7 @@ import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenEntity;
 import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenService;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserService;
-import com.system.libsystem.entities.user.UserType;
+import com.system.libsystem.util.UserType;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,35 +31,35 @@ public class RegistrationService {
     @Value("${mail.admin}")
     private String adminMail;
 
-    public String register(RegistrationRequest request) {
+    public String register(RegistrationRequest registrationRequest) {
         UserEntity userEntity = new UserEntity();
-        userEntity.setPassword(request.getPassword());
-        userEntity.setUsername(request.getUsername());
-        userEntity.setCardNumber(request.getCardNumber());
-        userEntity.setFirstName(request.getFirstName());
-        userEntity.setLastName(request.getLastName());
+        userEntity.setPassword(registrationRequest.getPassword());
+        userEntity.setUsername(registrationRequest.getUsername());
+        userEntity.setCardNumber(registrationRequest.getCardNumber());
+        userEntity.setFirstName(registrationRequest.getFirstName());
+        userEntity.setLastName(registrationRequest.getLastName());
         userEntity.setEnabled(false);
         userEntity.setUserType(UserType.USER);
 
-        LocalDateTime datetime = LocalDateTime.now();
-        String registrationTime = datetime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+        final LocalDateTime datetime = LocalDateTime.now();
+        final String registrationTime = datetime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
 
-        String token = userService.registerUser(userEntity);
-        String confirmationAddress = userConfirmationAddress + token;
+        final String token = userService.registerUser(userEntity);
+        final String confirmationAddress = userConfirmationAddress + token;
 
         mailSender.send(adminMail, mailBuilder.getAccountConfirmationMailBody(
-                        request.getUsername(),
-                        request.getFirstName(),
-                        request.getLastName(),
-                        request.getCardNumber().toString(),
+                        registrationRequest.getUsername(),
+                        registrationRequest.getFirstName(),
+                        registrationRequest.getLastName(),
+                        registrationRequest.getCardNumber().toString(),
                         registrationTime,
                         confirmationAddress),
                 "New account registration request");
-        mailSender.send(request.getUsername(), mailBuilder.getAccountRegisteredMailBody(
-                        request.getUsername(),
-                        request.getFirstName(),
-                        request.getLastName(),
-                        request.getCardNumber().toString()),
+        mailSender.send(registrationRequest.getUsername(), mailBuilder.getAccountRegisteredMailBody(
+                        registrationRequest.getUsername(),
+                        registrationRequest.getFirstName(),
+                        registrationRequest.getLastName(),
+                        registrationRequest.getCardNumber().toString()),
                 "Your account has been created");
 
         return token;

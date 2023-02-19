@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+import static com.system.libsystem.util.SharedConstants.USER_EXCEPTION_LOG;
+
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
@@ -24,20 +26,18 @@ public class UserService implements UserDetailsService {
     @Override
     public UserEntity loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        final UserEntity userEntity = userRepository.findByUsername(username);
-        if (userEntity != null) {
-            userEntity.setUsername(userEntity.getUsername());
-            userEntity.setPassword(userEntity.getPassword());
-            userEntity.setEnabled(userEntity.isEnabled());
-            return userEntity;
-        } else {
-            throw new UsernameNotFoundException("Unable to find user " + username);
-        }
+        final UserEntity userEntity = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(USER_EXCEPTION_LOG + username));
+
+        userEntity.setUsername(userEntity.getUsername());
+        userEntity.setPassword(userEntity.getPassword());
+        userEntity.setEnabled(userEntity.isEnabled());
+        return userEntity;
     }
 
     public String registerUser(UserEntity userEntity) {
 
-        if (userRepository.findByUsername(userEntity.getUsername()) != null) {
+        if (userRepository.findByUsername(userEntity.getUsername()).isPresent()) {
             throw new IllegalStateException("Username already taken");
         }
 
@@ -57,7 +57,9 @@ public class UserService implements UserDetailsService {
     }
 
     public int enableUser(String username) {
-        userRepository.findByUsername(username).setEnabled(true);
+        UserEntity userEntity = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(USER_EXCEPTION_LOG + username));
+        userEntity.setEnabled(true);
         loadUserByUsername(username).setEnabled(true);
         return userRepository.enableUser(username);
     }

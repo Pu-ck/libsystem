@@ -1,5 +1,6 @@
 package com.system.libsystem.rest.user;
 
+import com.system.libsystem.helpermodels.UserBook;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,11 @@ public class UserProfileController {
     @GetMapping
     public List<String> getUserProfileInformation(HttpServletRequest httpServletRequest) {
         return userProfileService.getUserProfileInformation(httpServletRequest);
+    }
+
+    @GetMapping("/borrowed-books")
+    public List<UserBook> getBooksBorrowedByUser(HttpServletRequest httpServletRequest) {
+        return userProfileService.getBooksBorrowedByUser(httpServletRequest);
     }
 
     @PostMapping("/change-password")

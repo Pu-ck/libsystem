@@ -1,4 +1,4 @@
-package com.system.libsystem.entities.user;
+package com.system.libsystem.util;
 
 public enum UserType {
     USER,

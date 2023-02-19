@@ -1,37 +1,33 @@
-package com.system.libsystem.entities.book;
+package com.system.libsystem.entities.borrowedbook;
 
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.sql.Date;
 
 @Entity
 @Getter
 @Setter
-public class BookEntity {
+public class BorrowedBookEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @Column(nullable = false)
-    private String title;
+    private int bookId;
 
     @Column(nullable = false)
-    private String author;
+    private int userId;
 
     @Column(nullable = false)
-    private String genre;
+    private Date borrowDate;
 
     @Column(nullable = false)
-    private String publisher;
+    private Date returnDate;
 
     @Column(nullable = false)
-    private int quantity;
-
-    @Column(nullable = false)
-    private String yearOfPrint;
-
-    @Column(nullable = false)
-    private String description;
+    private BigDecimal penalty;
 
 }
