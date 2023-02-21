@@ -66,19 +66,16 @@ public class RegistrationService {
     }
 
     @Transactional
-    public String confirmToken(String token) {
+    public void confirmToken(String token) {
         ConfirmationTokenEntity confirmationTokenEntity = confirmationTokenService.getToken(token).orElseThrow(() ->
                 new IllegalStateException("Confirmation token not found"));
 
-        userService.enableUser(
-                confirmationTokenEntity.getUserEntity().getUsername());
+        userService.enableUser(confirmationTokenEntity.getUserEntity().getUsername());
 
         mailSender.send(confirmationTokenEntity.getUserEntity().getUsername(), mailBuilder.getAccountEnabledMailBody(
                 confirmationTokenEntity.getUserEntity().getFirstName(),
                 confirmationTokenEntity.getUserEntity().getLastName(),
                 loginPageAddress), "Account enabled");
-
-        return "Requested account was confirmed and enabled";
     }
 
 }

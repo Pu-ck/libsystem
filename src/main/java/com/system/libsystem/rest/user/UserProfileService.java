@@ -53,7 +53,6 @@ public class UserProfileService {
             final BookEntity bookEntity = bookRepository.findById(borrowedBookEntity.getBookId())
                     .orElseThrow(() -> new IllegalStateException("Unable to find book with id: "
                             + borrowedBookEntity.getBookId()));
-
             UserBook userBook = new UserBook();
             userBook.setTitle(bookEntity.getTitle());
             userBook.setAuthor(bookEntity.getAuthor());

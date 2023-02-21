@@ -15,8 +15,7 @@ import javax.mail.internet.MimeMessage;
 @RequiredArgsConstructor
 public class MailService implements MailSender {
 
-    private static final String encodingFormat = "utf-8";
-
+    private static final String ENCODING_FORMAT = "utf-8";
     private final JavaMailSender javaMailSender;
     @Value("${mail.sender}")
     private String sender;
@@ -26,7 +25,7 @@ public class MailService implements MailSender {
     public void send(String to, String mail, String subject) {
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, encodingFormat);
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, ENCODING_FORMAT);
             mimeMessageHelper.setText(mail, true);
             mimeMessageHelper.setTo(to);
             mimeMessageHelper.setSubject(subject);

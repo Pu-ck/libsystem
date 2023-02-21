@@ -48,7 +48,8 @@ public class Config {
         ).and();
 
         http.authorizeRequests()
-                .antMatchers("/home/login", "/home/registration/**", "/home/logout").permitAll()
+                .antMatchers("/home/login", "/home/password-reminder",
+                        "/home/registration/**", "/home/logout").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(

@@ -6,6 +6,8 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookEntity;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookRepository;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
+import com.system.libsystem.mail.MailBuilder;
+import com.system.libsystem.mail.MailSender;
 import com.system.libsystem.session.SessionRegistry;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -28,6 +30,8 @@ public class BooksBorrowService {
     private final SessionRegistry sessionRegistry;
     private final UserRepository userRepository;
     private final BorrowedBookRepository borrowedBookRepository;
+    private final MailSender mailSender;
+    private final MailBuilder mailBuilder;
 
     public void borrow(BooksBorrowRequest booksBorrowRequest, HttpServletRequest httpServletRequest) {
 
@@ -48,37 +52,40 @@ public class BooksBorrowService {
         final int userId = userEntity.getId();
         final Long cardNumber = userEntity.getCardNumber();
         final int bookId = bookEntity.getId();
+        final int orderQuantity = booksBorrowRequest.getQuantity();
 
         if (Objects.equals(booksBorrowRequest.getCardNumber(), cardNumber)) {
-            if (bookEntity.getQuantity() > 0) {
-                for (BorrowedBookEntity borrowedBookEntity : borrowedBookRepository.findByUserId(userEntity.getId())) {
-                    if (borrowedBookEntity.getBookId() == bookId) {
-                        throw new IllegalStateException("Book with id " + bookId + " is already borrowed by user "
-                                + username);
-                    } else {
-                        saveBorrowedBookToRepository(bookId, userId, borrowDate, returnDate, penalty, bookEntity);
-                    }
+            if (bookEntity.getQuantity() > 0 && orderQuantity <= bookEntity.getQuantity()) {
+                for (int i = 0; i < orderQuantity; i++) {
+                    BorrowedBookEntity borrowedBookEntity = new BorrowedBookEntity();
+                    borrowedBookEntity.setBookId(bookId);
+                    borrowedBookEntity.setUserId(userId);
+                    borrowedBookEntity.setBorrowDate(borrowDate);
+                    borrowedBookEntity.setReturnDate(returnDate);
+                    borrowedBookEntity.setPenalty(penalty);
+                    borrowedBookEntity.setCardNumber(cardNumber);
+                    borrowedBookRepository.save(borrowedBookEntity);
+                    sendBookBorrowConfirmationMail(userEntity, bookEntity, borrowedBookEntity);
                 }
+                bookEntity.setQuantity(bookEntity.getQuantity() - orderQuantity);
+                bookRepository.save(bookEntity);
             } else {
-                throw new IllegalStateException("Book with id " + bookEntity.getId() + " is not available in stock");
+                throw new IllegalStateException("Book with id " + bookEntity.getId() + " is not available in stock " +
+                        "or the requested quantity of books to borrow is larger than the quantity in stock");
             }
-
         } else {
             throw new IllegalStateException("Invalid card number");
         }
     }
 
-    private void saveBorrowedBookToRepository(int bookId, int userId, Date borrowDate, Date returnDate,
-                                              BigDecimal penalty, BookEntity bookEntity) {
-        BorrowedBookEntity borrowedBookEntity = new BorrowedBookEntity();
-        borrowedBookEntity.setBookId(bookId);
-        borrowedBookEntity.setUserId(userId);
-        borrowedBookEntity.setBorrowDate(borrowDate);
-        borrowedBookEntity.setReturnDate(returnDate);
-        borrowedBookEntity.setPenalty(penalty);
-        borrowedBookRepository.save(borrowedBookEntity);
-        bookEntity.setQuantity(bookEntity.getQuantity() - 1);
-        bookRepository.save(bookEntity);
+    private void sendBookBorrowConfirmationMail(UserEntity userEntity, BookEntity bookEntity,
+                                                BorrowedBookEntity borrowedBookEntity) {
+        mailSender.send(userEntity.getUsername(), mailBuilder.getBookBorrowMailBody
+                (userEntity.getFirstName(),
+                        userEntity.getLastName(),
+                        bookEntity.getTitle(),
+                        bookEntity.getAuthor(),
+                        borrowedBookEntity.getReturnDate().toString()), "New book borrowed");
     }
 
 }

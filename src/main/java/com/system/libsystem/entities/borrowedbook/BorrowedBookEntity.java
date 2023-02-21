@@ -22,6 +22,9 @@ public class BorrowedBookEntity {
     private int userId;
 
     @Column(nullable = false)
+    private Long cardNumber;
+
+    @Column(nullable = false)
     private Date borrowDate;
 
     @Column(nullable = false)

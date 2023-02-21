@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class LoginService {
 
-    private AuthenticationManager authenticationManager;
-    private SessionRegistry sessionRegistry;
+    private final AuthenticationManager authenticationManager;
+    private final SessionRegistry sessionRegistry;
 
     public ResponseEntity<LoginSessionRequest> login(LoginRequest loginRequest) {
         authenticationManager.authenticate(

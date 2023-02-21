@@ -1,33 +1,29 @@
-package com.system.libsystem.entities.confirmationtoken;
+package com.system.libsystem.entities.passwordremindertoken;
 
 import com.system.libsystem.entities.user.UserEntity;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Date;
 
+@Entity
 @Getter
 @Setter
-@NoArgsConstructor
-@Entity
-public class ConfirmationTokenEntity {
+public class PasswordReminderTokenEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @Column(nullable = false)
     private String token;
+
     @ManyToOne
     @JoinColumn(
             nullable = false,
             name = "user_id"
     )
     private UserEntity userEntity;
-
-    public ConfirmationTokenEntity(String token, UserEntity userEntity) {
-        this.token = token;
-        this.userEntity = userEntity;
-    }
 
 }

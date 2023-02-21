@@ -13,6 +13,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByUsername(String username);
 
+    Optional<UserEntity> findById(int id);
+
     @Transactional
     @Modifying
     @Query("UPDATE UserEntity a " +

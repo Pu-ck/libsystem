@@ -29,4 +29,24 @@ public class MailBuilder {
                 "<p>Wait until the administrator enables your account. You will receive a confirmation mail " +
                 "when your new account will be enabled.</p>";
     }
+
+    public String getPasswordReminderMailBody(String setNewPasswordAddress, String firstName, String lastName,
+                                              String cardNumber) {
+        return "Hello " + firstName + " " + lastName + "," +
+                "<p>You have requested a password reminder for an account associated with library card number: "
+                + cardNumber + "</p>" +
+                "<p>Click the link below in order to set a new password to you library system account:</p>" +
+                "<p><a href=\"" + setNewPasswordAddress + "\">Set new password</a></p>";
+    }
+
+    public String getBookBorrowMailBody(String firstName, String lastName, String title, String author,
+                                        String returnDate) {
+        return "Hello " + firstName + " " + lastName + "," +
+                "<p>You have borrowed a new book: <p>" +
+                "<p>Title: " + title +  "<p>" +
+                "<p>Author: " + author + "<p>" +
+                "<p>Estimated return date: " + returnDate + "<p>" +
+                "<p>You can check all your currently borrowed books in your user profile information</p>";
+    }
+
 }
