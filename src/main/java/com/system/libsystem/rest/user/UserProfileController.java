@@ -24,6 +24,11 @@ public class UserProfileController {
         return userProfileService.getBooksBorrowedByUser(httpServletRequest);
     }
 
+    @GetMapping("/ordered-books")
+    public List<UserBook> getBooksOrderedByUser(HttpServletRequest httpServletRequest) {
+        return userProfileService.getBooksOrderedByUser(httpServletRequest);
+    }
+
     @PostMapping("/change-password")
     public void changeUserPassword(@RequestBody ChangePasswordRequest request, HttpServletRequest httpServletRequest) {
         userProfileService.changeUserPassword(request, httpServletRequest);

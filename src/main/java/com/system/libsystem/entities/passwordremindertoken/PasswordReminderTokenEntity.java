@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -25,5 +25,8 @@ public class PasswordReminderTokenEntity {
             name = "user_id"
     )
     private UserEntity userEntity;
+
+    @Column(nullable = false)
+    private Date expiryDate;
 
 }

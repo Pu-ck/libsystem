@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class BooksBorrowRequest {
+public class BorrowBookRequest {
     private int bookId;
     private Long cardNumber;
     private int quantity;

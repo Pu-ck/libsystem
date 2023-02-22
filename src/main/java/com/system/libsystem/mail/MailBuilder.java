@@ -40,13 +40,15 @@ public class MailBuilder {
     }
 
     public String getBookBorrowMailBody(String firstName, String lastName, String title, String author,
-                                        String returnDate) {
+                                        int orderNumber) {
         return "Hello " + firstName + " " + lastName + "," +
-                "<p>You have borrowed a new book: <p>" +
+                "<p>You have ordered a new book: <p>" +
                 "<p>Title: " + title +  "<p>" +
                 "<p>Author: " + author + "<p>" +
-                "<p>Estimated return date: " + returnDate + "<p>" +
-                "<p>You can check all your currently borrowed books in your user profile information</p>";
+                "<p>Order number: " + orderNumber + "<p>" +
+                "<p>You can pick up your order at your local library.</p>" +
+                "<p>After picking up order books you will be able to check all your borrowed books, including " +
+                "estimated return date and possible penalty, in your user profile information.</p>";
     }
 
 }

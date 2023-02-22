@@ -11,14 +11,14 @@ import java.util.Map;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/home/books")
-public class BooksFilterController {
+public class FilterBooksController {
 
-    private final BooksFilterService booksFilterService;
+    private final FilterBooksService filterBooksService;
 
     @GetMapping
     @ResponseBody
     public List<BookEntity> filterByBooksProperties(@RequestParam Map<String, String> requestParameters) {
-        return booksFilterService.filterByBookProperties(requestParameters);
+        return filterBooksService.filterByBookProperties(requestParameters);
     }
 
 }

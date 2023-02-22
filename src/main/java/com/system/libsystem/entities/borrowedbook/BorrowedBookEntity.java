@@ -24,13 +24,16 @@ public class BorrowedBookEntity {
     @Column(nullable = false)
     private Long cardNumber;
 
-    @Column(nullable = false)
+    @Column
     private Date borrowDate;
 
-    @Column(nullable = false)
+    @Column
     private Date returnDate;
 
     @Column(nullable = false)
     private BigDecimal penalty;
+
+    @Column(nullable = false)
+    private boolean accepted;
 
 }

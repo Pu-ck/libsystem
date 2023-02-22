@@ -18,7 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.system.libsystem.util.SharedConstants.USER_EXCEPTION_LOG;
+import static com.system.libsystem.util.SharedConstants.FIND_BOOK_EXCEPTION_LOG;
+import static com.system.libsystem.util.SharedConstants.FIND_USER_EXCEPTION_LOG;
 
 @Service
 @AllArgsConstructor
@@ -34,7 +35,7 @@ public class UserProfileService {
         final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         final String username = sessionRegistry.getSessionUsername(sessionID);
         final UserEntity userEntity = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(USER_EXCEPTION_LOG + username));
+                .orElseThrow(() -> new UsernameNotFoundException(FIND_USER_EXCEPTION_LOG + username));
 
         return List.of(userEntity.getUsername(), userEntity.getFirstName(), userEntity.getLastName(),
                 userEntity.getCardNumber().toString());
@@ -44,14 +45,14 @@ public class UserProfileService {
         final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         final String username = sessionRegistry.getSessionUsername(sessionID);
         final UserEntity userEntity = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(USER_EXCEPTION_LOG + username));
+                .orElseThrow(() -> new UsernameNotFoundException(FIND_USER_EXCEPTION_LOG + username));
         final int userId = userEntity.getId();
 
         List<UserBook> userBooks = new ArrayList<>();
 
         for (BorrowedBookEntity borrowedBookEntity : borrowedBookRepository.findByUserId(userId)) {
             final BookEntity bookEntity = bookRepository.findById(borrowedBookEntity.getBookId())
-                    .orElseThrow(() -> new IllegalStateException("Unable to find book with id: "
+                    .orElseThrow(() -> new IllegalStateException(FIND_BOOK_EXCEPTION_LOG
                             + borrowedBookEntity.getBookId()));
             UserBook userBook = new UserBook();
             userBook.setTitle(bookEntity.getTitle());
@@ -59,9 +60,17 @@ public class UserProfileService {
             userBook.setGenre(bookEntity.getGenre());
             userBook.setPublisher(bookEntity.getPublisher());
             userBook.setYearOfPrint(bookEntity.getYearOfPrint());
-            userBook.setBorrowDate(borrowedBookEntity.getBorrowDate().toString());
-            userBook.setReturnDate(borrowedBookEntity.getReturnDate().toString());
-            userBook.setPenalty(borrowedBookEntity.getPenalty().toString());
+            if (borrowedBookEntity.isAccepted()) {
+                userBook.setBorrowDate(borrowedBookEntity.getBorrowDate().toString());
+                userBook.setReturnDate(borrowedBookEntity.getReturnDate().toString());
+                userBook.setPenalty(borrowedBookEntity.getPenalty().toString());
+                userBook.setStatus("Borrowed");
+            } else {
+                userBook.setBorrowDate("");
+                userBook.setReturnDate("");
+                userBook.setPenalty("");
+                userBook.setStatus("Ordered");
+            }
             userBooks.add(userBook);
         }
 
@@ -72,7 +81,7 @@ public class UserProfileService {
         final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         final String username = sessionRegistry.getSessionUsername(sessionID);
         UserEntity userEntity = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(USER_EXCEPTION_LOG + username));
+                .orElseThrow(() -> new UsernameNotFoundException(FIND_USER_EXCEPTION_LOG + username));
 
         final String oldPassword = userEntity.getPassword();
         final String newPassword = request.getNewPassword();

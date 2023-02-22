@@ -16,15 +16,14 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.Objects;
 
-import static com.system.libsystem.util.SharedConstants.USER_EXCEPTION_LOG;
+import static com.system.libsystem.util.SharedConstants.FIND_BOOK_EXCEPTION_LOG;
+import static com.system.libsystem.util.SharedConstants.FIND_USER_EXCEPTION_LOG;
 
 @Service
 @AllArgsConstructor
-public class BooksBorrowService {
+public class BorrowBookService {
 
     private final BookRepository bookRepository;
     private final SessionRegistry sessionRegistry;
@@ -33,41 +32,34 @@ public class BooksBorrowService {
     private final MailSender mailSender;
     private final MailBuilder mailBuilder;
 
-    public void borrow(BooksBorrowRequest booksBorrowRequest, HttpServletRequest httpServletRequest) {
-
-        final Date borrowDate = new Date(System.currentTimeMillis());
-        final LocalDate dateMonthLater = borrowDate.toLocalDate().plusMonths(1);
-        final Date returnDate = Date.valueOf(dateMonthLater);
+    public void borrow(BorrowBookRequest borrowBookRequest, HttpServletRequest httpServletRequest) {
 
         final BigDecimal penalty = new BigDecimal("0.00");
         final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         final String username = sessionRegistry.getSessionUsername(sessionID);
 
-        UserEntity userEntity = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(USER_EXCEPTION_LOG + username));
-        BookEntity bookEntity = bookRepository.findById(booksBorrowRequest.getBookId())
-                .orElseThrow(() -> new IllegalStateException("Unable to find requested book with id "
-                        + booksBorrowRequest.getBookId()));
+        final UserEntity userEntity = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(FIND_USER_EXCEPTION_LOG + username));
+
+        BookEntity bookEntity = bookRepository.findById(borrowBookRequest.getBookId())
+                .orElseThrow(() -> new IllegalStateException(FIND_BOOK_EXCEPTION_LOG + borrowBookRequest.getBookId()));
 
         final int userId = userEntity.getId();
         final Long cardNumber = userEntity.getCardNumber();
         final int bookId = bookEntity.getId();
-        final int orderQuantity = booksBorrowRequest.getQuantity();
+        final int orderQuantity = borrowBookRequest.getQuantity();
 
-        if (Objects.equals(booksBorrowRequest.getCardNumber(), cardNumber)) {
+        if (Objects.equals(borrowBookRequest.getCardNumber(), cardNumber)) {
             if (bookEntity.getQuantity() > 0 && orderQuantity <= bookEntity.getQuantity()) {
                 for (int i = 0; i < orderQuantity; i++) {
                     BorrowedBookEntity borrowedBookEntity = new BorrowedBookEntity();
                     borrowedBookEntity.setBookId(bookId);
                     borrowedBookEntity.setUserId(userId);
-                    borrowedBookEntity.setBorrowDate(borrowDate);
-                    borrowedBookEntity.setReturnDate(returnDate);
                     borrowedBookEntity.setPenalty(penalty);
                     borrowedBookEntity.setCardNumber(cardNumber);
                     borrowedBookRepository.save(borrowedBookEntity);
                     sendBookBorrowConfirmationMail(userEntity, bookEntity, borrowedBookEntity);
                 }
-                bookEntity.setQuantity(bookEntity.getQuantity() - orderQuantity);
                 bookRepository.save(bookEntity);
             } else {
                 throw new IllegalStateException("Book with id " + bookEntity.getId() + " is not available in stock " +
@@ -85,7 +77,7 @@ public class BooksBorrowService {
                         userEntity.getLastName(),
                         bookEntity.getTitle(),
                         bookEntity.getAuthor(),
-                        borrowedBookEntity.getReturnDate().toString()), "New book borrowed");
+                        borrowedBookEntity.getId()), "New book ordered");
     }
 
 }

@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-import static com.system.libsystem.util.SharedConstants.USER_EXCEPTION_LOG;
+import static com.system.libsystem.util.SharedConstants.FIND_USER_EXCEPTION_LOG;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +27,7 @@ public class UserService implements UserDetailsService {
     public UserEntity loadUserByUsername(String username) throws UsernameNotFoundException {
 
         final UserEntity userEntity = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(USER_EXCEPTION_LOG + username));
+                .orElseThrow(() -> new UsernameNotFoundException(FIND_USER_EXCEPTION_LOG + username));
 
         userEntity.setUsername(userEntity.getUsername());
         userEntity.setPassword(userEntity.getPassword());
@@ -58,7 +58,7 @@ public class UserService implements UserDetailsService {
 
     public int enableUser(String username) {
         UserEntity userEntity = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(USER_EXCEPTION_LOG + username));
+                .orElseThrow(() -> new UsernameNotFoundException(FIND_USER_EXCEPTION_LOG + username));
         userEntity.setEnabled(true);
         loadUserByUsername(username).setEnabled(true);
         return userRepository.enableUser(username);

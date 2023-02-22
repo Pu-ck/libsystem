@@ -7,18 +7,24 @@ import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
-import static com.system.libsystem.util.SharedConstants.USER_EXCEPTION_LOG;
+import static com.system.libsystem.util.SharedConstants.FIND_USER_EXCEPTION_LOG;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PasswordReminderService {
+
+    private static final int PASSWORD_REMINDER_TOKEN_EXPIRATION_TIME = 8;
 
     private final MailSender mailSender;
     private final MailBuilder mailBuilder;
@@ -31,16 +37,20 @@ public class PasswordReminderService {
 
     public void remindPassword(PasswordReminderRequest passwordReminderRequest) {
         final UserEntity userEntity = userRepository.findByUsername(passwordReminderRequest.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException(USER_EXCEPTION_LOG));
+                .orElseThrow(() -> new UsernameNotFoundException(FIND_USER_EXCEPTION_LOG));
         final String firstName = userEntity.getFirstName();
         final String lastName = userEntity.getLastName();
         final String token = UUID.randomUUID().toString();
 
         saveNewPasswordReminderToken(userEntity, token);
 
-        mailSender.send(passwordReminderRequest.getUsername(), mailBuilder.getPasswordReminderMailBody
-                (passwordReminderAddress + token, firstName, lastName,
-                        passwordReminderRequest.getCardNumber().toString()), "Password reminder");
+        if (Objects.equals(passwordReminderRequest.getCardNumber(), userEntity.getCardNumber())) {
+            mailSender.send(passwordReminderRequest.getUsername(), mailBuilder.getPasswordReminderMailBody
+                    (passwordReminderAddress + token, firstName, lastName,
+                            passwordReminderRequest.getCardNumber().toString()), "Password reminder");
+        } else {
+            throw new IllegalStateException("Invalid card number");
+        }
     }
 
     public void resetPassword(ResetPasswordRequest resetPasswordRequest) {
@@ -49,7 +59,7 @@ public class PasswordReminderService {
                 .orElseThrow(() -> new IllegalStateException("Unable to find requested token"));
         final int userId = passwordReminderTokenEntity.getUserEntity().getId();
         final UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException(USER_EXCEPTION_LOG));
+                .orElseThrow(() -> new UsernameNotFoundException(FIND_USER_EXCEPTION_LOG));
 
         String encodedPassword = bCryptPasswordEncoder.encode(resetPasswordRequest.getPassword());
         userEntity.setPassword(encodedPassword);
@@ -58,8 +68,13 @@ public class PasswordReminderService {
 
     private void saveNewPasswordReminderToken(UserEntity userEntity, String token) {
         final PasswordReminderTokenEntity passwordReminderTokenEntity = new PasswordReminderTokenEntity();
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.HOUR_OF_DAY, PASSWORD_REMINDER_TOKEN_EXPIRATION_TIME);
+
         passwordReminderTokenEntity.setToken(token);
         passwordReminderTokenEntity.setUserEntity(userEntity);
+        passwordReminderTokenEntity.setExpiryDate(calendar.getTime());
         passwordReminderTokenRepository.save(passwordReminderTokenEntity);
     }
 
@@ -70,12 +85,24 @@ public class PasswordReminderService {
 
         if (!isTokenFound(passwordReminderTokenEntity)) {
             return "Invalid token";
+        } else if (isTokenExpired(passwordReminderTokenEntity)) {
+            return "Expired token";
         }
         return null;
     }
 
     private boolean isTokenFound(PasswordReminderTokenEntity passwordReminderTokenEntity) {
         return passwordReminderTokenEntity != null;
+    }
+
+    private boolean isTokenExpired(PasswordReminderTokenEntity passwordReminderTokenEntity) {
+
+        final Date passwordReminderTokenExpiryDateTime = passwordReminderTokenEntity.getExpiryDate();
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        final Date currentDateTime = calendar.getTime();
+
+        return currentDateTime.compareTo(passwordReminderTokenExpiryDateTime) < 0;
     }
 
 }

@@ -12,13 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/home/books")
-public class BooksBorrowController {
+public class BorrowBookController {
 
-    private final BooksBorrowService booksBorrowService;
+    private final BorrowBookService borrowBookService;
 
     @PostMapping
-    public void borrow(@RequestBody BooksBorrowRequest booksBorrowRequest, HttpServletRequest httpServletRequest) {
-        booksBorrowService.borrow(booksBorrowRequest, httpServletRequest);
+    public void borrow(@RequestBody BorrowBookRequest borrowBookRequest, HttpServletRequest httpServletRequest) {
+        borrowBookService.borrow(borrowBookRequest, httpServletRequest);
     }
 
 }
