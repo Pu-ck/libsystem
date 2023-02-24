@@ -61,15 +61,9 @@ public class UserProfileService {
             userBook.setPublisher(bookEntity.getPublisher());
             userBook.setYearOfPrint(bookEntity.getYearOfPrint());
             if (borrowedBookEntity.isAccepted()) {
-                userBook.setBorrowDate(borrowedBookEntity.getBorrowDate().toString());
-                userBook.setReturnDate(borrowedBookEntity.getReturnDate().toString());
-                userBook.setPenalty(borrowedBookEntity.getPenalty().toString());
-                userBook.setStatus("Borrowed");
+                setBorrowedBookDetails(userBook, borrowedBookEntity);
             } else {
-                userBook.setBorrowDate("");
-                userBook.setReturnDate("");
-                userBook.setPenalty("");
-                userBook.setStatus("Ordered");
+                setOrderedBookDetails(userBook);
             }
             userBooks.add(userBook);
         }
@@ -98,6 +92,20 @@ public class UserProfileService {
         } else {
             throw new IllegalStateException("The old password is not correct");
         }
+    }
+
+    private void setBorrowedBookDetails(UserBook userBook, BorrowedBookEntity borrowedBookEntity) {
+        userBook.setBorrowDate(borrowedBookEntity.getBorrowDate().toString());
+        userBook.setReturnDate(borrowedBookEntity.getReturnDate().toString());
+        userBook.setPenalty(borrowedBookEntity.getPenalty().toString());
+        userBook.setStatus("Borrowed");
+    }
+
+    private void setOrderedBookDetails(UserBook userBook) {
+        userBook.setBorrowDate("");
+        userBook.setReturnDate("");
+        userBook.setPenalty("");
+        userBook.setStatus("Ordered");
     }
 
 }

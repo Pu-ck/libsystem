@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/home/administration/books/return")
+@RequestMapping("/api/administration/books/return")
 public class ReturnBookController {
 
     private final ReturnBookService returnBookService;

@@ -40,9 +40,9 @@ public class MailBuilder {
     }
 
     public String getBookBorrowMailBody(String firstName, String lastName, String title, String author,
-                                        int orderNumber) {
+                                        int orderNumber, String affiliate) {
         return "Hello " + firstName + " " + lastName + "," +
-                "<p>You have ordered a new book: <p>" +
+                "<p>You have ordered a new book from library affiliate: " + affiliate + "<p>" +
                 "<p>Title: " + title +  "<p>" +
                 "<p>Author: " + author + "<p>" +
                 "<p>Order number: " + orderNumber + "<p>" +

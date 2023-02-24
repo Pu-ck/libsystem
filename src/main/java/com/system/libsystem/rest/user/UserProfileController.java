@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/home/userprofile")
+@RequestMapping("/api/userprofile")
 public class UserProfileController {
 
     private final UserProfileService userProfileService;
@@ -22,11 +22,6 @@ public class UserProfileController {
     @GetMapping("/borrowed-books")
     public List<UserBook> getBooksBorrowedByUser(HttpServletRequest httpServletRequest) {
         return userProfileService.getBooksBorrowedByUser(httpServletRequest);
-    }
-
-    @GetMapping("/ordered-books")
-    public List<UserBook> getBooksOrderedByUser(HttpServletRequest httpServletRequest) {
-        return userProfileService.getBooksOrderedByUser(httpServletRequest);
     }
 
     @PostMapping("/change-password")

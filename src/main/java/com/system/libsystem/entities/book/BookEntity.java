@@ -26,12 +26,21 @@ public class BookEntity {
     private String publisher;
 
     @Column(nullable = false)
-    private int quantity;
-
-    @Column(nullable = false)
     private String yearOfPrint;
 
     @Column(nullable = false)
     private String description;
+
+    @Column(nullable = false)
+    private int currentQuantityAffiliateA;
+
+    @Column(nullable = false)
+    private int generalQuantityAffiliateA;
+
+    @Column(nullable = false)
+    private int currentQuantityAffiliateB;
+
+    @Column(nullable = false)
+    private int generalQuantityAffiliateB;
 
 }

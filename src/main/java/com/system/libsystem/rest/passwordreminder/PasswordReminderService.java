@@ -19,6 +19,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import static com.system.libsystem.util.SharedConstants.FIND_USER_EXCEPTION_LOG;
+import static com.system.libsystem.util.SharedConstants.INVALID_CARD_NUMBER_LOG;
 
 @Service
 @RequiredArgsConstructor
@@ -49,7 +50,7 @@ public class PasswordReminderService {
                     (passwordReminderAddress + token, firstName, lastName,
                             passwordReminderRequest.getCardNumber().toString()), "Password reminder");
         } else {
-            throw new IllegalStateException("Invalid card number");
+            throw new IllegalStateException(INVALID_CARD_NUMBER_LOG);
         }
     }
 

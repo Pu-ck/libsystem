@@ -1,13 +1,12 @@
 package com.system.libsystem.rest.registration;
 
-import com.system.libsystem.mail.MailBuilder;
-import com.system.libsystem.mail.MailSender;
 import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenEntity;
 import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenService;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserService;
+import com.system.libsystem.mail.MailBuilder;
+import com.system.libsystem.mail.MailSender;
 import com.system.libsystem.util.UserType;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -47,20 +46,8 @@ public class RegistrationService {
         final String token = userService.registerUser(userEntity);
         final String confirmationAddress = userConfirmationAddress + token;
 
-        mailSender.send(adminMail, mailBuilder.getAccountConfirmationMailBody(
-                        registrationRequest.getUsername(),
-                        registrationRequest.getFirstName(),
-                        registrationRequest.getLastName(),
-                        registrationRequest.getCardNumber().toString(),
-                        registrationTime,
-                        confirmationAddress),
-                "New account registration request");
-        mailSender.send(registrationRequest.getUsername(), mailBuilder.getAccountRegisteredMailBody(
-                        registrationRequest.getUsername(),
-                        registrationRequest.getFirstName(),
-                        registrationRequest.getLastName(),
-                        registrationRequest.getCardNumber().toString()),
-                "Your account has been created");
+        sendAccountConfirmationMail(registrationRequest, registrationTime, confirmationAddress);
+        sendAccountRegistrationMail(registrationRequest);
 
         return token;
     }
@@ -76,6 +63,27 @@ public class RegistrationService {
                 confirmationTokenEntity.getUserEntity().getFirstName(),
                 confirmationTokenEntity.getUserEntity().getLastName(),
                 loginPageAddress), "Account enabled");
+    }
+
+    private void sendAccountConfirmationMail(RegistrationRequest registrationRequest, String registrationTime
+            , String confirmationAddress) {
+        mailSender.send(adminMail, mailBuilder.getAccountConfirmationMailBody(
+                        registrationRequest.getUsername(),
+                        registrationRequest.getFirstName(),
+                        registrationRequest.getLastName(),
+                        registrationRequest.getCardNumber().toString(),
+                        registrationTime,
+                        confirmationAddress),
+                "New account registration request");
+    }
+
+    private void sendAccountRegistrationMail(RegistrationRequest registrationRequest) {
+        mailSender.send(registrationRequest.getUsername(), mailBuilder.getAccountRegisteredMailBody(
+                        registrationRequest.getUsername(),
+                        registrationRequest.getFirstName(),
+                        registrationRequest.getLastName(),
+                        registrationRequest.getCardNumber().toString()),
+                "Your account has been created");
     }
 
 }

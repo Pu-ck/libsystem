@@ -6,6 +6,7 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookEntity;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookRepository;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
+import com.system.libsystem.rest.administration.AdministrationBookUtil;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,8 +16,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import static com.system.libsystem.util.SharedConstants.FIND_BOOK_EXCEPTION_LOG;
-import static com.system.libsystem.util.SharedConstants.FIND_USER_EXCEPTION_LOG;
+import static com.system.libsystem.util.SharedConstants.*;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +25,7 @@ public class ConfirmOrderService {
     private static final int BORROWED_BOOK_KEEP_TIME = 1;
 
     private final BorrowedBookRepository borrowedBookRepository;
+    private final AdministrationBookUtil administrationBookUtil;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
 
@@ -38,6 +39,7 @@ public class ConfirmOrderService {
                 .orElseThrow(() -> new IllegalStateException(FIND_BOOK_EXCEPTION_LOG + confirmOrderRequest.getId()));
 
         final int userId = borrowedBookEntity.getUserId();
+        final String affiliate = borrowedBookEntity.getAffiliate();
 
         final UserEntity userEntity = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException(FIND_USER_EXCEPTION_LOG));
@@ -49,10 +51,10 @@ public class ConfirmOrderService {
             borrowedBookEntity.setAccepted(true);
             borrowedBookEntity.setBorrowDate(borrowDate);
             borrowedBookEntity.setReturnDate(returnDate);
-            bookEntity.setQuantity(bookEntity.getQuantity() - 1);
+            administrationBookUtil.setCurrentQuantityInAffiliate(bookEntity, affiliate, -1);
             borrowedBookRepository.save(borrowedBookEntity);
         } else {
-            throw new IllegalStateException("Invalid card number");
+            throw new IllegalStateException(INVALID_CARD_NUMBER_LOG);
         }
     }
 

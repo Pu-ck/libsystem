@@ -10,7 +10,7 @@ import java.util.Map;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/home/books")
+@RequestMapping("/api/books")
 public class FilterBooksController {
 
     private final FilterBooksService filterBooksService;

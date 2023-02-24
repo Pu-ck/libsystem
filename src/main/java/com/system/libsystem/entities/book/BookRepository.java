@@ -19,6 +19,9 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
 
     List<BookEntity> findByYearOfPrint(String yearOfPrint);
 
+    List<BookEntity> findByCurrentQuantityAffiliateAGreaterThan(int value);
+    List<BookEntity> findByCurrentQuantityAffiliateBGreaterThan(int value);
+
     List<BookEntity> findAll();
 
     Optional<BookEntity> findById(int id);

@@ -34,6 +34,9 @@ public class BorrowedBookEntity {
     private BigDecimal penalty;
 
     @Column(nullable = false)
+    private String affiliate;
+
+    @Column(nullable = false)
     private boolean accepted;
 
 }

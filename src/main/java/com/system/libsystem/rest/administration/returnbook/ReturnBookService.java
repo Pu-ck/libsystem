@@ -6,6 +6,7 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookEntity;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookRepository;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
+import com.system.libsystem.rest.administration.AdministrationBookUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,9 @@ import static com.system.libsystem.util.SharedConstants.FIND_USER_EXCEPTION_LOG;
 @AllArgsConstructor
 public class ReturnBookService {
 
-    private final BookRepository bookRepository;
     private final BorrowedBookRepository borrowedBookRepository;
+    private final AdministrationBookUtil administrationBookUtil;
+    private final BookRepository bookRepository;
     private final UserRepository userRepository;
 
     public void returnBook(ReturnBookRequest returnBookRequest) {
@@ -36,10 +38,10 @@ public class ReturnBookService {
 
         if (Objects.equals(returnBookRequest.getCardNumber(), userEntity.getCardNumber())) {
             borrowedBookRepository.delete(borrowedBookEntity);
-            bookEntity.setQuantity(bookEntity.getQuantity() + 1);
+            administrationBookUtil.setCurrentQuantityInAffiliate(bookEntity,
+                    borrowedBookEntity.getAffiliate(), 1);
             bookRepository.save(bookEntity);
         }
-
     }
 
 }

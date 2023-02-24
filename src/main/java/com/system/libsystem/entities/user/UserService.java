@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 import static com.system.libsystem.util.SharedConstants.FIND_USER_EXCEPTION_LOG;
+import static com.system.libsystem.util.SharedConstants.INVALID_CARD_NUMBER_LOG;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +43,7 @@ public class UserService implements UserDetailsService {
         }
 
         if (userEntity.getCardNumber().toString().length() != CARD_NUMBER_LENGTH) {
-            throw new IllegalStateException("Invalid card number format");
+            throw new IllegalStateException(INVALID_CARD_NUMBER_LOG + " format");
         }
 
         String encodedPassword = bCryptPasswordEncoder.encode(userEntity.getPassword());

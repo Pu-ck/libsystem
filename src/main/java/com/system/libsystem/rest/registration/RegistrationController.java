@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/home/registration")
+@RequestMapping("/api/registration")
 @AllArgsConstructor
 public class RegistrationController {
 

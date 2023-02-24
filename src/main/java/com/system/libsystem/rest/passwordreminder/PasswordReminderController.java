@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/home/password-reminder")
+@RequestMapping("/api/password-reminder")
 @AllArgsConstructor
 public class PasswordReminderController {
 

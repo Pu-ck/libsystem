@@ -5,9 +5,15 @@ import com.system.libsystem.entities.book.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.system.libsystem.util.SharedConstants.AFFILIATE_A;
+import static com.system.libsystem.util.SharedConstants.AFFILIATE_B;
 
 @Service
 @RequiredArgsConstructor
@@ -18,10 +24,11 @@ public class FilterBooksService {
     private static final String SORT_BY_GENRE = "3";
     private static final String SORT_BY_PUBLISHER = "4";
     private static final String SORT_BY_YEAR_OF_PRINT = "5";
-    private static final String SORT_BY_QUANTITY = "6";
-    private static final String SORT_DESCENDING = "1";
+    private static final String SORT_BY_CURRENT_QUANTITY = "6";
+    private static final String SORT_BY_GENERAL_QUANTITY = "7";
 
     private final BookRepository bookRepository;
+    private final FilterBooksSortUtil filterBooksSortUtil;
 
     public List<BookEntity> filterByBookProperties(Map<String, String> requestParameters) {
 
@@ -30,6 +37,7 @@ public class FilterBooksService {
         final String genre = requestParameters.get("genre");
         final String publisher = requestParameters.get("publisher");
         final String yearOfPrint = requestParameters.get("yearOfPrint");
+        final String affiliate = requestParameters.get("affiliate");
         final String sortType = requestParameters.get("sortType");
         final String sortDirection = requestParameters.get("sortDirection");
 
@@ -55,63 +63,47 @@ public class FilterBooksService {
             bookEntities = Stream.concat(bookEntities.stream(),
                     bookRepository.findByYearOfPrint(yearOfPrint).stream()).collect(Collectors.toList());
         }
+        if (affiliate.length() > 0) {
+            bookEntities = getBooksFilteredByAffiliate(affiliate, bookEntities);
+        }
         if (bookEntities.isEmpty()) {
             bookEntities = bookRepository.findAll();
         }
 
-        return getSortedBooks(sortType, sortDirection, bookEntities);
+        return getSortedBooks(sortType, sortDirection, bookEntities.stream().distinct().collect(Collectors.toList()),
+                affiliate);
     }
 
-    private List<BookEntity> getSortedBooks(String sortType, String sortDirection, List<BookEntity> bookEntities) {
+    private List<BookEntity> getBooksFilteredByAffiliate(String affiliate, List<BookEntity> bookEntities) {
+        if (affiliate.equals(AFFILIATE_A)) {
+            return Stream.concat(bookEntities.stream(),
+                    bookRepository.findByCurrentQuantityAffiliateAGreaterThan(0)
+                            .stream()).collect(Collectors.toList());
+        } else if (affiliate.equals(AFFILIATE_B)) {
+            return Stream.concat(bookEntities.stream(),
+                    bookRepository.findByCurrentQuantityAffiliateBGreaterThan(0)
+                            .stream()).collect(Collectors.toList());
+        }
+        return Collections.emptyList();
+    }
+
+    private List<BookEntity> getSortedBooks(String sortType, String sortDirection, List<BookEntity> bookEntities,
+                                            String affliate) {
         switch (sortType) {
             case SORT_BY_TITLE:
-                if (Objects.equals(sortDirection, SORT_DESCENDING)) {
-                    return bookEntities.stream()
-                            .sorted(Comparator.comparing(BookEntity::getTitle).reversed())
-                            .collect(Collectors.toList());
-                }
-                return bookEntities.stream()
-                        .sorted(Comparator.comparing(BookEntity::getTitle)).collect(Collectors.toList());
+                return filterBooksSortUtil.getBooksFilteredByTitleSorted(sortDirection, bookEntities);
             case SORT_BY_AUTHOR:
-                if (Objects.equals(sortDirection, SORT_DESCENDING)) {
-                    return bookEntities.stream()
-                            .sorted(Comparator.comparing(BookEntity::getAuthor).reversed())
-                            .collect(Collectors.toList());
-                }
-                return bookEntities.stream()
-                        .sorted(Comparator.comparing(BookEntity::getAuthor)).collect(Collectors.toList());
+                return filterBooksSortUtil.getBooksFilteredByAuthorSorted(sortDirection, bookEntities);
             case SORT_BY_GENRE:
-                if (Objects.equals(sortDirection, SORT_DESCENDING)) {
-                    return bookEntities.stream()
-                            .sorted(Comparator.comparing(BookEntity::getGenre).reversed())
-                            .collect(Collectors.toList());
-                }
-                return bookEntities.stream()
-                        .sorted(Comparator.comparing(BookEntity::getGenre)).collect(Collectors.toList());
+                return filterBooksSortUtil.getBooksFilteredByGenreSorted(sortDirection, bookEntities);
             case SORT_BY_PUBLISHER:
-                if (Objects.equals(sortDirection, SORT_DESCENDING)) {
-                    return bookEntities.stream()
-                            .sorted(Comparator.comparing(BookEntity::getPublisher).reversed())
-                            .collect(Collectors.toList());
-                }
-                return bookEntities.stream()
-                        .sorted(Comparator.comparing(BookEntity::getPublisher)).collect(Collectors.toList());
+                return filterBooksSortUtil.getBooksFilteredByPublisherSorted(sortDirection, bookEntities);
             case SORT_BY_YEAR_OF_PRINT:
-                if (Objects.equals(sortDirection, SORT_DESCENDING)) {
-                    return bookEntities.stream()
-                            .sorted(Comparator.comparing(BookEntity::getYearOfPrint).reversed())
-                            .collect(Collectors.toList());
-                }
-                return bookEntities.stream()
-                        .sorted(Comparator.comparing(BookEntity::getYearOfPrint)).collect(Collectors.toList());
-            case SORT_BY_QUANTITY:
-                if (Objects.equals(sortDirection, SORT_DESCENDING)) {
-                    return bookEntities.stream()
-                            .sorted(Comparator.comparing(BookEntity::getQuantity).reversed())
-                            .collect(Collectors.toList());
-                }
-                return bookEntities.stream()
-                        .sorted(Comparator.comparing(BookEntity::getQuantity)).collect(Collectors.toList());
+                return filterBooksSortUtil.getBooksFilteredByYearOfPrintSorted(sortDirection, bookEntities);
+            case SORT_BY_CURRENT_QUANTITY:
+                return filterBooksSortUtil.getBooksFilteredByCurrentQuantity(sortDirection, bookEntities, affliate);
+            case SORT_BY_GENERAL_QUANTITY:
+                return filterBooksSortUtil.getBooksFilteredByGeneralQuantity(sortDirection, bookEntities, affliate);
             default:
                 return bookEntities;
         }

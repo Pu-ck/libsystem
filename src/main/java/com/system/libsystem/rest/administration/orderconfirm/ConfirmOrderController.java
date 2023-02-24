@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/home/administration/books/confirm-order")
+@RequestMapping("/api/administration/books/confirm-order")
 public class ConfirmOrderController {
 
     private final ConfirmOrderService confirmOrderService;

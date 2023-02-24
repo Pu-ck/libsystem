@@ -14,5 +14,6 @@ public class UserBook {
     private String borrowDate;
     private String returnDate;
     private String penalty;
+    private String affiliate;
     private String status;
 }
