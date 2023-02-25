@@ -2,10 +2,12 @@ package com.system.libsystem.config;
 
 import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.session.SessionFilter;
+import com.system.libsystem.util.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -48,9 +50,18 @@ public class Config {
         ).and();
 
         http.authorizeRequests()
-                .antMatchers("/api/login", "/api/password-reminder",
-                        "/api/registration/**", "/api/logout").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/api/login", "/api/password-reminder", "/api/registration/**", "/api/logout")
+                .permitAll()
+                .antMatchers(HttpMethod.POST, "/api/administration/books/extend-book")
+                .hasRole(UserType.ADMIN.name())
+                .antMatchers(HttpMethod.POST, "/api/administration/books/confirm-order")
+                .hasRole(UserType.ADMIN.name())
+                .antMatchers(HttpMethod.POST, "/api/administration/books/return")
+                .hasRole(UserType.ADMIN.name())
+                .anyRequest()
+                .authenticated()
+                .and()
+                .httpBasic();
 
         http.addFilterBefore(
                 sessionFilter,

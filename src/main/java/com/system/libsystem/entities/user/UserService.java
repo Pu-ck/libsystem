@@ -3,7 +3,6 @@ package com.system.libsystem.entities.user;
 import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenEntity;
 import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenService;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -41,7 +40,6 @@ public class UserService implements UserDetailsService {
         if (userRepository.findByUsername(userEntity.getUsername()).isPresent()) {
             throw new IllegalStateException("Username already taken");
         }
-
         if (userEntity.getCardNumber().toString().length() != CARD_NUMBER_LENGTH) {
             throw new IllegalStateException(INVALID_CARD_NUMBER_LOG + " format");
         }
@@ -64,4 +62,5 @@ public class UserService implements UserDetailsService {
         loadUserByUsername(username).setEnabled(true);
         return userRepository.enableUser(username);
     }
+
 }

@@ -39,4 +39,7 @@ public class BorrowedBookEntity {
     @Column(nullable = false)
     private boolean accepted;
 
+    @Column(nullable = false)
+    private boolean extended;
+
 }

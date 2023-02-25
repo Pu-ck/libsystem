@@ -19,6 +19,12 @@ public class UserProfileController {
         return userProfileService.getUserProfileInformation(httpServletRequest);
     }
 
+    @PostMapping("/borrowed-books")
+    public void extendBookReturnDate(@RequestBody ExtendBookRequest extendBookRequest,
+                                     HttpServletRequest httpServletRequest) {
+        userProfileService.extendBookReturnDate(extendBookRequest, httpServletRequest);
+    }
+
     @GetMapping("/borrowed-books")
     public List<UserBook> getBooksBorrowedByUser(HttpServletRequest httpServletRequest) {
         return userProfileService.getBooksBorrowedByUser(httpServletRequest);

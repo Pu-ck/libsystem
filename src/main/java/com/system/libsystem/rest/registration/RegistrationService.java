@@ -23,6 +23,7 @@ public class RegistrationService {
     private final ConfirmationTokenService confirmationTokenService;
     private final MailBuilder mailBuilder;
     private final MailSender mailSender;
+
     @Value("${server.confirmation.address}")
     private String userConfirmationAddress;
     @Value("${application.login.address}")
