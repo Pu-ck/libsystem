@@ -1,49 +1,54 @@
 package com.system.libsystem.rest.user;
 
 import com.system.libsystem.entities.book.BookEntity;
-import com.system.libsystem.entities.book.BookRepository;
+import com.system.libsystem.entities.book.BookService;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookEntity;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookRepository;
+import com.system.libsystem.entities.borrowedbook.BorrowedBookService;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
+import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.helpermodels.UserBook;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
+import com.system.libsystem.rest.util.BookUtil;
 import com.system.libsystem.session.SessionRegistry;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import static com.system.libsystem.util.SharedConstants.*;
+import static com.system.libsystem.util.SharedConstants.INVALID_CARD_NUMBER_LOG;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserProfileService {
 
     private final BorrowedBookRepository borrowedBookRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final SessionRegistry sessionRegistry;
     private final UserRepository userRepository;
-    private final BookRepository bookRepository;
     private final MailBuilder mailBuilder;
     private final MailSender mailSender;
+    private final BorrowedBookService borrowedBookService;
+    private final UserService userService;
+    private final BookService bookService;
+    private final BookUtil bookUtil;
 
-    @Value("${mail.admin}")
+    @Value("${mail.sender.admin}")
     private String adminMail;
 
     public List<String> getUserProfileInformation(HttpServletRequest httpServletRequest) {
         final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         final String username = sessionRegistry.getSessionUsername(sessionID);
-        final UserEntity userEntity = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(FIND_USER_EXCEPTION_LOG + username));
+        final UserEntity userEntity = userService.getUserByUsername(username);
 
         return List.of(userEntity.getUsername(), userEntity.getFirstName(), userEntity.getLastName(),
                 userEntity.getCardNumber().toString());
@@ -53,16 +58,13 @@ public class UserProfileService {
 
         final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         final String username = sessionRegistry.getSessionUsername(sessionID);
-        final UserEntity userEntity = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(FIND_USER_EXCEPTION_LOG + username));
+        final UserEntity userEntity = userService.getUserByUsername(username);
         final int userId = userEntity.getId();
 
         List<UserBook> userBooks = new ArrayList<>();
 
         for (BorrowedBookEntity borrowedBookEntity : borrowedBookRepository.findByUserId(userId)) {
-            final BookEntity bookEntity = bookRepository.findById(borrowedBookEntity.getBookId())
-                    .orElseThrow(() -> new IllegalStateException(FIND_BOOK_EXCEPTION_LOG
-                            + borrowedBookEntity.getBookId()));
+            final BookEntity bookEntity = bookService.getBookById(borrowedBookEntity.getBookId());
             UserBook userBook = new UserBook();
             userBook.setTitle(bookEntity.getTitle());
             userBook.setAuthor(bookEntity.getAuthor());
@@ -84,20 +86,18 @@ public class UserProfileService {
     public void changeUserPassword(ChangePasswordRequest request, HttpServletRequest httpServletRequest) {
         final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         final String username = sessionRegistry.getSessionUsername(sessionID);
-        UserEntity userEntity = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(FIND_USER_EXCEPTION_LOG + username));
+
+        UserEntity userEntity = userService.getUserByUsername(username);
 
         final String oldPassword = userEntity.getPassword();
         final String newPassword = request.getNewPassword();
         final String requestOldPassword = request.getOldPassword();
 
-        if (bCryptPasswordEncoder.matches(requestOldPassword, oldPassword)) {
-            if (bCryptPasswordEncoder.matches(newPassword, oldPassword)) {
+        if (isRequestOldPasswordMatchingOldPassword(requestOldPassword, oldPassword)) {
+            if (isNewPasswordSameAsOldPassword(newPassword, oldPassword)) {
                 throw new IllegalStateException("The new password is the same as old one");
             } else {
-                String encodedPassword = bCryptPasswordEncoder.encode(newPassword);
-                userEntity.setPassword(encodedPassword);
-                userRepository.save(userEntity);
+                saveNewPassword(userEntity, newPassword);
             }
         } else {
             throw new IllegalStateException("The old password is not correct");
@@ -105,20 +105,18 @@ public class UserProfileService {
     }
 
     public void extendBookReturnDate(ExtendBookRequest extendBookRequest, HttpServletRequest httpServletRequest) {
-
         final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         final String username = sessionRegistry.getSessionUsername(sessionID);
 
-        final UserEntity userEntity = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(FIND_USER_EXCEPTION_LOG + username));
+        final UserEntity userEntity = userService.getUserByUsername(username);
+        final BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById(extendBookRequest
+                .getBorrowedBookId());
 
-        final BorrowedBookEntity borrowedBookEntity = borrowedBookRepository
-                .findById(extendBookRequest.getBorrowedBookId())
-                .orElseThrow(() -> new IllegalStateException(FIND_BORROWED_BOOK_EXCEPTION_LOG));
-
-        if (Objects.equals(userEntity.getCardNumber(), extendBookRequest.getCardNumber())) {
+        if (bookUtil.isCardNumberValid(userEntity.getCardNumber(), extendBookRequest.getCardNumber())) {
             if (!borrowedBookEntity.isExtended()) {
                 sendBookReturnDateExtensionRequestMail(userEntity, borrowedBookEntity);
+                log.info("New request for return date extension of borrowed book with id " + borrowedBookEntity.getId()
+                        + " has been created by user with id " + userEntity.getId());
             } else {
                 throw new IllegalStateException("The borrowed book with id " + borrowedBookEntity.getId() +
                         " has been already extended once");
@@ -126,21 +124,14 @@ public class UserProfileService {
         } else {
             throw new IllegalStateException(INVALID_CARD_NUMBER_LOG);
         }
-
     }
 
-    private void sendBookReturnDateExtensionRequestMail(UserEntity userEntity, BorrowedBookEntity borrowedBookEntity) {
-        mailSender.send(adminMail, mailBuilder.getBookReturnDateExtensionRequestMailBody(
-                        userEntity.getId(),
-                        userEntity.getCardNumber().toString(),
-                        borrowedBookEntity.getBookId(),
-                        borrowedBookEntity.getBorrowDate().toString(),
-                        borrowedBookEntity.getReturnDate().toString(),
-                        borrowedBookEntity.getAffiliate(),
-                        borrowedBookEntity.getPenalty()),
-                "New book return date extension request");
+    private void saveNewPassword(UserEntity userEntity, String newPassword) {
+        String encodedPassword = bCryptPasswordEncoder.encode(newPassword);
+        userEntity.setPassword(encodedPassword);
+        userRepository.save(userEntity);
+        log.info("New password for user with id " + userEntity.getId() + " has been set (via user profile)");
     }
-
 
     private void setBorrowedBookDetails(UserBook userBook, BorrowedBookEntity borrowedBookEntity) {
         userBook.setBorrowDate(borrowedBookEntity.getBorrowDate().toString());
@@ -154,6 +145,27 @@ public class UserProfileService {
         userBook.setReturnDate("");
         userBook.setPenalty("");
         userBook.setStatus("Ordered");
+    }
+
+    private boolean isRequestOldPasswordMatchingOldPassword(String requestOldPassword, String oldPassword) {
+        return bCryptPasswordEncoder.matches(requestOldPassword, oldPassword);
+    }
+
+    private boolean isNewPasswordSameAsOldPassword(String newPassword, String oldPassword) {
+        return bCryptPasswordEncoder.matches(newPassword, oldPassword);
+    }
+
+    private void sendBookReturnDateExtensionRequestMail(UserEntity userEntity, BorrowedBookEntity borrowedBookEntity) {
+        mailSender.send(adminMail, mailBuilder.getBookReturnDateExtensionRequestMailBody(
+                        userEntity.getId(),
+                        userEntity.getCardNumber().toString(),
+                        borrowedBookEntity.getBookId(),
+                        borrowedBookEntity.getBorrowDate().toString(),
+                        borrowedBookEntity.getReturnDate().toString(),
+                        borrowedBookEntity.getAffiliate(),
+                        borrowedBookEntity.getPenalty()),
+                "New book return date extension request");
+        log.info("New sendBookReturnDateExtensionRequestMail message sent to " + adminMail);
     }
 
 }

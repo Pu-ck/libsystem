@@ -1,21 +1,18 @@
 package com.system.libsystem.rest.books.details;
 
 import com.system.libsystem.entities.book.BookEntity;
-import com.system.libsystem.entities.book.BookRepository;
+import com.system.libsystem.entities.book.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import static com.system.libsystem.util.SharedConstants.FIND_BOOK_EXCEPTION_LOG;
 
 @Service
 @AllArgsConstructor
 public class BookDetailsService {
 
-    private final BookRepository bookRepository;
+    private final BookService bookService;
 
     public BookEntity getBookDetails(int bookId) {
-        return bookRepository.findById(bookId)
-                .orElseThrow(() -> new IllegalStateException(FIND_BOOK_EXCEPTION_LOG + bookId));
+        return bookService.getBookById(bookId);
     }
 
 }

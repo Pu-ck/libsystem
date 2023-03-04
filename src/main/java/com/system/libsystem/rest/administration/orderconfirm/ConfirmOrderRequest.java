@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ConfirmOrderRequest {
-    private int id;
+    private int borrowedBookId;
     private Long cardNumber;
 }

@@ -11,8 +11,10 @@ import java.sql.Date;
 @Getter
 @Setter
 public class BorrowedBookEntity {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "borrowed_book_id_seq", sequenceName = "borrowed_book_id_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "borrowed_book_id_seq")
     private int id;
 
     @Column(nullable = false)

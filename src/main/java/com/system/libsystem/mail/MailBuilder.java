@@ -1,11 +1,15 @@
 package com.system.libsystem.mail;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Component
 public class MailBuilder {
+
     public String getAccountConfirmationMailBody(String userName, String firstName, String lastName, String cardNumber,
                                                  String registrationTime, String confirmationAddress) {
         return "New account registration request, " +
@@ -44,7 +48,7 @@ public class MailBuilder {
     public String getBookBorrowMailBody(String firstName, String lastName, String title, String author,
                                         int orderNumber, String affiliate) {
         return "Hello " + firstName + " " + lastName + "," +
-                "<p>You have ordered a new book from library affiliate " + affiliate + "<p>" +
+                "<p>You have ordered a new book from library affiliate: " + affiliate + "<p>" +
                 "<p>Title: " + title + "<p>" +
                 "<p>Author: " + author + "<p>" +
                 "<p>Order number: " + orderNumber + "<p>" +
@@ -70,11 +74,38 @@ public class MailBuilder {
     public String getBookReturnDateExtensionConfirmationMailBody(String firstName, String lastName, String title,
                                                                  String author, String newReturnDate, String affiliate) {
         return "Hello " + firstName + " " + lastName + "," +
-                "<p>Your book's return date extension request has been accepted. Extended book details: <p>" +
+                "<p>Your book's return date extension request has been accepted. Extended book's details: <p>" +
                 "<p>Title: " + title + "<p>" +
                 "<p>Author: " + author + "<p>" +
                 "<p>Library affiliate: " + affiliate + "<p>" +
                 "<p>New return date: " + newReturnDate + "<p>";
+    }
+
+    public String getOrderedBookPenaltyInformationMailBody(String firstName, String lastName, String title,
+                                                           String author, String returnDate, String affiliate,
+                                                           BigDecimal penalty) {
+        return "Hello " + firstName + " " + lastName + "," +
+                "<p>The time to return a book you have ordered has expired and a penalty was increased. " +
+                "Book's details: <p>" +
+                "<p>Title: " + title + "<p>" +
+                "<p>Author: " + author + "<p>" +
+                "<p>Library affiliate: " + affiliate + "<p>" +
+                "<p>Return date: " + returnDate + "<p>" +
+                "<p>Current penalty: " + penalty + "<p>" +
+                "<p>If available, extend the return date of your book, or return it to your local library affiliate.<p>";
+    }
+
+    public String getComingUpBorrowedBookReturnDateMailBody(String firstName, String lastName, String title,
+                                                           String author, String returnDate, String affiliate,
+                                                            long daysToReturnDate) {
+        return "Hello " + firstName + " " + lastName + "," +
+                "<p>Your ordered book's return date is coming. Book's details: <p>" +
+                "<p>Title: " + title + "<p>" +
+                "<p>Author: " + author + "<p>" +
+                "<p>Library affiliate: " + affiliate + "<p>" +
+                "<p>Return date: " + returnDate + "<p>" +
+                "<p>Days to return date: " + daysToReturnDate + "<p>" +
+                "<p>If available, extend the return date of your book, or return it to your local library affiliate.<p>";
     }
 
 }

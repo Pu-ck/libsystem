@@ -13,7 +13,8 @@ import java.util.Date;
 public class PasswordReminderTokenEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "password_reminder_token_id_seq", sequenceName = "password_reminder_token_id_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "password_reminder_token_id_seq")
     private Long id;
 
     @Column(nullable = false)

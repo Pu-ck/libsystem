@@ -53,11 +53,11 @@ public class Config {
                 .antMatchers("/api/login", "/api/password-reminder", "/api/registration/**", "/api/logout")
                 .permitAll()
                 .antMatchers(HttpMethod.POST, "/api/administration/books/extend-book")
-                .hasRole(UserType.ADMIN.name())
+                .hasAuthority(UserType.ADMIN.name())
                 .antMatchers(HttpMethod.POST, "/api/administration/books/confirm-order")
-                .hasRole(UserType.ADMIN.name())
+                .hasAuthority(UserType.ADMIN.name())
                 .antMatchers(HttpMethod.POST, "/api/administration/books/return")
-                .hasRole(UserType.ADMIN.name())
+                .hasAuthority(UserType.ADMIN.name())
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -68,8 +68,8 @@ public class Config {
                 UsernamePasswordAuthenticationFilter.class
         );
 
-        http.logout().clearAuthentication(true).logoutRequestMatcher(new AntPathRequestMatcher("/home/logout"))
-                .logoutSuccessUrl("/home/login").deleteCookies("JSESSIONID")
+        http.logout().clearAuthentication(true).logoutRequestMatcher(new AntPathRequestMatcher("/api/logout"))
+                .logoutSuccessUrl("/api/login").deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true);
 
         return http.build();

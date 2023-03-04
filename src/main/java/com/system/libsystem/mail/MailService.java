@@ -16,9 +16,11 @@ import javax.mail.internet.MimeMessage;
 public class MailService implements MailSender {
 
     private static final String ENCODING_FORMAT = "utf-8";
+
     private final JavaMailSender javaMailSender;
-    @Value("${mail.sender}")
-    private String sender;
+
+    @Value("${mail.sender.confirmation}")
+    private String confirmationMail;
 
     @Override
     @Async
@@ -29,7 +31,7 @@ public class MailService implements MailSender {
             mimeMessageHelper.setText(mail, true);
             mimeMessageHelper.setTo(to);
             mimeMessageHelper.setSubject(subject);
-            mimeMessageHelper.setFrom(sender);
+            mimeMessageHelper.setFrom(confirmationMail);
             javaMailSender.send(mimeMessage);
         } catch (MessagingException exception) {
             throw new IllegalStateException("Mail sending failure " + exception.getMessage());

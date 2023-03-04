@@ -14,10 +14,13 @@ import javax.persistence.*;
 public class ConfirmationTokenEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "confirmation_token_id_seq", sequenceName = "confirmation_token_id_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "confirmation_token_id_seq")
     private Long id;
+
     @Column(nullable = false)
     private String token;
+
     @ManyToOne
     @JoinColumn(
             nullable = false,

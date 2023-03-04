@@ -88,7 +88,7 @@ public class FilterBooksService {
     }
 
     private List<BookEntity> getSortedBooks(String sortType, String sortDirection, List<BookEntity> bookEntities,
-                                            String affliate) {
+                                            String affiliate) {
         switch (sortType) {
             case SORT_BY_TITLE:
                 return filterBooksSortUtil.getBooksFilteredByTitleSorted(sortDirection, bookEntities);
@@ -101,9 +101,9 @@ public class FilterBooksService {
             case SORT_BY_YEAR_OF_PRINT:
                 return filterBooksSortUtil.getBooksFilteredByYearOfPrintSorted(sortDirection, bookEntities);
             case SORT_BY_CURRENT_QUANTITY:
-                return filterBooksSortUtil.getBooksFilteredByCurrentQuantity(sortDirection, bookEntities, affliate);
+                return filterBooksSortUtil.getBooksFilteredByCurrentQuantity(sortDirection, bookEntities, affiliate);
             case SORT_BY_GENERAL_QUANTITY:
-                return filterBooksSortUtil.getBooksFilteredByGeneralQuantity(sortDirection, bookEntities, affliate);
+                return filterBooksSortUtil.getBooksFilteredByGeneralQuantity(sortDirection, bookEntities, affiliate);
             default:
                 return bookEntities;
         }

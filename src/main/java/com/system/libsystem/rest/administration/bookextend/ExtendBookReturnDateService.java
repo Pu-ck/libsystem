@@ -1,55 +1,64 @@
 package com.system.libsystem.rest.administration.bookextend;
 
 import com.system.libsystem.entities.book.BookEntity;
-import com.system.libsystem.entities.book.BookRepository;
+import com.system.libsystem.entities.book.BookService;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookEntity;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookRepository;
+import com.system.libsystem.entities.borrowedbook.BorrowedBookService;
 import com.system.libsystem.entities.user.UserEntity;
-import com.system.libsystem.entities.user.UserRepository;
+import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
 
-import static com.system.libsystem.util.SharedConstants.*;
-
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ExtendBookReturnDateService {
 
     private final BorrowedBookRepository borrowedBookRepository;
-    private final BookRepository bookRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
+    private final BookService bookService;
+    private final BorrowedBookService borrowedBookService;
     private final MailBuilder mailBuilder;
     private final MailSender mailSender;
 
     public void extendRequestedBookReturnDate(ExtendBookReturnDateRequest extendBookReturnDateRequest) {
 
-        BorrowedBookEntity borrowedBookEntity = borrowedBookRepository
-                .findById(extendBookReturnDateRequest.getBorrowedBookId())
-                .orElseThrow(() -> new IllegalStateException(FIND_BORROWED_BOOK_EXCEPTION_LOG));
-
-        final UserEntity userEntity = userRepository.findById(borrowedBookEntity.getUserId())
-                .orElseThrow(() -> new UsernameNotFoundException(FIND_USER_EXCEPTION_LOG
-                        + borrowedBookEntity.getUserId()));
-
-        final BookEntity bookEntity = bookRepository.findById(borrowedBookEntity.getBookId())
-                .orElseThrow(() -> new IllegalStateException(FIND_BOOK_EXCEPTION_LOG + borrowedBookEntity.getBookId()));
+        BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById(extendBookReturnDateRequest
+                .getBorrowedBookId());
+        final UserEntity userEntity = userService.getUserById(borrowedBookEntity.getUserId());
+        final BookEntity bookEntity = bookService.getBookById(borrowedBookEntity.getBookId());
 
         final Date currentReturnDate = borrowedBookEntity.getReturnDate();
         final LocalDate extendTime = currentReturnDate.toLocalDate().plusDays(extendBookReturnDateRequest.getExtendTime());
         final Date newReturnDate = Date.valueOf(extendTime);
 
-        if (!borrowedBookEntity.isAccepted()) {
-            borrowedBookEntity.setReturnDate(newReturnDate);
-            borrowedBookEntity.setExtended(true);
-            borrowedBookRepository.save(borrowedBookEntity);
-            sendBookReturnDateExtensionConfirmationMail(userEntity, borrowedBookEntity, bookEntity);
+        if (borrowedBookEntity.isAccepted()) {
+            if (!borrowedBookEntity.isExtended()) {
+                saveBorrowedBookNewReturnDate(borrowedBookEntity, newReturnDate, userEntity, bookEntity);
+            } else {
+                throw new IllegalStateException("Unable to extend return date of the requested borrowed book with id "
+                        + borrowedBookEntity.getId() + " because the return date has been already extended once");
+            }
+        } else {
+            throw new IllegalStateException("Unable to extended return date of the requested borrowed book with id "
+                    + borrowedBookEntity.getId() + " because the book is not accepted");
         }
+    }
+
+    private void saveBorrowedBookNewReturnDate(BorrowedBookEntity borrowedBookEntity, Date newReturnDate,
+                                               UserEntity userEntity, BookEntity bookEntity) {
+        borrowedBookEntity.setReturnDate(newReturnDate);
+        borrowedBookEntity.setExtended(true);
+        borrowedBookRepository.save(borrowedBookEntity);
+        sendBookReturnDateExtensionConfirmationMail(userEntity, borrowedBookEntity, bookEntity);
+        log.info("New return date set for borrowed book with id " + borrowedBookEntity.getId());
     }
 
     private void sendBookReturnDateExtensionConfirmationMail(UserEntity userEntity, BorrowedBookEntity borrowedBookEntity,
@@ -62,6 +71,7 @@ public class ExtendBookReturnDateService {
                         borrowedBookEntity.getReturnDate().toString(),
                         borrowedBookEntity.getAffiliate()),
                 "Book return date extension request accepted");
+        log.info("New sendBookReturnDateExtensionConfirmationMail sent to " + userEntity.getUsername());
     }
 
 }

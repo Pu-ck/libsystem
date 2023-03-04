@@ -1,5 +1,6 @@
 package com.system.libsystem.session;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -10,6 +11,7 @@ import java.util.Base64;
 import java.util.UUID;
 
 @Component
+@Slf4j
 public class SessionRegistry {
 
     private final ValueOperations<String, String> redisSessionStorage;
@@ -31,6 +33,8 @@ public class SessionRegistry {
         } catch (final Exception exception) {
             exception.printStackTrace();
         }
+
+        log.info("New session with id " + sessionID + " set and saved in Redis repository");
 
         return sessionID;
     }
