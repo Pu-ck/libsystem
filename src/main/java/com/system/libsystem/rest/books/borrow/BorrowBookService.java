@@ -1,4 +1,4 @@
-package com.system.libsystem.rest.books.details.borrow;
+package com.system.libsystem.rest.books.borrow;
 
 import com.system.libsystem.entities.book.BookEntity;
 import com.system.libsystem.entities.book.BookService;

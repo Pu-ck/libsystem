@@ -1,4 +1,4 @@
-package com.system.libsystem.rest.books.details.borrow;
+package com.system.libsystem.rest.books.borrow;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

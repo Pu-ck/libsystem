@@ -2,6 +2,7 @@ package com.system.libsystem.rest.books.filter;
 
 import com.system.libsystem.entities.book.BookEntity;
 import com.system.libsystem.entities.book.BookRepository;
+import com.system.libsystem.entities.book.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,11 @@ public class FilterBooksService {
 
     private final BookRepository bookRepository;
     private final FilterBooksSortUtil filterBooksSortUtil;
+    private final BookService bookService;
+
+    public BookEntity getBookDetails(int bookId) {
+        return bookService.getBookById(bookId);
+    }
 
     public List<BookEntity> filterByBookProperties(Map<String, String> requestParameters) {
 
