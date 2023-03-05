@@ -55,7 +55,6 @@ public class UserProfileService {
     }
 
     public List<UserBook> getBooksBorrowedByUser(HttpServletRequest httpServletRequest) {
-
         final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         final String username = sessionRegistry.getSessionUsername(sessionID);
         final UserEntity userEntity = userService.getUserByUsername(username);
