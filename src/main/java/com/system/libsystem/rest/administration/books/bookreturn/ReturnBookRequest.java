@@ -1,4 +1,4 @@
-package com.system.libsystem.rest.administration.bookextend;
+package com.system.libsystem.rest.administration.books.bookreturn;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ExtendBookReturnDateRequest {
+public class ReturnBookRequest {
     private int borrowedBookId;
-    private int extendTime;
+    private Long cardNumber;
 }

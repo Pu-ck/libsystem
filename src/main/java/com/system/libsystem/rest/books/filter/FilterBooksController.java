@@ -2,12 +2,9 @@ package com.system.libsystem.rest.books.filter;
 
 import com.system.libsystem.entities.book.BookEntity;
 
-import com.system.libsystem.rest.books.borrow.BorrowBookRequest;
-import com.system.libsystem.rest.books.borrow.BorrowBookService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -23,8 +20,8 @@ public class FilterBooksController {
         return filterBooksService.filterByBookProperties(requestParameters);
     }
 
-    @GetMapping(params = "id")
-    public BookEntity getBookDetails(@RequestParam("id") int bookId) {
+    @GetMapping("/{book_id}")
+    public BookEntity getBookDetails(@PathVariable("book_id") int bookId) {
         return filterBooksService.getBookDetails(bookId);
     }
 

@@ -45,6 +45,12 @@ public class MailBuilder {
                 "<p><a href=\"" + setNewPasswordAddress + "\">Set new password</a></p>";
     }
 
+    public String getNewPasswordSetMailBody(String firstName, String lastName, String loginPageAddress) {
+        return "Hello " + firstName + " " + lastName + "," +
+                "<p>Your new password has been successfully set. You can now you can now " +
+                "<a href=\"" + loginPageAddress + "\">login</a> to the library system.</p>";
+    }
+
     public String getBookBorrowMailBody(String firstName, String lastName, String title, String author,
                                         int orderNumber, String affiliate) {
         return "Hello " + firstName + " " + lastName + "," +
@@ -57,13 +63,13 @@ public class MailBuilder {
                 "estimated return date and possible penalty, in your user profile information.</p>";
     }
 
-    public String getBookReturnDateExtensionRequestMailBody(int userId, String cardNumber, int bookId,
+    public String getBookReturnDateExtensionRequestMailBody(int userId, String cardNumber, int borrowedBookId,
                                                             String borrowDate, String returnDate, String affiliate,
                                                             BigDecimal penalty) {
         return "New book return date extension request, " +
                 "<p>User id: " + userId + "</p>" +
                 "<p>Card number: " + cardNumber + "</p>" +
-                "<p>Book id: " + bookId + "</p>" +
+                "<p>Borrowed book id: " + borrowedBookId + "</p>" +
                 "<p>Borrow date: " + borrowDate + "</p>" +
                 "<p>Return date: " + returnDate + "</p>" +
                 "<p>Current penalty: " + penalty + "</p>" +
@@ -96,7 +102,7 @@ public class MailBuilder {
     }
 
     public String getComingUpBorrowedBookReturnDateMailBody(String firstName, String lastName, String title,
-                                                           String author, String returnDate, String affiliate,
+                                                            String author, String returnDate, String affiliate,
                                                             long daysToReturnDate) {
         return "Hello " + firstName + " " + lastName + "," +
                 "<p>Your ordered book's return date is coming. Book's details: <p>" +
@@ -106,6 +112,37 @@ public class MailBuilder {
                 "<p>Return date: " + returnDate + "<p>" +
                 "<p>Days to return date: " + daysToReturnDate + "<p>" +
                 "<p>If available, extend the return date of your book, or return it to your local library affiliate.<p>";
+    }
+
+    public String getBorrowedBookOrderReadyMailBody(String firstName, String lastName, String title,
+                                                    String author, String affiliate) {
+        return "Hello " + firstName + " " + lastName + "," +
+                "<p>Your ordered book has been prepared for pick up. Book's details: <p>" +
+                "<p>Title: " + title + "<p>" +
+                "<p>Author: " + author + "<p>" +
+                "<p>Library affiliate: " + affiliate + "<p>" +
+                "<p>Pick up your ordered book at your local library affiliate within 2 days, otherwise the order " +
+                "will be cancelled.<p>";
+    }
+
+    public String getBorrowedBookOrderRejectedMailBody(String firstName, String lastName, String title,
+                                                       String author, String affiliate) {
+        return "Hello " + firstName + " " + lastName + "," +
+                "<p>Your ordered book has been rejected. Book's details: <p>" +
+                "<p>Title: " + title + "<p>" +
+                "<p>Author: " + author + "<p>" +
+                "<p>Library affiliate: " + affiliate + "<p>" +
+                "<p>Contact the administration for more information about your order rejection<p>";
+    }
+
+    public String getBorrowedBookOrderPickUpTimeExpired(String firstName, String lastName, String title,
+                                               String author, String affiliate) {
+        return "Hello " + firstName + " " + lastName + "," +
+                "<p>Your ordered book pick up time has expired. Book's details: <p>" +
+                "<p>Title: " + title + "<p>" +
+                "<p>Author: " + author + "<p>" +
+                "<p>Library affiliate: " + affiliate + "<p>" +
+                "<p>The ordered book has been returned to the library catalogue.<p>";
     }
 
 }

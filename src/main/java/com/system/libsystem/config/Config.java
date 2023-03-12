@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -50,13 +49,9 @@ public class Config {
         ).and();
 
         http.authorizeRequests()
-                .antMatchers("/api/login", "/api/password-reminder", "/api/registration/**", "/api/logout")
+                .antMatchers("/api/login", "/api/password-reminder/**", "/api/registration/**", "/api/logout")
                 .permitAll()
-                .antMatchers(HttpMethod.POST, "/api/administration/books/extend-book")
-                .hasAuthority(UserType.ADMIN.name())
-                .antMatchers(HttpMethod.POST, "/api/administration/books/confirm-order")
-                .hasAuthority(UserType.ADMIN.name())
-                .antMatchers(HttpMethod.POST, "/api/administration/books/return")
+                .antMatchers("/api/administration/**")
                 .hasAuthority(UserType.ADMIN.name())
                 .anyRequest()
                 .authenticated()

@@ -13,6 +13,7 @@ public class UserBook {
     private String yearOfPrint;
     private String borrowDate;
     private String returnDate;
+    private String readyDate;
     private String penalty;
     private String affiliate;
     private String status;

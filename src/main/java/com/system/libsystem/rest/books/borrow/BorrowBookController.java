@@ -1,11 +1,7 @@
 package com.system.libsystem.rest.books.borrow;
 
-import com.system.libsystem.entities.book.BookService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,8 +12,11 @@ public class BorrowBookController {
 
     private final BorrowBookService borrowBookService;
 
-    @PostMapping
-    public void borrow(@RequestBody BorrowBookRequest borrowBookRequest, HttpServletRequest httpServletRequest) {
+    @PutMapping("/{book_id}/borrow-book")
+    public void borrow(@RequestBody BorrowBookRequest borrowBookRequest,
+                       @PathVariable("book_id") int bookId,
+                       HttpServletRequest httpServletRequest) {
+        borrowBookRequest.setBookId(bookId);
         borrowBookService.borrow(borrowBookRequest, httpServletRequest);
     }
 

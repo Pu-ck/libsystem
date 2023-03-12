@@ -1,4 +1,4 @@
-package com.system.libsystem.rest.administration.orderconfirm;
+package com.system.libsystem.rest.administration.orders.orderaccept;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ConfirmOrderRequest {
+public class AcceptOrderRequest {
     private int borrowedBookId;
     private Long cardNumber;
 }

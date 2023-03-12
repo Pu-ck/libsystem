@@ -19,18 +19,20 @@ public class UserProfileController {
         return userProfileService.getUserProfileInformation(httpServletRequest);
     }
 
-    @PostMapping("/borrowed-books")
+    @GetMapping("/books")
+    public List<UserBook> getUserBooks(HttpServletRequest httpServletRequest) {
+        return userProfileService.getUserBooks(httpServletRequest);
+    }
+
+    @PutMapping("/books/{book_id}/extend-book")
     public void extendBookReturnDate(@RequestBody ExtendBookRequest extendBookRequest,
+                                     @PathVariable("book_id") int bookId,
                                      HttpServletRequest httpServletRequest) {
+        extendBookRequest.setBorrowedBookId(bookId);
         userProfileService.extendBookReturnDate(extendBookRequest, httpServletRequest);
     }
 
-    @GetMapping("/borrowed-books")
-    public List<UserBook> getBooksBorrowedByUser(HttpServletRequest httpServletRequest) {
-        return userProfileService.getBooksBorrowedByUser(httpServletRequest);
-    }
-
-    @PostMapping("/change-password")
+    @PutMapping("/change-password")
     public void changeUserPassword(@RequestBody ChangePasswordRequest request, HttpServletRequest httpServletRequest) {
         userProfileService.changeUserPassword(request, httpServletRequest);
     }

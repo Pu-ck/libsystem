@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 @AllArgsConstructor
 @Slf4j
-public class ReturnDateChecker {
+public class ReturnDateCheckerTask {
 
     private static final BigDecimal PENALTY = new BigDecimal("1.00");
     private static final int INCOMING_RETURN_DATE_REMINDER_PERIOD = 7;
@@ -33,7 +33,6 @@ public class ReturnDateChecker {
     private final UserService userService;
     private final BookService bookService;
 
-    @Async
     public void checkBorrowedBooksReturnDates() {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
@@ -41,7 +40,7 @@ public class ReturnDateChecker {
         List<BorrowedBookEntity> borrowedBookEntities = borrowedBookRepository.findAll();
 
         for (BorrowedBookEntity borrowedBookEntity : borrowedBookEntities) {
-            if (borrowedBookEntity.isAccepted()) {
+            if (borrowedBookEntity.isAccepted() && !borrowedBookEntity.isClosed()) {
                 final Date borrowedBookReturnDate = borrowedBookEntity.getReturnDate();
                 long daysToReturnDate = TimeUnit.MILLISECONDS
                         .toDays(borrowedBookReturnDate.getTime() - currentDate.getTime());

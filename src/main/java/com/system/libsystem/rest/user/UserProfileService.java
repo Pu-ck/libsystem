@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.system.libsystem.util.SharedConstants.INVALID_CARD_NUMBER_LOG;
+import static com.system.libsystem.util.SharedConstants.*;
 
 @Service
 @RequiredArgsConstructor
@@ -54,7 +54,7 @@ public class UserProfileService {
                 userEntity.getCardNumber().toString());
     }
 
-    public List<UserBook> getBooksBorrowedByUser(HttpServletRequest httpServletRequest) {
+    public List<UserBook> getUserBooks(HttpServletRequest httpServletRequest) {
         final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         final String username = sessionRegistry.getSessionUsername(sessionID);
         final UserEntity userEntity = userService.getUserByUsername(username);
@@ -65,14 +65,14 @@ public class UserProfileService {
         for (BorrowedBookEntity borrowedBookEntity : borrowedBookRepository.findByUserId(userId)) {
             final BookEntity bookEntity = bookService.getBookById(borrowedBookEntity.getBookId());
             UserBook userBook = new UserBook();
-            userBook.setTitle(bookEntity.getTitle());
-            userBook.setAuthor(bookEntity.getAuthor());
-            userBook.setGenre(bookEntity.getGenre());
-            userBook.setPublisher(bookEntity.getPublisher());
-            userBook.setYearOfPrint(bookEntity.getYearOfPrint());
-            userBook.setAffiliate(borrowedBookEntity.getAffiliate());
-            if (borrowedBookEntity.isAccepted()) {
+            setUserBookDetails(userBook, borrowedBookEntity, bookEntity);
+
+            if (borrowedBookEntity.isClosed()) {
+                setReturnedOrRejectedBookDetails(userBook, borrowedBookEntity);
+            } else if (borrowedBookEntity.isAccepted()) {
                 setBorrowedBookDetails(userBook, borrowedBookEntity);
+            } else if (borrowedBookEntity.isReady()) {
+                setReadyBookDetails(userBook, borrowedBookEntity);
             } else {
                 setOrderedBookDetails(userBook);
             }
@@ -112,13 +112,16 @@ public class UserProfileService {
                 .getBorrowedBookId());
 
         if (bookUtil.isCardNumberValid(userEntity.getCardNumber(), extendBookRequest.getCardNumber())) {
-            if (!borrowedBookEntity.isExtended()) {
-                sendBookReturnDateExtensionRequestMail(userEntity, borrowedBookEntity);
-                log.info("New request for return date extension of borrowed book with id " + borrowedBookEntity.getId()
-                        + " has been created by user with id " + userEntity.getId());
+            if (!borrowedBookEntity.isClosed()) {
+                if (!borrowedBookEntity.isExtended()) {
+                    sendBookReturnDateExtensionRequestMail(userEntity, borrowedBookEntity);
+                    log.info("New request for return date extension of borrowed book with id "
+                            + borrowedBookEntity.getId() + " has been issued by user with id " + userEntity.getId());
+                } else {
+                    throw new IllegalStateException(BOOK_ALREADY_EXTENDED_LOG + borrowedBookEntity.getId());
+                }
             } else {
-                throw new IllegalStateException("The borrowed book with id " + borrowedBookEntity.getId() +
-                        " has been already extended once");
+                throw new IllegalStateException(BOOK_ALREADY_RETURNED_LOG + borrowedBookEntity.getId());
             }
         } else {
             throw new IllegalStateException(INVALID_CARD_NUMBER_LOG);
@@ -130,6 +133,15 @@ public class UserProfileService {
         userEntity.setPassword(encodedPassword);
         userRepository.save(userEntity);
         log.info("New password for user with id " + userEntity.getId() + " has been set (via user profile)");
+    }
+
+    private void setUserBookDetails(UserBook userBook, BorrowedBookEntity borrowedBookEntity, BookEntity bookEntity) {
+        userBook.setTitle(bookEntity.getTitle());
+        userBook.setAuthor(bookEntity.getAuthor());
+        userBook.setGenre(bookEntity.getGenre());
+        userBook.setPublisher(bookEntity.getPublisher());
+        userBook.setYearOfPrint(bookEntity.getYearOfPrint());
+        userBook.setAffiliate(borrowedBookEntity.getAffiliate());
     }
 
     private void setBorrowedBookDetails(UserBook userBook, BorrowedBookEntity borrowedBookEntity) {
@@ -146,6 +158,29 @@ public class UserProfileService {
         userBook.setStatus("Ordered");
     }
 
+    private void setReadyBookDetails(UserBook userBook, BorrowedBookEntity borrowedBookEntity) {
+        userBook.setBorrowDate("");
+        userBook.setReturnDate("");
+        userBook.setPenalty("");
+        userBook.setStatus("Ready");
+        userBook.setReadyDate(borrowedBookEntity.getReadyDate().toString());
+    }
+
+    private void setReturnedOrRejectedBookDetails(UserBook userBook, BorrowedBookEntity borrowedBookEntity) {
+        if (borrowedBookEntity.getBorrowDate() != null && borrowedBookEntity.getReturnDate() != null
+                && borrowedBookEntity.getPenalty() != null) {
+            userBook.setBorrowDate(borrowedBookEntity.getBorrowDate().toString());
+            userBook.setReturnDate(borrowedBookEntity.getReturnDate().toString());
+            userBook.setPenalty(borrowedBookEntity.getPenalty().toString());
+            userBook.setStatus("Returned");
+        } else {
+            userBook.setBorrowDate("");
+            userBook.setReturnDate("");
+            userBook.setPenalty("");
+            userBook.setStatus("Rejected");
+        }
+    }
+
     private boolean isRequestOldPasswordMatchingOldPassword(String requestOldPassword, String oldPassword) {
         return bCryptPasswordEncoder.matches(requestOldPassword, oldPassword);
     }
@@ -158,7 +193,7 @@ public class UserProfileService {
         mailSender.send(adminMail, mailBuilder.getBookReturnDateExtensionRequestMailBody(
                         userEntity.getId(),
                         userEntity.getCardNumber().toString(),
-                        borrowedBookEntity.getBookId(),
+                        borrowedBookEntity.getId(),
                         borrowedBookEntity.getBorrowDate().toString(),
                         borrowedBookEntity.getReturnDate().toString(),
                         borrowedBookEntity.getAffiliate(),

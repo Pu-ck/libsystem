@@ -38,6 +38,9 @@ public class PasswordReminderService {
 
     private final PasswordReminderTokenService passwordReminderTokenService;
 
+    @Value("${application.login.address}")
+    private String loginPageAddress;
+
     @Value("${server.password-reset.address}")
     private String passwordReminderAddress;
 
@@ -64,6 +67,7 @@ public class PasswordReminderService {
         String encodedPassword = bCryptPasswordEncoder.encode(resetPasswordRequest.getPassword());
         userEntity.setPassword(encodedPassword);
         userRepository.save(userEntity);
+        sendNewPasswordSetMail(userEntity);
         log.info("New password has been set for user with id " + userEntity.getId());
     }
 
@@ -118,6 +122,14 @@ public class PasswordReminderService {
                 userEntity.getLastName(),
                 passwordReminderRequest.getCardNumber().toString()), "Password reminder");
         log.info("New sendPasswordReminderMail message sent to " + userEntity.getUsername());
+    }
+
+    private void sendNewPasswordSetMail(UserEntity userEntity) {
+        mailSender.send(userEntity.getUsername(), mailBuilder.getNewPasswordSetMailBody(
+                userEntity.getFirstName(),
+                userEntity.getLastName(),
+                loginPageAddress), "New password successfully set");
+        log.info("New sendNewPasswordSetMail message sent to " + userEntity.getUsername());
     }
 
 }

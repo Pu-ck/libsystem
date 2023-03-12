@@ -15,8 +15,10 @@ public class PasswordReminderController {
         passwordReminderService.remindPassword(passwordReminderRequest);
     }
 
-    @PostMapping("/reset-password")
-    public void changeUserPassword(@RequestBody ResetPasswordRequest resetPasswordRequest) {
+    @PutMapping("/{token}/reset-password")
+    public void changeUserPassword(@RequestBody ResetPasswordRequest resetPasswordRequest,
+                                   @PathVariable("token") String token) {
+        resetPasswordRequest.setToken(token);
         passwordReminderService.resetPassword(resetPasswordRequest);
     }
 

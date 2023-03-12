@@ -32,6 +32,9 @@ public class BorrowedBookEntity {
     @Column
     private Date returnDate;
 
+    @Column
+    private Date readyDate;
+
     @Column(nullable = false)
     private BigDecimal penalty;
 
@@ -43,5 +46,11 @@ public class BorrowedBookEntity {
 
     @Column(nullable = false)
     private boolean extended;
+
+    @Column(nullable = false)
+    private boolean closed;
+
+    @Column(nullable = false)
+    private boolean ready;
 
 }

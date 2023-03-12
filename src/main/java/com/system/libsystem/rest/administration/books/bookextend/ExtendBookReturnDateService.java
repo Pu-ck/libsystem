@@ -1,4 +1,4 @@
-package com.system.libsystem.rest.administration.bookextend;
+package com.system.libsystem.rest.administration.books.bookextend;
 
 import com.system.libsystem.entities.book.BookEntity;
 import com.system.libsystem.entities.book.BookService;
@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
+
+import static com.system.libsystem.util.SharedConstants.BOOK_ALREADY_EXTENDED_LOG;
+import static com.system.libsystem.util.SharedConstants.BOOK_ALREADY_RETURNED_LOG;
 
 @Service
 @AllArgsConstructor
@@ -39,16 +42,19 @@ public class ExtendBookReturnDateService {
         final LocalDate extendTime = currentReturnDate.toLocalDate().plusDays(extendBookReturnDateRequest.getExtendTime());
         final Date newReturnDate = Date.valueOf(extendTime);
 
-        if (borrowedBookEntity.isAccepted()) {
-            if (!borrowedBookEntity.isExtended()) {
-                saveBorrowedBookNewReturnDate(borrowedBookEntity, newReturnDate, userEntity, bookEntity);
+        if (!borrowedBookEntity.isClosed()) {
+            if (borrowedBookEntity.isAccepted()) {
+                if (!borrowedBookEntity.isExtended()) {
+                    saveBorrowedBookNewReturnDate(borrowedBookEntity, newReturnDate, userEntity, bookEntity);
+                } else {
+                    throw new IllegalStateException(BOOK_ALREADY_EXTENDED_LOG + borrowedBookEntity.getId());
+                }
             } else {
-                throw new IllegalStateException("Unable to extend return date of the requested borrowed book with id "
-                        + borrowedBookEntity.getId() + " because the return date has been already extended once");
+                throw new IllegalStateException("Unable to extended return date of the requested borrowed book with id "
+                        + borrowedBookEntity.getId() + " because the book is not accepted");
             }
         } else {
-            throw new IllegalStateException("Unable to extended return date of the requested borrowed book with id "
-                    + borrowedBookEntity.getId() + " because the book is not accepted");
+            throw new IllegalStateException(BOOK_ALREADY_RETURNED_LOG + borrowedBookEntity.getId());
         }
     }
 

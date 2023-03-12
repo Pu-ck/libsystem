@@ -1,6 +1,7 @@
 package com.system.libsystem.rest.books.borrow;
 
 import com.system.libsystem.entities.book.BookEntity;
+import com.system.libsystem.entities.book.BookRepository;
 import com.system.libsystem.entities.book.BookService;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookEntity;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookRepository;
@@ -27,6 +28,7 @@ import static com.system.libsystem.util.SharedConstants.*;
 public class BorrowBookService {
 
     private final BorrowedBookRepository borrowedBookRepository;
+    private final BookRepository bookRepository;
     private final SessionRegistry sessionRegistry;
     private final MailBuilder mailBuilder;
     private final MailSender mailSender;
@@ -59,6 +61,7 @@ public class BorrowBookService {
                     borrowedBookEntity.setPenalty(penalty);
                     borrowedBookEntity.setCardNumber(cardNumber);
                     borrowedBookEntity.setAffiliate(affiliate);
+                    decreaseBookQuantityAndSaveItInRepository(bookEntity, affiliate);
                     borrowedBookRepository.save(borrowedBookEntity);
                     sendBookBorrowConfirmationMail(userEntity, bookEntity, borrowedBookEntity, affiliate);
                     log.info("New borrowed book order with id " + borrowedBookEntity.getId()
@@ -72,6 +75,11 @@ public class BorrowBookService {
         } else {
             throw new IllegalStateException(INVALID_CARD_NUMBER_LOG);
         }
+    }
+
+    private void decreaseBookQuantityAndSaveItInRepository(BookEntity bookEntity, String affiliate) {
+        bookUtil.setCurrentQuantityInAffiliate(bookEntity, affiliate, -1);
+        bookRepository.save(bookEntity);
     }
 
     private int getCurrentQuantityFromAffiliate(String affiliate, BookEntity bookEntity) {
