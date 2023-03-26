@@ -7,6 +7,8 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookRepository;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookService;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserService;
+import com.system.libsystem.exceptions.BookAlreadyExtendedException;
+import com.system.libsystem.exceptions.BookAlreadyReturnedException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
 import lombok.AllArgsConstructor;
@@ -15,9 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
-
-import static com.system.libsystem.util.SharedConstants.BOOK_ALREADY_EXTENDED_LOG;
-import static com.system.libsystem.util.SharedConstants.BOOK_ALREADY_RETURNED_LOG;
 
 @Service
 @AllArgsConstructor
@@ -47,14 +46,14 @@ public class ExtendBookReturnDateService {
                 if (!borrowedBookEntity.isExtended()) {
                     saveBorrowedBookNewReturnDate(borrowedBookEntity, newReturnDate, userEntity, bookEntity);
                 } else {
-                    throw new IllegalStateException(BOOK_ALREADY_EXTENDED_LOG + borrowedBookEntity.getId());
+                    throw new BookAlreadyExtendedException(borrowedBookEntity.getId());
                 }
             } else {
                 throw new IllegalStateException("Unable to extended return date of the requested borrowed book with id "
                         + borrowedBookEntity.getId() + " because the book is not accepted");
             }
         } else {
-            throw new IllegalStateException(BOOK_ALREADY_RETURNED_LOG + borrowedBookEntity.getId());
+            throw new BookAlreadyReturnedException(borrowedBookEntity.getId());
         }
     }
 
@@ -73,7 +72,7 @@ public class ExtendBookReturnDateService {
                         userEntity.getFirstName(),
                         userEntity.getLastName(),
                         bookEntity.getTitle(),
-                        bookEntity.getAuthor(),
+                        String.join(",", bookEntity.getAuthors().stream().toList().toString()),
                         borrowedBookEntity.getReturnDate().toString(),
                         borrowedBookEntity.getAffiliate()),
                 "Book return date extension request accepted");

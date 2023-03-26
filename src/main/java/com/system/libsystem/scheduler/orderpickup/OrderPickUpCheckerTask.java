@@ -12,9 +12,9 @@ import com.system.libsystem.mail.MailSender;
 import com.system.libsystem.rest.util.BookUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +32,7 @@ public class OrderPickUpCheckerTask {
     private final MailSender mailSender;
     private final BookUtil bookUtil;
 
+    @Transactional
     public void checkIfOrderedBooksWerePickedUp() {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
@@ -70,7 +71,7 @@ public class OrderPickUpCheckerTask {
                 (userEntity.getFirstName(),
                         userEntity.getLastName(),
                         bookEntity.getTitle(),
-                        bookEntity.getAuthor(),
+                        String.join(",", bookEntity.getAuthors().stream().toList().toString()),
                         affiliate), "Ordered book pick up time expired");
         log.info("New sendBorrowedBookOrderPickUpTimeExpired message sent to " + userEntity.getUsername());
     }

@@ -10,7 +10,6 @@ import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -78,7 +77,7 @@ public class ReturnDateCheckerTask {
                         userEntity.getFirstName(),
                         userEntity.getLastName(),
                         bookEntity.getTitle(),
-                        bookEntity.getAuthor(),
+                        String.join(",", bookEntity.getAuthors().stream().toList().toString()),
                         borrowedBookEntity.getReturnDate().toString(),
                         borrowedBookEntity.getAffiliate(),
                         borrowedBookEntity.getPenalty()),
@@ -92,7 +91,7 @@ public class ReturnDateCheckerTask {
                         userEntity.getFirstName(),
                         userEntity.getLastName(),
                         bookEntity.getTitle(),
-                        bookEntity.getAuthor(),
+                        String.join(",", bookEntity.getAuthors().stream().toList().toString()),
                         borrowedBookEntity.getReturnDate().toString(),
                         borrowedBookEntity.getAffiliate(),
                         daysToReturnDate),

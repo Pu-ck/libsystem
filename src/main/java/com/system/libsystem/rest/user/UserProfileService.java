@@ -8,6 +8,9 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookService;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.entities.user.UserService;
+import com.system.libsystem.exceptions.BookAlreadyExtendedException;
+import com.system.libsystem.exceptions.BookAlreadyReturnedException;
+import com.system.libsystem.exceptions.InvalidCardNumberException;
 import com.system.libsystem.helpermodels.UserBook;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
@@ -23,8 +26,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.system.libsystem.util.SharedConstants.*;
 
 @Service
 @RequiredArgsConstructor
@@ -118,13 +119,13 @@ public class UserProfileService {
                     log.info("New request for return date extension of borrowed book with id "
                             + borrowedBookEntity.getId() + " has been issued by user with id " + userEntity.getId());
                 } else {
-                    throw new IllegalStateException(BOOK_ALREADY_EXTENDED_LOG + borrowedBookEntity.getId());
+                    throw new BookAlreadyExtendedException(borrowedBookEntity.getId());
                 }
             } else {
-                throw new IllegalStateException(BOOK_ALREADY_RETURNED_LOG + borrowedBookEntity.getId());
+                throw new BookAlreadyReturnedException(borrowedBookEntity.getId());
             }
         } else {
-            throw new IllegalStateException(INVALID_CARD_NUMBER_LOG);
+            throw new InvalidCardNumberException();
         }
     }
 
@@ -137,10 +138,10 @@ public class UserProfileService {
 
     private void setUserBookDetails(UserBook userBook, BorrowedBookEntity borrowedBookEntity, BookEntity bookEntity) {
         userBook.setTitle(bookEntity.getTitle());
-        userBook.setAuthor(bookEntity.getAuthor());
-        userBook.setGenre(bookEntity.getGenre());
-        userBook.setPublisher(bookEntity.getPublisher());
-        userBook.setYearOfPrint(bookEntity.getYearOfPrint());
+        userBook.setAuthors(bookEntity.getAuthors());
+        userBook.setGenres(bookEntity.getGenres());
+        userBook.setPublisherName(bookEntity.getPublisherEntity().getName());
+        userBook.setYearOfPrint(Integer.toString(bookEntity.getYearOfPrintEntity().getYearOfPrint()));
         userBook.setAffiliate(borrowedBookEntity.getAffiliate());
     }
 
@@ -154,6 +155,7 @@ public class UserProfileService {
     private void setOrderedBookDetails(UserBook userBook) {
         userBook.setBorrowDate("");
         userBook.setReturnDate("");
+        userBook.setReadyDate("");
         userBook.setPenalty("");
         userBook.setStatus("Ordered");
     }
@@ -161,9 +163,9 @@ public class UserProfileService {
     private void setReadyBookDetails(UserBook userBook, BorrowedBookEntity borrowedBookEntity) {
         userBook.setBorrowDate("");
         userBook.setReturnDate("");
+        userBook.setReadyDate(borrowedBookEntity.getReadyDate().toString());
         userBook.setPenalty("");
         userBook.setStatus("Ready");
-        userBook.setReadyDate(borrowedBookEntity.getReadyDate().toString());
     }
 
     private void setReturnedOrRejectedBookDetails(UserBook userBook, BorrowedBookEntity borrowedBookEntity) {
@@ -176,6 +178,7 @@ public class UserProfileService {
         } else {
             userBook.setBorrowDate("");
             userBook.setReturnDate("");
+            userBook.setReadyDate("");
             userBook.setPenalty("");
             userBook.setStatus("Rejected");
         }

@@ -5,6 +5,9 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookRepository;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookService;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserService;
+import com.system.libsystem.exceptions.BookAlreadyAcceptedException;
+import com.system.libsystem.exceptions.BookAlreadyReturnedException;
+import com.system.libsystem.exceptions.InvalidCardNumberException;
 import com.system.libsystem.rest.util.BookUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,8 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.time.LocalDate;
-
-import static com.system.libsystem.util.SharedConstants.*;
 
 @Service
 @RequiredArgsConstructor
@@ -42,13 +43,13 @@ public class AcceptOrderService {
                 if (!borrowedBookEntity.isAccepted()) {
                     saveBorrowedBookAsConfirmed(borrowedBookEntity, borrowDate, returnDate);
                 } else {
-                    throw new IllegalStateException(BOOK_ALREADY_ACCEPTED_LOG + borrowedBookEntity.getId());
+                    throw new BookAlreadyAcceptedException(borrowedBookEntity.getId());
                 }
             } else {
-                throw new IllegalStateException(BOOK_ALREADY_RETURNED_LOG + borrowedBookEntity.getId());
+                throw new BookAlreadyReturnedException(borrowedBookEntity.getId());
             }
         } else {
-            throw new IllegalStateException(INVALID_CARD_NUMBER_LOG);
+            throw new InvalidCardNumberException();
         }
     }
 

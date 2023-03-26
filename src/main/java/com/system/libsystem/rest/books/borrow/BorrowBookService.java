@@ -7,6 +7,7 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookEntity;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookRepository;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserService;
+import com.system.libsystem.exceptions.InvalidCardNumberException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
 import com.system.libsystem.rest.util.BookUtil;
@@ -17,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -36,6 +38,7 @@ public class BorrowBookService {
     private final BookService bookService;
     private final BookUtil bookUtil;
 
+    @Transactional
     public void borrow(BorrowBookRequest borrowBookRequest, HttpServletRequest httpServletRequest) {
 
         final BigDecimal penalty = new BigDecimal("0.00");
@@ -73,7 +76,7 @@ public class BorrowBookService {
                         "quantity in stock of the library affiliate");
             }
         } else {
-            throw new IllegalStateException(INVALID_CARD_NUMBER_LOG);
+            throw new InvalidCardNumberException();
         }
     }
 
@@ -102,7 +105,7 @@ public class BorrowBookService {
                 (userEntity.getFirstName(),
                         userEntity.getLastName(),
                         bookEntity.getTitle(),
-                        bookEntity.getAuthor(),
+                        String.join(",", bookEntity.getAuthors().stream().toList().toString()),
                         borrowedBookEntity.getId(),
                         affiliate), "New book ordered");
         log.info("New sendBookBorrowConfirmationMail message sent to " + userEntity.getUsername());

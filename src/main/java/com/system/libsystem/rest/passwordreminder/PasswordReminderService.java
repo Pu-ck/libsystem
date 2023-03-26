@@ -6,6 +6,7 @@ import com.system.libsystem.entities.passwordremindertoken.PasswordReminderToken
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.entities.user.UserService;
+import com.system.libsystem.exceptions.InvalidCardNumberException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
 import com.system.libsystem.rest.util.BookUtil;
@@ -18,8 +19,6 @@ import org.springframework.stereotype.Service;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
-
-import static com.system.libsystem.util.SharedConstants.INVALID_CARD_NUMBER_LOG;
 
 @Service
 @RequiredArgsConstructor
@@ -54,7 +53,7 @@ public class PasswordReminderService {
         if (bookUtil.isCardNumberValid(passwordReminderRequest.getCardNumber(), userEntity.getCardNumber())) {
             sendPasswordReminderMail(userEntity, passwordReminderRequest, token);
         } else {
-            throw new IllegalStateException(INVALID_CARD_NUMBER_LOG);
+            throw new InvalidCardNumberException();
         }
     }
 

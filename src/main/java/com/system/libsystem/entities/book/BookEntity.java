@@ -1,9 +1,16 @@
 package com.system.libsystem.entities.book;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.system.libsystem.entities.author.AuthorEntity;
+import com.system.libsystem.entities.genre.GenreEntity;
+import com.system.libsystem.entities.publisher.PublisherEntity;
+import com.system.libsystem.entities.yearofprint.YearOfPrintEntity;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -18,17 +25,31 @@ public class BookEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
-    private String author;
+    @ManyToMany
+    @JoinTable(
+            name = "book_author",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
+    @JsonManagedReference("book-authors")
+    private Set<AuthorEntity> authors = new HashSet<>();
 
-    @Column(nullable = false)
-    private String genre;
+    @ManyToMany
+    @JoinTable(
+            name = "book_genre",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    @JsonManagedReference("book-genres")
+    private Set<GenreEntity> genres = new HashSet<>();
 
-    @Column(nullable = false)
-    private String publisher;
+    @ManyToOne
+    @JoinColumn(name = "publisher_id")
+    private PublisherEntity publisherEntity;
 
-    @Column(nullable = false)
-    private String yearOfPrint;
+    @ManyToOne
+    @JoinColumn(name = "year_of_print_id")
+    private YearOfPrintEntity yearOfPrintEntity;
 
     @Column(nullable = false)
     private String description;

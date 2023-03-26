@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.system.libsystem.util.SharedConstants.AFFILIATE_A;
@@ -51,23 +50,23 @@ public class FilterBooksService {
 
         if (title.length() > 0) {
             bookEntities = Stream.concat(bookEntities.stream(),
-                    bookRepository.findByTitle(title).stream()).collect(Collectors.toList());
+                    bookRepository.findByTitle(title).stream()).toList();
         }
         if (author.length() > 0) {
             bookEntities = Stream.concat(bookEntities.stream(),
-                    bookRepository.findByAuthorContainingIgnoreCase(author).stream()).collect(Collectors.toList());
+                    bookRepository.findByAuthorName(author).stream()).toList();
         }
         if (genre.length() > 0) {
             bookEntities = Stream.concat(bookEntities.stream(),
-                    bookRepository.findByGenreContainingIgnoreCase(genre).stream()).collect(Collectors.toList());
+                    bookRepository.findByGenreName(genre).stream()).toList();
         }
         if (publisher.length() > 0) {
             bookEntities = Stream.concat(bookEntities.stream(),
-                    bookRepository.findByPublisher(publisher).stream()).collect(Collectors.toList());
+                    bookRepository.findByPublisherName(publisher).stream()).toList();
         }
         if (yearOfPrint.length() > 0) {
             bookEntities = Stream.concat(bookEntities.stream(),
-                    bookRepository.findByYearOfPrint(yearOfPrint).stream()).collect(Collectors.toList());
+                    bookRepository.findByYearOfPrint(Integer.parseInt(yearOfPrint)).stream()).toList();
         }
         if (affiliate.length() > 0) {
             bookEntities = getBooksFilteredByAffiliate(affiliate, bookEntities);
@@ -76,7 +75,7 @@ public class FilterBooksService {
             bookEntities = bookRepository.findAll();
         }
 
-        return getSortedBooks(sortType, sortDirection, bookEntities.stream().distinct().collect(Collectors.toList()),
+        return getSortedBooks(sortType, sortDirection, bookEntities.stream().distinct().toList(),
                 affiliate);
     }
 
@@ -84,35 +83,31 @@ public class FilterBooksService {
         if (affiliate.equals(AFFILIATE_A)) {
             return Stream.concat(bookEntities.stream(),
                     bookRepository.findByCurrentQuantityAffiliateAGreaterThan(0)
-                            .stream()).collect(Collectors.toList());
+                            .stream()).toList();
         } else if (affiliate.equals(AFFILIATE_B)) {
             return Stream.concat(bookEntities.stream(),
                     bookRepository.findByCurrentQuantityAffiliateBGreaterThan(0)
-                            .stream()).collect(Collectors.toList());
+                            .stream()).toList();
         }
         return Collections.emptyList();
     }
 
     private List<BookEntity> getSortedBooks(String sortType, String sortDirection, List<BookEntity> bookEntities,
                                             String affiliate) {
-        switch (sortType) {
-            case SORT_BY_TITLE:
-                return filterBooksSortUtil.getBooksFilteredByTitleSorted(sortDirection, bookEntities);
-            case SORT_BY_AUTHOR:
-                return filterBooksSortUtil.getBooksFilteredByAuthorSorted(sortDirection, bookEntities);
-            case SORT_BY_GENRE:
-                return filterBooksSortUtil.getBooksFilteredByGenreSorted(sortDirection, bookEntities);
-            case SORT_BY_PUBLISHER:
-                return filterBooksSortUtil.getBooksFilteredByPublisherSorted(sortDirection, bookEntities);
-            case SORT_BY_YEAR_OF_PRINT:
-                return filterBooksSortUtil.getBooksFilteredByYearOfPrintSorted(sortDirection, bookEntities);
-            case SORT_BY_CURRENT_QUANTITY:
-                return filterBooksSortUtil.getBooksFilteredByCurrentQuantity(sortDirection, bookEntities, affiliate);
-            case SORT_BY_GENERAL_QUANTITY:
-                return filterBooksSortUtil.getBooksFilteredByGeneralQuantity(sortDirection, bookEntities, affiliate);
-            default:
-                return bookEntities;
-        }
+        return switch (sortType) {
+            case SORT_BY_TITLE -> filterBooksSortUtil.getBooksFilteredByTitleSorted(sortDirection, bookEntities);
+            case SORT_BY_AUTHOR -> filterBooksSortUtil.getBooksFilteredByAuthorSorted(sortDirection, bookEntities);
+            case SORT_BY_GENRE -> filterBooksSortUtil.getBooksFilteredByGenreSorted(sortDirection, bookEntities);
+            case SORT_BY_PUBLISHER ->
+                    filterBooksSortUtil.getBooksFilteredByPublisherSorted(sortDirection, bookEntities);
+            case SORT_BY_YEAR_OF_PRINT ->
+                    filterBooksSortUtil.getBooksFilteredByYearOfPrintSorted(sortDirection, bookEntities);
+            case SORT_BY_CURRENT_QUANTITY ->
+                    filterBooksSortUtil.getBooksFilteredByCurrentQuantity(sortDirection, bookEntities, affiliate);
+            case SORT_BY_GENERAL_QUANTITY ->
+                    filterBooksSortUtil.getBooksFilteredByGeneralQuantity(sortDirection, bookEntities, affiliate);
+            default -> bookEntities;
+        };
     }
 
 }

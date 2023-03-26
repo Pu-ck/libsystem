@@ -21,8 +21,8 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 public class RegistrationService {
 
-    private final UserService userService;
     private final ConfirmationTokenService confirmationTokenService;
+    private final UserService userService;
     private final MailBuilder mailBuilder;
     private final MailSender mailSender;
 

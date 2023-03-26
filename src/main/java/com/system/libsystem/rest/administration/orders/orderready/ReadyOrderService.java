@@ -8,6 +8,7 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookRepository;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookService;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserService;
+import com.system.libsystem.exceptions.BookAlreadyReturnedException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
 import com.system.libsystem.rest.util.BookUtil;
@@ -15,9 +16,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.sql.Date;
-
-import static com.system.libsystem.util.SharedConstants.BOOK_ALREADY_RETURNED_LOG;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +35,7 @@ public class ReadyOrderService {
     private final MailSender mailSender;
     private final MailBuilder mailBuilder;
 
+    @Transactional
     public void setOrderStatus(ReadyOrderRequest readyOrderRequest) {
 
         final Date currentDate = new Date(System.currentTimeMillis());
@@ -53,7 +54,7 @@ public class ReadyOrderService {
                 setOrderAsRejected(borrowedBookEntity, userEntity, bookEntity);
             }
         } else {
-            throw new IllegalStateException(BOOK_ALREADY_RETURNED_LOG + borrowedBookEntity.getId());
+            throw new BookAlreadyReturnedException(borrowedBookEntity.getId());
         }
     }
 
@@ -79,7 +80,7 @@ public class ReadyOrderService {
                 (userEntity.getFirstName(),
                         userEntity.getLastName(),
                         bookEntity.getTitle(),
-                        bookEntity.getAuthor(),
+                        String.join(",", bookEntity.getAuthors().stream().toList().toString()),
                         affiliate), "Ordered book ready");
         log.info("New sendBorrowedBookOrderReadyMail message sent to " + userEntity.getUsername());
     }
@@ -89,7 +90,7 @@ public class ReadyOrderService {
                 (userEntity.getFirstName(),
                         userEntity.getLastName(),
                         bookEntity.getTitle(),
-                        bookEntity.getAuthor(),
+                        String.join(",", bookEntity.getAuthors().stream().toList().toString()),
                         affiliate), "Ordered book rejected");
         log.info("New sendBorrowedBookOrderRejected message sent to " + userEntity.getUsername());
     }

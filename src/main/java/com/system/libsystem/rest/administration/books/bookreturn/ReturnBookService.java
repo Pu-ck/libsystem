@@ -8,13 +8,14 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookRepository;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookService;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserService;
+import com.system.libsystem.exceptions.BookAlreadyAcceptedException;
+import com.system.libsystem.exceptions.InvalidCardNumberException;
 import com.system.libsystem.rest.util.BookUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import static com.system.libsystem.util.SharedConstants.BOOK_ALREADY_ACCEPTED_LOG;
-import static com.system.libsystem.util.SharedConstants.INVALID_CARD_NUMBER_LOG;
+import javax.transaction.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -28,6 +29,7 @@ public class ReturnBookService {
     private final BookService bookService;
     private final UserService userService;
 
+    @Transactional
     public void returnBook(ReturnBookRequest returnBookRequest) {
 
         BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById(returnBookRequest
@@ -39,10 +41,10 @@ public class ReturnBookService {
             if (bookUtil.isCardNumberValid(userEntity.getCardNumber(), returnBookRequest.getCardNumber())) {
                 returnBorrowedBook(borrowedBookEntity, bookEntity);
             } else {
-                throw new IllegalStateException(INVALID_CARD_NUMBER_LOG);
+                throw new InvalidCardNumberException();
             }
         } else {
-            throw new IllegalStateException(BOOK_ALREADY_ACCEPTED_LOG + borrowedBookEntity.getId());
+            throw new BookAlreadyAcceptedException(borrowedBookEntity.getId());
         }
     }
 

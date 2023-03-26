@@ -2,6 +2,7 @@ package com.system.libsystem.entities.user;
 
 import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenEntity;
 import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenService;
+import com.system.libsystem.exceptions.InvalidCardNumberException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,8 +11,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
-
-import static com.system.libsystem.util.SharedConstants.INVALID_CARD_NUMBER_LOG;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +37,7 @@ public class UserService implements UserDetailsService {
 
     public UserEntity getUserById(int userId) throws UsernameNotFoundException {
         return userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException(FIND_USER_EXCEPTION_LOG
-                        + userId));
+                + userId));
     }
 
     public UserEntity getUserByUsername(String username) throws UsernameNotFoundException {
@@ -51,7 +50,7 @@ public class UserService implements UserDetailsService {
             throw new IllegalStateException("Username already taken");
         }
         if (userEntity.getCardNumber().toString().length() != CARD_NUMBER_LENGTH) {
-            throw new IllegalStateException(INVALID_CARD_NUMBER_LOG + " format");
+            throw new InvalidCardNumberException();
         }
 
         String encodedPassword = bCryptPasswordEncoder.encode(userEntity.getPassword());
