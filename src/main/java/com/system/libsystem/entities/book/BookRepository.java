@@ -25,9 +25,6 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
     @Query("SELECT b FROM BookEntity b JOIN b.yearOfPrintEntity p WHERE p.yearOfPrint = :yearOfPrint")
     List<BookEntity> findByYearOfPrint(@Param("yearOfPrint") int yearOfPrint);
 
-    List<BookEntity> findByCurrentQuantityAffiliateAGreaterThan(int value);
-    List<BookEntity> findByCurrentQuantityAffiliateBGreaterThan(int value);
-
     List<BookEntity> findAll();
 
     Optional<BookEntity> findById(int id);

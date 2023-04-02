@@ -7,11 +7,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public class BorrowedBookNotFoundException extends RuntimeException {
 
-    private final int borrowedBookId;
+    private final int id;
 
     @Override
     public String getMessage() {
-        return "Unable to find borrowed book with id " + borrowedBookId;
+        return "Unable to find borrowed book with id " + id;
     }
 
 }

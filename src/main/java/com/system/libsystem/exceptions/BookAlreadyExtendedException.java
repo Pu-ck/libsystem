@@ -7,11 +7,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public class BookAlreadyExtendedException extends RuntimeException {
 
-    private final int borrowedBookId;
+    private final int id;
 
     @Override
     public String getMessage() {
-        return "Borrowed book with id " + borrowedBookId + " already extended";
+        return "Borrowed book with id " + id + " already extended";
     }
 
 }

@@ -1,31 +1,40 @@
 package com.system.libsystem.rest.util;
 
+import com.system.libsystem.entities.affiliatebook.AffiliateBook;
+import com.system.libsystem.entities.affiliatebook.AffiliateBookRepository;
+import com.system.libsystem.entities.affiliate.AffiliateEntity;
 import com.system.libsystem.entities.book.BookEntity;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import com.system.libsystem.exceptions.AffiliateBookNotFoundException;
+import com.system.libsystem.exceptions.AffiliateNotFoundException;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
-import static com.system.libsystem.util.SharedConstants.AFFILIATE_A;
-import static com.system.libsystem.util.SharedConstants.AFFILIATE_B;
-
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @Component
 @Slf4j
 public final class BookUtil {
 
+    private final AffiliateBookRepository affiliateBookRepository;
+
     public void setCurrentQuantityInAffiliate(BookEntity bookEntity, String affiliate, int changeQuantityValue) {
-        if (affiliate.equals(AFFILIATE_A)) {
-            bookEntity.setCurrentQuantityAffiliateA(bookEntity.getCurrentQuantityAffiliateA() + changeQuantityValue);
-            log.info("The current quantity in Affiliate A for book with id " + bookEntity.getId() +
-                    " has been changed by " + changeQuantityValue);
-        } else if (affiliate.equals(AFFILIATE_B)) {
-            bookEntity.setCurrentQuantityAffiliateB(bookEntity.getCurrentQuantityAffiliateB() + changeQuantityValue);
-            log.info("The current quantity in Affiliate B for book with id " + bookEntity.getId() +
-                    " has been changed by " + changeQuantityValue);
-        }
+
+        final AffiliateEntity affiliateEntity = bookEntity.getAffiliates().stream()
+                .filter(searchedAffiliate -> searchedAffiliate.getName().equals(affiliate))
+                .findFirst()
+                .orElseThrow(() -> new AffiliateNotFoundException(affiliate));
+
+        AffiliateBook affiliateBook = affiliateBookRepository.findByBookIdAndAffiliateId(bookEntity.getId(),
+                affiliateEntity.getId()).orElseThrow(() ->
+                new AffiliateBookNotFoundException(affiliate, bookEntity.getId()));
+
+        affiliateBook.setCurrentQuantity(affiliateBook.getCurrentQuantity() + changeQuantityValue);
+        affiliateBookRepository.save(affiliateBook);
+
+        log.info("The current quantity in " + affiliate + " for book with id " + bookEntity.getId() +
+                " has been changed by " + changeQuantityValue);
     }
 
     public boolean isCardNumberValid(long userCardNumber, long confirmOrderRequestCardNumber) {

@@ -5,13 +5,13 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class BookNotFoundException extends RuntimeException {
+public class AffiliateNotFoundException extends RuntimeException {
 
-    private final int id;
+    private final String name;
 
     @Override
     public String getMessage() {
-        return "Unable to find book with id " + id;
+        return "Unable to find affiliate " + name;
     }
 
 }

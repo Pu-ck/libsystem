@@ -1,19 +1,20 @@
 package com.system.libsystem.rest.books.filter;
 
+import com.system.libsystem.entities.affiliate.AffiliateEntity;
+import com.system.libsystem.entities.affiliate.AffiliateRepository;
+import com.system.libsystem.entities.affiliatebook.AffiliateBook;
+import com.system.libsystem.entities.affiliatebook.AffiliateBookRepository;
 import com.system.libsystem.entities.book.BookEntity;
 import com.system.libsystem.entities.book.BookRepository;
 import com.system.libsystem.entities.book.BookService;
+import com.system.libsystem.exceptions.BookNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-
-import static com.system.libsystem.util.SharedConstants.AFFILIATE_A;
-import static com.system.libsystem.util.SharedConstants.AFFILIATE_B;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +29,8 @@ public class FilterBooksService {
     private static final String SORT_BY_GENERAL_QUANTITY = "7";
 
     private final BookRepository bookRepository;
+    private final AffiliateRepository affiliateRepository;
+    private final AffiliateBookRepository affiliateBookRepository;
     private final FilterBooksSortUtil filterBooksSortUtil;
     private final BookService bookService;
 
@@ -69,31 +72,28 @@ public class FilterBooksService {
                     bookRepository.findByYearOfPrint(Integer.parseInt(yearOfPrint)).stream()).toList();
         }
         if (affiliate.length() > 0) {
-            bookEntities = getBooksFilteredByAffiliate(affiliate, bookEntities);
+            bookEntities = getBooksFilteredByAffiliate(affiliate);
         }
         if (bookEntities.isEmpty()) {
             bookEntities = bookRepository.findAll();
         }
 
-        return getSortedBooks(sortType, sortDirection, bookEntities.stream().distinct().toList(),
-                affiliate);
+        return getSortedBooks(sortType, sortDirection, bookEntities.stream().distinct().toList());
     }
 
-    private List<BookEntity> getBooksFilteredByAffiliate(String affiliate, List<BookEntity> bookEntities) {
-        if (affiliate.equals(AFFILIATE_A)) {
-            return Stream.concat(bookEntities.stream(),
-                    bookRepository.findByCurrentQuantityAffiliateAGreaterThan(0)
-                            .stream()).toList();
-        } else if (affiliate.equals(AFFILIATE_B)) {
-            return Stream.concat(bookEntities.stream(),
-                    bookRepository.findByCurrentQuantityAffiliateBGreaterThan(0)
-                            .stream()).toList();
-        }
-        return Collections.emptyList();
+    private List<BookEntity> getBooksFilteredByAffiliate(String affiliate) {
+
+        final List<AffiliateEntity> affiliateEntities = affiliateRepository.findAllByName(affiliate);
+        final List<Integer> affiliateEntitiesIds = affiliateEntities.stream().map(AffiliateEntity::getId).toList();
+        final List<AffiliateBook> affiliateBooks = affiliateBookRepository.findByAffiliateIdIn(affiliateEntitiesIds);
+
+        return affiliateBooks.stream().filter(affiliateBook -> affiliateBook.getCurrentQuantity() > 0)
+                        .map(affiliateBook -> bookRepository.findById(affiliateBook.getBookId())
+                        .orElseThrow(() -> new BookNotFoundException(affiliateBook.getBookId())))
+                        .toList();
     }
 
-    private List<BookEntity> getSortedBooks(String sortType, String sortDirection, List<BookEntity> bookEntities,
-                                            String affiliate) {
+    private List<BookEntity> getSortedBooks(String sortType, String sortDirection, List<BookEntity> bookEntities) {
         return switch (sortType) {
             case SORT_BY_TITLE -> filterBooksSortUtil.getBooksFilteredByTitleSorted(sortDirection, bookEntities);
             case SORT_BY_AUTHOR -> filterBooksSortUtil.getBooksFilteredByAuthorSorted(sortDirection, bookEntities);
@@ -102,10 +102,8 @@ public class FilterBooksService {
                     filterBooksSortUtil.getBooksFilteredByPublisherSorted(sortDirection, bookEntities);
             case SORT_BY_YEAR_OF_PRINT ->
                     filterBooksSortUtil.getBooksFilteredByYearOfPrintSorted(sortDirection, bookEntities);
-            case SORT_BY_CURRENT_QUANTITY ->
-                    filterBooksSortUtil.getBooksFilteredByCurrentQuantity(sortDirection, bookEntities, affiliate);
-            case SORT_BY_GENERAL_QUANTITY ->
-                    filterBooksSortUtil.getBooksFilteredByGeneralQuantity(sortDirection, bookEntities, affiliate);
+            case SORT_BY_CURRENT_QUANTITY -> filterBooksSortUtil.getBooksFilteredByCurrentQuantity(sortDirection);
+            case SORT_BY_GENERAL_QUANTITY -> filterBooksSortUtil.getBooksFilteredByGeneralQuantity(sortDirection);
             default -> bookEntities;
         };
     }

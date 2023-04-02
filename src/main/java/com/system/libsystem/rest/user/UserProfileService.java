@@ -142,7 +142,7 @@ public class UserProfileService {
         userBook.setGenres(bookEntity.getGenres());
         userBook.setPublisherName(bookEntity.getPublisherEntity().getName());
         userBook.setYearOfPrint(Integer.toString(bookEntity.getYearOfPrintEntity().getYearOfPrint()));
-        userBook.setAffiliate(borrowedBookEntity.getAffiliate());
+        userBook.setAffiliate(borrowedBookEntity.getAffiliateEntity().getName());
     }
 
     private void setBorrowedBookDetails(UserBook userBook, BorrowedBookEntity borrowedBookEntity) {
@@ -199,7 +199,7 @@ public class UserProfileService {
                         borrowedBookEntity.getId(),
                         borrowedBookEntity.getBorrowDate().toString(),
                         borrowedBookEntity.getReturnDate().toString(),
-                        borrowedBookEntity.getAffiliate(),
+                        borrowedBookEntity.getAffiliateEntity().getName(),
                         borrowedBookEntity.getPenalty()),
                 "New book return date extension request");
         log.info("New sendBookReturnDateExtensionRequestMail message sent to " + adminMail);

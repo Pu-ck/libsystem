@@ -52,14 +52,13 @@ public class OrderPickUpCheckerTask {
         }
     }
 
-    private void setBorrowedBookOrderAsClosed(BookEntity bookEntity,
-                                              BorrowedBookEntity borrowedBookEntity,
+    private void setBorrowedBookOrderAsClosed(BookEntity bookEntity, BorrowedBookEntity borrowedBookEntity,
                                               UserEntity userEntity) {
         borrowedBookEntity.setClosed(true);
-        bookUtil.setCurrentQuantityInAffiliate(bookEntity, borrowedBookEntity.getAffiliate(), 1);
+        bookUtil.setCurrentQuantityInAffiliate(bookEntity, borrowedBookEntity.getAffiliateEntity().getName(), 1);
         bookRepository.save(bookEntity);
         borrowedBookRepository.save(borrowedBookEntity);
-        sendBorrowedBookOrderPickUpTimeExpired(userEntity, bookEntity, borrowedBookEntity.getAffiliate());
+        sendBorrowedBookOrderPickUpTimeExpired(userEntity, bookEntity, borrowedBookEntity.getAffiliateEntity().getName());
     }
 
     private boolean isOrderedBookPickUpOverdue(Date currentDate, Date borrowedBookReadyDate) {

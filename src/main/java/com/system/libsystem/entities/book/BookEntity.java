@@ -1,6 +1,7 @@
 package com.system.libsystem.entities.book;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.system.libsystem.entities.affiliate.AffiliateEntity;
 import com.system.libsystem.entities.author.AuthorEntity;
 import com.system.libsystem.entities.genre.GenreEntity;
 import com.system.libsystem.entities.publisher.PublisherEntity;
@@ -43,6 +44,15 @@ public class BookEntity {
     @JsonManagedReference("book-genres")
     private Set<GenreEntity> genres = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "book_affiliate",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "affiliate_id")
+    )
+    @JsonManagedReference("book-affiliates")
+    private Set<AffiliateEntity> affiliates = new HashSet<>();
+
     @ManyToOne
     @JoinColumn(name = "publisher_id")
     private PublisherEntity publisherEntity;
@@ -53,17 +63,5 @@ public class BookEntity {
 
     @Column(nullable = false)
     private String description;
-
-    @Column(nullable = false)
-    private int currentQuantityAffiliateA;
-
-    @Column(nullable = false)
-    private int generalQuantityAffiliateA;
-
-    @Column(nullable = false)
-    private int currentQuantityAffiliateB;
-
-    @Column(nullable = false)
-    private int generalQuantityAffiliateB;
 
 }

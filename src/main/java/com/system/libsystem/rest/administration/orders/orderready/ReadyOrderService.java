@@ -63,16 +63,16 @@ public class ReadyOrderService {
         borrowedBookEntity.setReadyDate(readyDate);
         borrowedBookEntity.setReady(true);
         borrowedBookRepository.save(borrowedBookEntity);
-        sendBorrowedBookOrderReadyMail(userEntity, bookEntity, borrowedBookEntity.getAffiliate());
+        sendBorrowedBookOrderReadyMail(userEntity, bookEntity, borrowedBookEntity.getAffiliateEntity().getName());
     }
 
     private void setOrderAsRejected(BorrowedBookEntity borrowedBookEntity, UserEntity userEntity,
                                     BookEntity bookEntity) {
-        bookUtil.setCurrentQuantityInAffiliate(bookEntity, borrowedBookEntity.getAffiliate(), 1);
+        bookUtil.setCurrentQuantityInAffiliate(bookEntity, borrowedBookEntity.getAffiliateEntity().getName(), 1);
         bookRepository.save(bookEntity);
         borrowedBookEntity.setClosed(true);
         borrowedBookRepository.save(borrowedBookEntity);
-        sendBorrowedBookOrderRejected(userEntity, bookEntity, borrowedBookEntity.getAffiliate());
+        sendBorrowedBookOrderRejected(userEntity, bookEntity, borrowedBookEntity.getAffiliateEntity().getName());
     }
 
     private void sendBorrowedBookOrderReadyMail(UserEntity userEntity, BookEntity bookEntity, String affiliate) {

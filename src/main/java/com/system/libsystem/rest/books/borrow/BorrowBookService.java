@@ -1,5 +1,9 @@
 package com.system.libsystem.rest.books.borrow;
 
+import com.system.libsystem.entities.affiliatebook.AffiliateBook;
+import com.system.libsystem.entities.affiliatebook.AffiliateBookRepository;
+import com.system.libsystem.entities.affiliate.AffiliateEntity;
+import com.system.libsystem.entities.affiliate.AffiliateRepository;
 import com.system.libsystem.entities.book.BookEntity;
 import com.system.libsystem.entities.book.BookRepository;
 import com.system.libsystem.entities.book.BookService;
@@ -7,6 +11,7 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookEntity;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookRepository;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserService;
+import com.system.libsystem.exceptions.AffiliateNotFoundException;
 import com.system.libsystem.exceptions.InvalidCardNumberException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
@@ -20,16 +25,15 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
-import java.util.Objects;
-
-import static com.system.libsystem.util.SharedConstants.*;
 
 @Service
 @AllArgsConstructor
 @Slf4j
 public class BorrowBookService {
 
+    private final AffiliateBookRepository affiliateBookRepository;
     private final BorrowedBookRepository borrowedBookRepository;
+    private final AffiliateRepository affiliateRepository;
     private final BookRepository bookRepository;
     private final SessionRegistry sessionRegistry;
     private final MailBuilder mailBuilder;
@@ -54,6 +58,8 @@ public class BorrowBookService {
         final int orderQuantity = borrowBookRequest.getQuantity();
         final int currentQuantity = getCurrentQuantityFromAffiliate(borrowBookRequest.getAffiliate(), bookEntity);
         final String affiliate = borrowBookRequest.getAffiliate();
+        final AffiliateEntity affiliateEntity = affiliateRepository.findByName(affiliate).orElseThrow(() ->
+                new AffiliateNotFoundException(affiliate));
 
         if (bookUtil.isCardNumberValid(borrowBookRequest.getCardNumber(), cardNumber)) {
             if (isOrderQuantityValid(currentQuantity, orderQuantity)) {
@@ -63,7 +69,7 @@ public class BorrowBookService {
                     borrowedBookEntity.setUserId(userId);
                     borrowedBookEntity.setPenalty(penalty);
                     borrowedBookEntity.setCardNumber(cardNumber);
-                    borrowedBookEntity.setAffiliate(affiliate);
+                    borrowedBookEntity.setAffiliateEntity(affiliateEntity);
                     decreaseBookQuantityAndSaveItInRepository(bookEntity, affiliate);
                     borrowedBookRepository.save(borrowedBookEntity);
                     sendBookBorrowConfirmationMail(userEntity, bookEntity, borrowedBookEntity, affiliate);
@@ -86,12 +92,16 @@ public class BorrowBookService {
     }
 
     private int getCurrentQuantityFromAffiliate(String affiliate, BookEntity bookEntity) {
-        if (Objects.equals(affiliate, AFFILIATE_A)) {
-            return bookEntity.getCurrentQuantityAffiliateA();
-        } else if (Objects.equals(affiliate, AFFILIATE_B)) {
-            return bookEntity.getCurrentQuantityAffiliateB();
-        }
-        return 0;
+        final AffiliateEntity affiliateEntity = bookEntity.getAffiliates().stream()
+                .filter(searchedAffiliate -> searchedAffiliate.getName().equals(affiliate))
+                .findFirst()
+                .orElseThrow(() -> new AffiliateNotFoundException(affiliate));
+
+        AffiliateBook affiliateBook = affiliateBookRepository.findByBookIdAndAffiliateId(bookEntity.getId(),
+                affiliateEntity.getId()).orElseThrow(() ->
+                new AffiliateNotFoundException(affiliate));
+
+        return affiliateBook.getCurrentQuantity();
     }
 
     private boolean isOrderQuantityValid(int currentQuantity, int orderQuantity) {

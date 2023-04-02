@@ -19,7 +19,7 @@ public class GenreEntity {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "genre_id_seq")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @ManyToMany(mappedBy = "genres")

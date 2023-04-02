@@ -1,5 +1,6 @@
 package com.system.libsystem.entities.borrowedbook;
 
+import com.system.libsystem.entities.affiliate.AffiliateEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,8 +39,9 @@ public class BorrowedBookEntity {
     @Column(nullable = false)
     private BigDecimal penalty;
 
-    @Column(nullable = false)
-    private String affiliate;
+    @ManyToOne
+    @JoinColumn(name = "affiliate_id")
+    private AffiliateEntity affiliateEntity;
 
     @Column(nullable = false)
     private boolean accepted;

@@ -74,7 +74,7 @@ public class ExtendBookReturnDateService {
                         bookEntity.getTitle(),
                         String.join(",", bookEntity.getAuthors().stream().toList().toString()),
                         borrowedBookEntity.getReturnDate().toString(),
-                        borrowedBookEntity.getAffiliate()),
+                        borrowedBookEntity.getAffiliateEntity().getName()),
                 "Book return date extension request accepted");
         log.info("New sendBookReturnDateExtensionConfirmationMail sent to " + userEntity.getUsername());
     }

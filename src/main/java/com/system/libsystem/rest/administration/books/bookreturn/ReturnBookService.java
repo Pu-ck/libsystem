@@ -51,7 +51,7 @@ public class ReturnBookService {
     private void returnBorrowedBook(BorrowedBookEntity borrowedBookEntity, BookEntity bookEntity) {
         borrowedBookEntity.setClosed(true);
         borrowedBookRepository.save(borrowedBookEntity);
-        bookUtil.setCurrentQuantityInAffiliate(bookEntity, borrowedBookEntity.getAffiliate(), 1);
+        bookUtil.setCurrentQuantityInAffiliate(bookEntity, borrowedBookEntity.getAffiliateEntity().getName(), 1);
         bookRepository.save(bookEntity);
         log.info("The borrowed book with id " + borrowedBookEntity.getId() + " has been returned and set as closed " +
                 "in the repository");

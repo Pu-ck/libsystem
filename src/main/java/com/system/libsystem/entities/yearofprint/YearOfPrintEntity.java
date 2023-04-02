@@ -15,7 +15,7 @@ public class YearOfPrintEntity {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "year_of_print_id_seq")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private int yearOfPrint;
 
 }

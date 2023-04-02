@@ -79,7 +79,7 @@ public class ReturnDateCheckerTask {
                         bookEntity.getTitle(),
                         String.join(",", bookEntity.getAuthors().stream().toList().toString()),
                         borrowedBookEntity.getReturnDate().toString(),
-                        borrowedBookEntity.getAffiliate(),
+                        borrowedBookEntity.getAffiliateEntity().getName(),
                         borrowedBookEntity.getPenalty()),
                 "Penalty increased for an overdue book");
         log.info("New sendIncreasedPenaltyInformationMail message sent to " + userEntity.getUsername());
@@ -93,7 +93,7 @@ public class ReturnDateCheckerTask {
                         bookEntity.getTitle(),
                         String.join(",", bookEntity.getAuthors().stream().toList().toString()),
                         borrowedBookEntity.getReturnDate().toString(),
-                        borrowedBookEntity.getAffiliate(),
+                        borrowedBookEntity.getAffiliateEntity().getName(),
                         daysToReturnDate),
                 "Incoming book's return date");
         log.info("New sendComingUpBorrowedBookReturnDateMail message sent to " + userEntity.getUsername());
