@@ -13,6 +13,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByUsername(String username);
 
+    Optional<UserEntity> findByCardNumber(Long cardNumber);
+
     Optional<UserEntity> findById(int id);
 
     @Transactional

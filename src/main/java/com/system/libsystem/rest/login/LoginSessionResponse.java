@@ -5,6 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LoginSessionRequest {
+public class LoginSessionResponse {
     private String sessionID;
 }

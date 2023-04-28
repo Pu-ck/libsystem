@@ -10,13 +10,15 @@ import { LoginComponent } from './login/login.component';
 import { RequestInterceptor } from './request.interceptor';
 import { RouterModule } from '@angular/router';
 import { RegistrationComponent } from './registration/registration.component';
+import { RegisteredComponent } from './registered/registered.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegistrationComponent,
-    HomeComponent
+    HomeComponent,
+    RegisteredComponent
   ],
   imports: [
     BrowserModule,

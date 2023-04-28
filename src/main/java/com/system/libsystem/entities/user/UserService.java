@@ -2,7 +2,10 @@ package com.system.libsystem.entities.user;
 
 import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenEntity;
 import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenService;
+import com.system.libsystem.exceptions.CardNumberAlreadyTakenException;
 import com.system.libsystem.exceptions.InvalidCardNumberException;
+import com.system.libsystem.exceptions.InvalidPasswordLengthException;
+import com.system.libsystem.exceptions.UsernameAlreadyTakenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,6 +22,8 @@ public class UserService implements UserDetailsService {
 
     public static final String FIND_USER_EXCEPTION_LOG = "Unable to find user ";
     private static final int CARD_NUMBER_LENGTH = 10;
+    private static final int MIN_PASSWORD_LENGTH = 8;
+    private static final int MAX_PASSWORD_LENGTH = 25;
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -46,12 +51,8 @@ public class UserService implements UserDetailsService {
     }
 
     public String registerUser(UserEntity userEntity) {
-        if (userRepository.findByUsername(userEntity.getUsername()).isPresent()) {
-            throw new IllegalStateException("Username already taken");
-        }
-        if (userEntity.getCardNumber().toString().length() != CARD_NUMBER_LENGTH) {
-            throw new InvalidCardNumberException();
-        }
+        log.info("New user " + userEntity.getUsername() + " with id " + userEntity.getId() + " registration attempt");
+        validateUserRegistrationData(userEntity);
 
         String encodedPassword = bCryptPasswordEncoder.encode(userEntity.getPassword());
         userEntity.setPassword(encodedPassword);
@@ -72,6 +73,24 @@ public class UserService implements UserDetailsService {
         loadUserByUsername(username).setEnabled(true);
         log.info("New user with id " + userEntity.getId() + " enabled");
         return userRepository.enableUser(username);
+    }
+
+    private void validateUserRegistrationData(UserEntity userEntity) {
+        if (userRepository.findByUsername(userEntity.getUsername()).isPresent()) {
+            log.error("Username " + userEntity.getUsername() + " already taken");
+            throw new UsernameAlreadyTakenException();
+        }
+        if (userRepository.findByCardNumber(userEntity.getCardNumber()).isPresent()) {
+            log.error("Card number " + userEntity.getCardNumber() + " already taken");
+            throw new CardNumberAlreadyTakenException();
+        }
+        if (userEntity.getCardNumber().toString().length() != CARD_NUMBER_LENGTH) {
+            throw new InvalidCardNumberException();
+        }
+        if (userEntity.getPassword().length() < MIN_PASSWORD_LENGTH
+                || userEntity.getPassword().length() > MAX_PASSWORD_LENGTH) {
+            throw new InvalidPasswordLengthException();
+        }
     }
 
 }

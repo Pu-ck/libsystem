@@ -1,13 +1,26 @@
-<form name="form" (ngSubmit)="login()" #f="ngForm">
+<form name="form" (ngSubmit)="login()" #loginForm="ngForm">
     <div>
         <label for="username">Username</label>
         <input type="text" name="username" [(ngModel)]="model.username" #username="ngModel" required>
+        
+        <div *ngIf="username?.invalid && (username?.dirty || username?.touched)">
+            <div *ngIf="username?.errors?.['required']">Username is required</div>
+        </div>
+
     </div>
     <div>
         <label for="password">Password</label>
         <input type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required>
+
+        <div *ngIf="password?.invalid && (password?.dirty || password?.touched)">
+            <div *ngIf="password?.errors?.['required']">Password is required</div>
+        </div>
+
     </div>
     <div>
-        <button>Login</button>
+        <button [disabled]="!model.username || !model.password">Login</button>
+        <div *ngIf="loginError">Incorrect username or password</div>
     </div>
 </form>
+
+<button (click)="redirectToRegistrationForm()">Register new account</button>

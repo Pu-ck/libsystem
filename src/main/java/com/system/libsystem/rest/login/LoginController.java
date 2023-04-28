@@ -15,7 +15,7 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping
-    public ResponseEntity<LoginSessionRequest> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<LoginSessionResponse> login(@RequestBody LoginRequest loginRequest) {
         return loginService.login(loginRequest);
     }
 

@@ -11,6 +11,7 @@ export class LoginComponent implements OnInit {
 
   model: any = {};
   sessionId: any = "";
+  loginError = false;
 
   constructor(
       private router: Router,
@@ -25,20 +26,23 @@ export class LoginComponent implements OnInit {
     this.http.post<any>(url, {
       username: this.model.username,
       password: this.model.password
-    }).subscribe(res => {
-      if (res) {
-        this.sessionId = res.sessionId;
-          
+    }).subscribe(response => {
+        this.sessionId = response.sessionId;  
         sessionStorage.setItem(
           'token',
           this.sessionId
         );
-
         this.router.navigate(['']);
-
-      } else {
-          alert("Cannot authenticate user with given credentials!")
+    }, error => {
+      if (error.status === 401) {
+        this.loginError = true;
       }
-    });
-}
+    }
+    );
+  }
+
+  redirectToRegistrationForm() {
+    this.router.navigate(['/registration']);
+  }
+  
 }

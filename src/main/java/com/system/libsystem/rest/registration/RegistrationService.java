@@ -6,10 +6,12 @@ import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
+import com.system.libsystem.rest.login.LoginSessionResponse;
 import com.system.libsystem.util.UserType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +35,7 @@ public class RegistrationService {
     @Value("${mail.sender.admin}")
     private String adminMail;
 
-    public String register(RegistrationRequest registrationRequest) {
+    public ResponseEntity<RegistrationResponse> register(RegistrationRequest registrationRequest) {
         UserEntity userEntity = new UserEntity();
         userEntity.setPassword(registrationRequest.getPassword());
         userEntity.setUsername(registrationRequest.getUsername());
@@ -53,7 +55,10 @@ public class RegistrationService {
         sendAccountRegistrationMail(registrationRequest);
         log.info("New account created for user with id " + userEntity.getId());
 
-        return token;
+        RegistrationResponse registrationResponse = new RegistrationResponse();
+        registrationResponse.setToken(token);
+
+        return ResponseEntity.ok(registrationResponse);
     }
 
     @Transactional

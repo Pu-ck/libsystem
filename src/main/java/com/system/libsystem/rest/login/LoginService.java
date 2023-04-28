@@ -19,18 +19,18 @@ public class LoginService {
     private final SessionRegistry sessionRegistry;
     private final UserService userService;
 
-    public ResponseEntity<LoginSessionRequest> login(LoginRequest loginRequest) {
+    public ResponseEntity<LoginSessionResponse> login(LoginRequest loginRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                 loginRequest.getPassword()));
 
         final UserEntity userEntity = userService.loadUserByUsername(loginRequest.getUsername());
         final String sessionID = sessionRegistry.registerSession(loginRequest.getUsername());
 
-        LoginSessionRequest loginSessionRequest = new LoginSessionRequest();
-        loginSessionRequest.setSessionID(sessionID);
+        LoginSessionResponse loginSessionResponse = new LoginSessionResponse();
+        loginSessionResponse.setSessionID(sessionID);
         log.info("New user with id " + userEntity.getId() + " has logged in");
 
-        return ResponseEntity.ok(loginSessionRequest);
+        return ResponseEntity.ok(loginSessionResponse);
     }
 
 }
