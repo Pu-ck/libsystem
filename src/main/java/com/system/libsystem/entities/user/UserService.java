@@ -2,10 +2,7 @@ package com.system.libsystem.entities.user;
 
 import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenEntity;
 import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenService;
-import com.system.libsystem.exceptions.CardNumberAlreadyTakenException;
-import com.system.libsystem.exceptions.InvalidCardNumberException;
-import com.system.libsystem.exceptions.InvalidPasswordLengthException;
-import com.system.libsystem.exceptions.UsernameAlreadyTakenException;
+import com.system.libsystem.exceptions.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -80,6 +78,9 @@ public class UserService implements UserDetailsService {
             log.error("Username " + userEntity.getUsername() + " already taken");
             throw new UsernameAlreadyTakenException();
         }
+        if (!isEmailAddressValid(userEntity.getUsername())) {
+            throw new InvalidEmailAddressFormat();
+        }
         if (userRepository.findByCardNumber(userEntity.getCardNumber()).isPresent()) {
             log.error("Card number " + userEntity.getCardNumber() + " already taken");
             throw new CardNumberAlreadyTakenException();
@@ -91,6 +92,10 @@ public class UserService implements UserDetailsService {
                 || userEntity.getPassword().length() > MAX_PASSWORD_LENGTH) {
             throw new InvalidPasswordLengthException();
         }
+    }
+
+    private static boolean isEmailAddressValid(String emailAddress) {
+        return Pattern.compile("^(.+)@(\\S+)$").matcher(emailAddress).matches();
     }
 
 }

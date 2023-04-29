@@ -49,7 +49,8 @@ public class Config {
         ).and();
 
         http.authorizeRequests()
-                .antMatchers("/api/login", "/api/password-reminder/**", "/api/registration/**", "/api/logout")
+                .antMatchers("/api/login", "/api/password-reminder/**", "/api/registration/**", "/api/logout"
+                , "/api/registered/**")
                 .permitAll()
                 .antMatchers("/api/administration/**")
                 .hasAuthority(UserType.ADMIN.name())
@@ -63,8 +64,8 @@ public class Config {
                 UsernamePasswordAuthenticationFilter.class
         );
 
-        http.logout().clearAuthentication(true).logoutRequestMatcher(new AntPathRequestMatcher("/api/logout"))
-                .logoutSuccessUrl("/api/login").deleteCookies("JSESSIONID")
+        http.logout().clearAuthentication(true).logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/login").deleteCookies("JSESSIONID")
                 .invalidateHttpSession(true);
 
         return http.build();

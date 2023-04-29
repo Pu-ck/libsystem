@@ -12,7 +12,6 @@ export class RegistrationComponent implements OnInit {
   model: any = {};
   usernameTaken = false;
   cardNumberTaken = false;
-  registered = false;
 
   constructor(
       private router: Router,
@@ -31,21 +30,18 @@ export class RegistrationComponent implements OnInit {
       lastName: this.model.lastName,
       cardNumber: this.model.cardNumber
     }).subscribe(response => {
-      this.registered = true;
       this.usernameTaken = false;
       this.cardNumberTaken = false;
       const token = response.token;
-      this.router.navigate(['/registered'], { queryParams: { token: token } });
+      this.router.navigate(['/registered'], { queryParams: { token: token, username: this.model.username } });
     }, error => {
       if (error.status === 409 && error.error.message === "Username already taken") {
         this.usernameTaken = true;
-        this.registered = false;
       } else {
         this.usernameTaken = false;
       }
       if (error.status === 409 && error.error.message === "Card number already taken") {
         this.cardNumberTaken = true;
-        this.registered = false;
       } else {
         this.cardNumberTaken = false;
       }

@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 export class LoginComponent implements OnInit {
 
   model: any = {};
-  sessionId: any = "";
+  sessionID: any = "";
   loginError = false;
 
   constructor(
@@ -27,10 +27,10 @@ export class LoginComponent implements OnInit {
       username: this.model.username,
       password: this.model.password
     }).subscribe(response => {
-        this.sessionId = response.sessionId;  
+        this.sessionID = response.sessionID;  
         sessionStorage.setItem(
           'token',
-          this.sessionId
+          this.sessionID
         );
         this.router.navigate(['']);
     }, error => {

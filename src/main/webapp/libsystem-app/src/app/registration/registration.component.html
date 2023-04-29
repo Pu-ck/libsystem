@@ -1,10 +1,11 @@
 <form name="form" (ngSubmit)="register()" #registrationForm="ngForm">
     <div>
         <label for="username">Username</label>
-        <input type="email" name="username" [(ngModel)]="model.username" #username="ngModel" required>
+        <input type="email" name="username" [(ngModel)]="model.username" #username="ngModel" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
 
         <div *ngIf="username?.invalid && (username?.dirty || username?.touched)">
             <div *ngIf="username?.errors?.['required']">Username is required</div>
+            <div *ngIf="username?.errors?.['pattern']">Invalid username format - the username must be an email address</div>
         </div>
 
     </div>
@@ -56,5 +57,3 @@
 </form>
 
 <button (click)="redirectToLoginForm()">Login with existing account</button>
-
-<div *ngIf="registered" id="registration-success">Your registration request has been created. Wait until the administrator enables your account - the message about your account activation will be sent on provided email address</div>

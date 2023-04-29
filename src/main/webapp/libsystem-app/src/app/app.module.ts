@@ -7,10 +7,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
-import { RequestInterceptor } from './request.interceptor';
+import { RequestInterceptor } from './request/request.interceptor';
 import { RouterModule } from '@angular/router';
 import { RegistrationComponent } from './registration/registration.component';
 import { RegisteredComponent } from './registered/registered.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { BooksComponent } from './user-profile/books/books.component';
+import { ChangePasswordComponent } from './user-profile/change-password/change-password.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +21,10 @@ import { RegisteredComponent } from './registered/registered.component';
     LoginComponent,
     RegistrationComponent,
     HomeComponent,
-    RegisteredComponent
+    RegisteredComponent,
+    UserProfileComponent,
+    BooksComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,
