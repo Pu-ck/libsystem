@@ -17,7 +17,7 @@ export class RequestInterceptor implements HttpInterceptor {
     let token = sessionStorage.getItem("token");
 
     if (token) {
-      request = request.clone({headers: request.headers.set("Authoriztion", token)});
+      request = request.clone({headers: request.headers.set("Authorization", token)});
     }
 
     return next.handle(request);

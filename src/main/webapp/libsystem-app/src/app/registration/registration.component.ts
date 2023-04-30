@@ -9,9 +9,9 @@ import { Router } from '@angular/router';
 })
 export class RegistrationComponent implements OnInit {
 
-  model: any = {};
-  usernameTaken = false;
-  cardNumberTaken = false;
+  public model: any = {};
+  public usernameTaken: boolean = false;
+  public cardNumberTaken: boolean = false;
 
   constructor(
       private router: Router,
@@ -21,8 +21,8 @@ export class RegistrationComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  register() {
-    let url = '/api/registration';
+  public register() {
+    const url = '/api/registration';
     this.http.post<any>(url, {
       username: this.model.username,
       password: this.model.password,
@@ -48,7 +48,7 @@ export class RegistrationComponent implements OnInit {
     });
   }
 
-  redirectToLoginForm() {
+  public redirectToLoginForm() {
     this.router.navigate(['/login']);
   }
 

@@ -2,22 +2,18 @@
     <div>
         <label for="username">Username</label>
         <input type="email" name="username" [(ngModel)]="model.username" #username="ngModel" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
-
         <div *ngIf="username?.invalid && (username?.dirty || username?.touched)">
             <div *ngIf="username?.errors?.['required']">Username is required</div>
             <div *ngIf="username?.errors?.['pattern']">Invalid username format - the username must be an email address</div>
         </div>
-
     </div>
     <div>
         <label for="password">Password</label>
         <input type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required minlength="8" maxlength="25">
-
         <div *ngIf="password?.invalid && (password?.dirty || password?.touched)">
             <div *ngIf="password?.errors?.['required']">Password is required</div>
             <div *ngIf="password?.errors?.['minlength']">The password must be between 8 and 25 characters long</div>
         </div>
-
     </div>
     <div>
         <label for="firstName">First name</label>
@@ -26,7 +22,6 @@
         <div *ngIf="firstName?.invalid && (firstName?.dirty || firstName?.touched)">
             <div *ngIf="firstName?.errors?.['required']">First name is required</div>
         </div>
-
     </div>
     <div>
         <label for="lastName">Last name</label>
@@ -35,19 +30,16 @@
         <div *ngIf="lastName?.invalid && (lastName?.dirty || lastName?.touched)">
             <div *ngIf="lastName?.errors?.['required']">Last name is required</div>
         </div>
-
     </div>
     <div>
         <label for="cardNumber">Card number</label>
         <input type="text" name="cardNumber" [(ngModel)]="model.cardNumber" #cardNumber="ngModel" required minlength="10" maxlength="10" pattern="^[0-9]+$">
-
         <div *ngIf="cardNumber?.invalid && (cardNumber?.dirty || cardNumber?.touched)">
             <div *ngIf="cardNumber?.errors?.['required']">Card number is required</div>
             <div *ngIf="cardNumber?.errors?.['minlength']">Invalid card number length</div>
             <div *ngIf="cardNumber?.errors?.['maxlength']">Invalid card number length</div>
             <div *ngIf="cardNumber.errors?.['pattern']">Invalid card number format</div>
         </div>
-
     </div>
     <div>
         <button type="submit" [disabled]="!registrationForm.valid">Register</button>

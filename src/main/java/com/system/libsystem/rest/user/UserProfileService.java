@@ -11,6 +11,7 @@ import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.exceptions.BookAlreadyExtendedException;
 import com.system.libsystem.exceptions.BookAlreadyReturnedException;
 import com.system.libsystem.exceptions.InvalidCardNumberException;
+import com.system.libsystem.exceptions.NewPasswordDuplicatedException;
 import com.system.libsystem.helpermodels.UserBook;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
@@ -95,7 +96,9 @@ public class UserProfileService {
 
         if (isRequestOldPasswordMatchingOldPassword(requestOldPassword, oldPassword)) {
             if (isNewPasswordSameAsOldPassword(newPassword, oldPassword)) {
-                throw new IllegalStateException("The new password is the same as old one");
+                log.error("The new password set by user " + username + " with id " + userEntity.getId()
+                        + " is the same as old one");
+                throw new NewPasswordDuplicatedException();
             } else {
                 saveNewPassword(userEntity, newPassword);
             }

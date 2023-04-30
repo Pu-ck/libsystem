@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -9,20 +10,27 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  model: any = {};
-  sessionID: any = "";
-  loginError = false;
+  public model: any = {};
+  public sessionID: any = "";
+  public loginError: boolean = false;
+  public loggedOut: boolean = false;
 
   constructor(
       private router: Router,
-      private http: HttpClient
+      private http: HttpClient,
+      private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['logout'] === 'true') {
+        this.loggedOut = true;
+      }
+    });
   }
 
-  login() {
-    let url = '/api/login';
+  public login() {
+    const url = '/api/login';
     this.http.post<any>(url, {
       username: this.model.username,
       password: this.model.password
@@ -32,7 +40,7 @@ export class LoginComponent implements OnInit {
           'token',
           this.sessionID
         );
-        this.router.navigate(['']);
+        window.location.href = '/'
     }, error => {
       if (error.status === 401) {
         this.loginError = true;
@@ -41,7 +49,7 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  redirectToRegistrationForm() {
+  public redirectToRegistrationForm() {
     this.router.navigate(['/registration']);
   }
   

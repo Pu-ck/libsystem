@@ -1,1 +1,60 @@
-<p>Your books</p>
+<table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Authors</th>
+        <th>Genres</th>
+        <th>Publisher</th>
+        <th>Year of print</th>
+        <th>Borrow date</th>
+        <th>Return date</th>
+        <th>Ready for pickup date</th>
+        <th>Current penalty</th>
+        <th>Affiliate</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let book of books">
+        <td>
+            {{book.title}}
+        </td>
+        <td>
+            <ul>
+                <li *ngFor="let author of book.authors">
+                    {{author.name}}
+                </li>
+            </ul>
+        </td>
+            <ul>
+                <li *ngFor="let genre of book.genres">
+                    {{genre.name}}
+                </li>
+            </ul>
+        <td>
+            {{book.publisherName}}
+        </td>
+        <td>
+            {{book.yearOfPrint}}
+        </td>
+        <td>
+            {{book.borrowDate}}
+        </td>
+        <td>
+            {{book.returnDate}}
+        </td>
+        <td>
+            {{book.readyDate}}
+        </td>
+        <td>
+            {{book.penalty}}
+        </td>
+        <td>
+            {{book.affiliate}}
+        </td>
+        <td>
+            {{book.status}}
+        </td>
+      </tr>
+    </tbody>
+  </table>

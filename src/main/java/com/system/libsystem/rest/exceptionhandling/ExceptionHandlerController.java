@@ -1,8 +1,10 @@
 package com.system.libsystem.rest.exceptionhandling;
 
 import com.system.libsystem.exceptions.CardNumberAlreadyTakenException;
+import com.system.libsystem.exceptions.NewPasswordDuplicatedException;
 import com.system.libsystem.exceptions.UsernameAlreadyTakenException;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.CardNumberAlreadyTakenResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.NewPasswordDuplicatedResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.UsernameAlreadyTakenResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,20 +17,20 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UsernameAlreadyTakenException.class)
     public ResponseEntity<UsernameAlreadyTakenResponse> handleUsernameAlreadyTakenException() {
-
-        final UsernameAlreadyTakenResponse usernameAlreadyTakenResponse =
-                new UsernameAlreadyTakenResponse();
-
+        final UsernameAlreadyTakenResponse usernameAlreadyTakenResponse = new UsernameAlreadyTakenResponse();
         return new ResponseEntity<>(usernameAlreadyTakenResponse, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(CardNumberAlreadyTakenException.class)
     public ResponseEntity<CardNumberAlreadyTakenResponse> handleCardNumberAlreadyTakenException() {
-
-        final CardNumberAlreadyTakenResponse cardNumberAlreadyTakenResponse =
-                new CardNumberAlreadyTakenResponse();
-
+        final CardNumberAlreadyTakenResponse cardNumberAlreadyTakenResponse = new CardNumberAlreadyTakenResponse();
         return new ResponseEntity<>(cardNumberAlreadyTakenResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(NewPasswordDuplicatedException.class)
+    public ResponseEntity<NewPasswordDuplicatedResponse> handleNewPasswordDuplicatedException() {
+        final NewPasswordDuplicatedResponse newPasswordDuplicatedResponse = new NewPasswordDuplicatedResponse();
+        return new ResponseEntity<>(newPasswordDuplicatedResponse, HttpStatus.CONFLICT);
     }
 
 }

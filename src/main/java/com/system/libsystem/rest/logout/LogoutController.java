@@ -17,7 +17,7 @@ public class LogoutController {
 
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletRequest httpServletRequest) {
-        return  logoutService.logout(httpServletRequest);
+        return logoutService.logout(httpServletRequest);
     }
 
 }

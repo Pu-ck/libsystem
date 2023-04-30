@@ -14,6 +14,7 @@ import { RegisteredComponent } from './registered/registered.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { BooksComponent } from './user-profile/books/books.component';
 import { ChangePasswordComponent } from './user-profile/change-password/change-password.component';
+import { NavigationMenuComponent } from './navigation-menu/navigation-menu.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ChangePasswordComponent } from './user-profile/change-password/change-p
     RegisteredComponent,
     UserProfileComponent,
     BooksComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    NavigationMenuComponent
   ],
   imports: [
     BrowserModule,

@@ -10,9 +10,9 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 })
 export class RegisteredComponent implements OnInit {
 
-  token: string = '';
-  username: string = '';
-  tokenVeryfied = false;
+  public token: string = '';
+  public username: string = '';
+  public tokenVeryfied: boolean = false;
 
   constructor(
     private router: Router,
@@ -26,12 +26,12 @@ export class RegisteredComponent implements OnInit {
     this.verifyToken();
   }
 
-  redirectToLoginForm() {
+  public redirectToLoginForm() {
     this.router.navigate(['/login']);
   }
 
-  verifyToken() {
-    let url = '/api/registered';
+  private verifyToken() {
+    const url = '/api/registered';
     let params = new HttpParams().set('token', this.token).set('username', this.username);
     this.http.get<any>(url, { params,
     }).subscribe(response => {

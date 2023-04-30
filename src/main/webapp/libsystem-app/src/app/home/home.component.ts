@@ -12,17 +12,9 @@ export class HomeComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private router: Router
-    ) { }
+  ) { }
 
   ngOnInit(): void {
   }
-
-  logout() {
-    this.http.post('/api/logout', {}).subscribe(() => {
-      console.log("Logout successful");
-      this.router.navigate(['/login']);
-      sessionStorage.clear();
-    });
-}
 
 }

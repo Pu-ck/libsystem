@@ -6,3 +6,11 @@
         <li><a href="/user-profile/change-password">Change password</a></li>
     </ul>
 </nav>
+
+<div *ngIf="userDetails">
+    <p>User profile details</p>
+    <p>Username: {{userDetails[0]}}</p>
+    <p>First name: {{userDetails[1]}}</p>
+    <p>Last name: {{userDetails[2]}}</p>
+    <p>Card number: {{userDetails[3]}}</p>
+  </div>
