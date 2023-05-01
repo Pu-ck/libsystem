@@ -1,6 +1,7 @@
 package com.system.libsystem.rest.passwordreminder;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,23 +16,16 @@ public class PasswordReminderController {
         passwordReminderService.remindPassword(passwordReminderRequest);
     }
 
+    @GetMapping("/new-password")
+    public ResponseEntity<Void> validatePasswordReminderToken(@RequestParam("token") String token) {
+        return passwordReminderService.validatePasswordReminderToken(token);
+    }
+
     @PutMapping("/{token}/reset-password")
     public void changeUserPassword(@RequestBody ResetPasswordRequest resetPasswordRequest,
                                    @PathVariable("token") String token) {
         resetPasswordRequest.setToken(token);
         passwordReminderService.resetPassword(resetPasswordRequest);
-    }
-
-    @GetMapping("/new-password")
-    public String getChangePasswordPage(@RequestParam("token") String token) {
-        String result = passwordReminderService.validatePasswordReminderToken(token);
-        if (result != null) {
-            // TODO: redirect to frontend login page
-            return "login";
-        } else {
-            // TODO: redirect to frontend password reset page
-            return "reset-password";
-        }
     }
 
 }

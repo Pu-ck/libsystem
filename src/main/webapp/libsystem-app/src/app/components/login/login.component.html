@@ -20,6 +20,6 @@
 </form>
 
 <button (click)="redirectToRegistrationForm()">Register new account</button>
-<button>I forgot password</button>
+<button (click)="redirectToPasswordReminderForm()">I forgot password</button>
 
-<div *ngIf="loggedOut">Logged out successfully!</div>
+<div *ngIf="loggedOut">Logged out successfully</div>

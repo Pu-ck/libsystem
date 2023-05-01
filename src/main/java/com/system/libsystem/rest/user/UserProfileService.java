@@ -8,10 +8,7 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookService;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.entities.user.UserService;
-import com.system.libsystem.exceptions.BookAlreadyExtendedException;
-import com.system.libsystem.exceptions.BookAlreadyReturnedException;
-import com.system.libsystem.exceptions.InvalidCardNumberException;
-import com.system.libsystem.exceptions.NewPasswordDuplicatedException;
+import com.system.libsystem.exceptions.*;
 import com.system.libsystem.helpermodels.UserBook;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
@@ -101,9 +98,12 @@ public class UserProfileService {
                 throw new NewPasswordDuplicatedException();
             } else {
                 saveNewPassword(userEntity, newPassword);
+                sendNewPasswordSetInApplicationMail(userEntity);
             }
         } else {
-            throw new IllegalStateException("The old password is not correct");
+            log.error("The validation password provided by user " + username + " with id " + userEntity.getId()
+                    + " is not matching the old password");
+            throw new OldPasswordNotMatchingException();
         }
     }
 
@@ -206,6 +206,14 @@ public class UserProfileService {
                         borrowedBookEntity.getPenalty()),
                 "New book return date extension request");
         log.info("New sendBookReturnDateExtensionRequestMail message sent to " + adminMail);
+    }
+
+    private void sendNewPasswordSetInApplicationMail(UserEntity userEntity) {
+        mailSender.send(userEntity.getUsername(), mailBuilder.getNewPasswordSetInApplicationMailBody(
+                        userEntity.getFirstName(),
+                        userEntity.getLastName()),
+                "Password successfully updated");
+        log.info("New sendNewPasswordSetInApplicationMail message sent to " + userEntity.getUsername());
     }
 
 }

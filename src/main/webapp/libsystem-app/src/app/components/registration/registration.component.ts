@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonRedirectsService } from '../../services/common-redirects.service';
 
 @Component({
   selector: 'app-register',
@@ -15,7 +16,8 @@ export class RegistrationComponent implements OnInit {
 
   constructor(
       private router: Router,
-      private http: HttpClient
+      private http: HttpClient,
+      public commonRedirectsService: CommonRedirectsService
   ) { }
 
   ngOnInit(): void {
@@ -35,21 +37,19 @@ export class RegistrationComponent implements OnInit {
       const token = response.token;
       this.router.navigate(['/registered'], { queryParams: { token: token, username: this.model.username } });
     }, error => {
-      if (error.status === 409 && error.error.message === "Username already taken") {
-        this.usernameTaken = true;
-      } else {
-        this.usernameTaken = false;
-      }
-      if (error.status === 409 && error.error.message === "Card number already taken") {
-        this.cardNumberTaken = true;
-      } else {
-        this.cardNumberTaken = false;
+      if (error.status === 409) {
+        if (error.error.message === "Username already taken") {
+          this.usernameTaken = true;
+        } else {
+          this.usernameTaken = false;
+        }
+        if (error.error.message === "Card number already taken") {
+          this.cardNumberTaken = true;
+        } else {
+          this.cardNumberTaken = false;
+        }
       }
     });
-  }
-
-  public redirectToLoginForm() {
-    this.router.navigate(['/login']);
   }
 
 }

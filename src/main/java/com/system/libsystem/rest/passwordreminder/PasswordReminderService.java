@@ -2,17 +2,19 @@ package com.system.libsystem.rest.passwordreminder;
 
 import com.system.libsystem.entities.passwordremindertoken.PasswordReminderTokenEntity;
 import com.system.libsystem.entities.passwordremindertoken.PasswordReminderTokenRepository;
-import com.system.libsystem.entities.passwordremindertoken.PasswordReminderTokenService;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.entities.user.UserService;
-import com.system.libsystem.exceptions.InvalidCardNumberException;
+import com.system.libsystem.exceptions.PasswordReminderTokenExpiredException;
+import com.system.libsystem.exceptions.PasswordReminderTokenNotFoundException;
+import com.system.libsystem.exceptions.UnableToAuthenticateCardNumberException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
 import com.system.libsystem.rest.util.BookUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,16 +37,13 @@ public class PasswordReminderService {
     private final UserService userService;
     private final BookUtil bookUtil;
 
-    private final PasswordReminderTokenService passwordReminderTokenService;
-
     @Value("${application.login.address}")
     private String loginPageAddress;
 
-    @Value("${server.password-reset.address}")
+    @Value("${application.password-reset.address}")
     private String passwordReminderAddress;
 
     public void remindPassword(PasswordReminderRequest passwordReminderRequest) {
-
         final UserEntity userEntity = userService.getUserByUsername(passwordReminderRequest.getUsername());
         final String token = UUID.randomUUID().toString();
 
@@ -53,14 +52,17 @@ public class PasswordReminderService {
         if (bookUtil.isCardNumberValid(passwordReminderRequest.getCardNumber(), userEntity.getCardNumber())) {
             sendPasswordReminderMail(userEntity, passwordReminderRequest, token);
         } else {
-            throw new InvalidCardNumberException();
+            log.error("Unable to authenticate and associate the provided card number "
+                    + passwordReminderRequest.getCardNumber() + " with user " + userEntity.getUsername() +
+                    " with id " + userEntity.getId());
+            throw new UnableToAuthenticateCardNumberException();
         }
     }
 
     public void resetPassword(ResetPasswordRequest resetPasswordRequest) {
-
-        final PasswordReminderTokenEntity passwordReminderTokenEntity = passwordReminderTokenService
-                .getPasswordReminderToken(resetPasswordRequest.getToken());
+        final PasswordReminderTokenEntity passwordReminderTokenEntity = passwordReminderTokenRepository
+                .findByToken(resetPasswordRequest.getToken()).orElseThrow(()
+                        -> new PasswordReminderTokenNotFoundException(resetPasswordRequest.getToken()));
         final UserEntity userEntity = userService.getUserById(passwordReminderTokenEntity.getUserEntity().getId());
 
         String encodedPassword = bCryptPasswordEncoder.encode(resetPasswordRequest.getPassword());
@@ -84,23 +86,14 @@ public class PasswordReminderService {
         log.info("New password reminder token with id " + passwordReminderTokenEntity.getId() + " has been saved");
     }
 
-    public String validatePasswordReminderToken(String token) {
-
-        final PasswordReminderTokenEntity passwordReminderTokenEntity = passwordReminderTokenService
-                .getPasswordReminderToken(token);
-
-        if (!isTokenFound(passwordReminderTokenEntity)) {
-            log.info("The password reminder token is invalid");
-            return "Invalid token";
-        } else if (isTokenExpired(passwordReminderTokenEntity)) {
+    public ResponseEntity<Void> validatePasswordReminderToken(String token) {
+        final PasswordReminderTokenEntity passwordReminderTokenEntity = passwordReminderTokenRepository
+                .findByToken(token).orElseThrow(() -> new PasswordReminderTokenNotFoundException(token));
+        if (isTokenExpired(passwordReminderTokenEntity)) {
             log.info("The password reminder token with id " + passwordReminderTokenEntity.getId() + " has expired");
-            return "Expired token";
+            throw new PasswordReminderTokenExpiredException(token, passwordReminderTokenEntity.getId());
         }
-        return null;
-    }
-
-    private boolean isTokenFound(PasswordReminderTokenEntity passwordReminderTokenEntity) {
-        return passwordReminderTokenEntity != null;
+        return ResponseEntity.ok().build();
     }
 
     private boolean isTokenExpired(PasswordReminderTokenEntity passwordReminderTokenEntity) {
@@ -108,7 +101,6 @@ public class PasswordReminderService {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         final Date currentDateTime = calendar.getTime();
-
         return currentDateTime.compareTo(passwordReminderTokenExpiryDateTime) < 0;
     }
 

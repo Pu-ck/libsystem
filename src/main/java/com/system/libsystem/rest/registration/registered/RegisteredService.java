@@ -18,12 +18,10 @@ public class RegisteredService {
     private final ConfirmationTokenRepository confirmationTokenRepository;
 
     public ResponseEntity<Void> validateRegistrationToken(String token, String username) {
-
         final ConfirmationTokenEntity confirmationTokenEntity = confirmationTokenRepository.findByToken(token)
                 .orElseThrow(() -> new ConfirmationTokenNotFoundException(token));
         final UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(()
                 -> new UsernameNotFoundException(username));
-
         final int userId = confirmationTokenEntity.getUserEntity().getId();
 
         if (userEntity.getId() == userId) {

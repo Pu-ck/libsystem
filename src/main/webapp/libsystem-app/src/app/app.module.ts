@@ -5,16 +5,18 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './login/login.component';
+import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/login/login.component';
 import { RequestInterceptor } from './request/request.interceptor';
 import { RouterModule } from '@angular/router';
-import { RegistrationComponent } from './registration/registration.component';
-import { RegisteredComponent } from './registered/registered.component';
-import { UserProfileComponent } from './user-profile/user-profile.component';
-import { BooksComponent } from './user-profile/books/books.component';
-import { ChangePasswordComponent } from './user-profile/change-password/change-password.component';
-import { NavigationMenuComponent } from './navigation-menu/navigation-menu.component';
+import { RegistrationComponent } from './components/registration/registration.component';
+import { RegisteredComponent } from './components/registered/registered.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { BooksComponent } from './components/user-profile/books/books.component';
+import { ChangePasswordComponent } from './components/user-profile/change-password/change-password.component';
+import { NavigationMenuComponent } from './components/navigation-menu/navigation-menu.component';
+import { PasswordReminderComponent } from './components/password-reminder/password-reminder.component';
+import { NewPasswordComponent } from './components/password-reminder/new-password/new-password.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { NavigationMenuComponent } from './navigation-menu/navigation-menu.compo
     UserProfileComponent,
     BooksComponent,
     ChangePasswordComponent,
-    NavigationMenuComponent
+    NavigationMenuComponent,
+    PasswordReminderComponent,
+    NewPasswordComponent
   ],
   imports: [
     BrowserModule,

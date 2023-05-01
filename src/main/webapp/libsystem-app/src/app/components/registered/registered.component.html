@@ -1,0 +1,3 @@
+<p *ngIf="tokenVerified">Your registration request has been created. Wait until the administrator enables your account - the message about your account activation will be sent on provided email address</p>
+
+<button *ngIf="tokenVerified" (click)="commonRedirectsService.redirectToLoginForm()">Back to login page</button>

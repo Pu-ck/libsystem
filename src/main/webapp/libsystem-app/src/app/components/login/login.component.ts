@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -51,6 +50,10 @@ export class LoginComponent implements OnInit {
 
   public redirectToRegistrationForm() {
     this.router.navigate(['/registration']);
+  }
+
+  public redirectToPasswordReminderForm() {
+    this.router.navigate(['/password-reminder']);
   }
   
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router} from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { CommonRedirectsService } from '../../services/common-redirects.service';
 
 @Component({
   selector: 'app-registered',
@@ -12,22 +12,19 @@ export class RegisteredComponent implements OnInit {
 
   public token: string = '';
   public username: string = '';
-  public tokenVeryfied: boolean = false;
+  public tokenVerified: boolean = false;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private http: HttpClient
-    ) { }
+    private http: HttpClient,
+    public commonRedirectsService: CommonRedirectsService
+  ) { }
 
   ngOnInit(): void {
     this.token = this.route.snapshot.queryParamMap.get('token')!;
     this.username = this.route.snapshot.queryParamMap.get('username')!;
     this.verifyToken();
-  }
-
-  public redirectToLoginForm() {
-    this.router.navigate(['/login']);
   }
 
   private verifyToken() {
@@ -36,13 +33,12 @@ export class RegisteredComponent implements OnInit {
     this.http.get<any>(url, { params,
     }).subscribe(response => {
       console.log(response);
-      this.tokenVeryfied = true;
+      this.tokenVerified = true;
     }, error => {
       console.log(error);
       this.router.navigate(['/login']);
     }
     );
-
   }
 
 }

@@ -47,8 +47,13 @@ public class MailBuilder {
 
     public String getNewPasswordSetMailBody(String firstName, String lastName, String loginPageAddress) {
         return "Hello " + firstName + " " + lastName + "," +
-                "<p>Your new password has been successfully set. You can now you can now " +
+                "<p>Your new password has been successfully set. You can now " +
                 "<a href=\"" + loginPageAddress + "\">login</a> to the library system.</p>";
+    }
+
+    public String getNewPasswordSetInApplicationMailBody(String firstName, String lastName) {
+        return "Hello " + firstName + " " + lastName + "," +
+                "<p>Your new password has been successfully updated.";
     }
 
     public String getBookBorrowMailBody(String firstName, String lastName, String title, String author,
@@ -144,5 +149,7 @@ public class MailBuilder {
                 "<p>Library affiliate: " + affiliate + "<p>" +
                 "<p>The ordered book has been returned to the library catalogue.<p>";
     }
+
+
 
 }
