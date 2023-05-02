@@ -60,7 +60,6 @@ public class ExtendBookReturnDateService {
     private void saveBorrowedBookNewReturnDate(BorrowedBookEntity borrowedBookEntity, Date newReturnDate,
                                                UserEntity userEntity, BookEntity bookEntity) {
         borrowedBookEntity.setReturnDate(newReturnDate);
-        borrowedBookEntity.setExtended(true);
         borrowedBookRepository.save(borrowedBookEntity);
         sendBookReturnDateExtensionConfirmationMail(userEntity, borrowedBookEntity, bookEntity);
         log.info("New return date set for borrowed book with id " + borrowedBookEntity.getId());

@@ -8,11 +8,13 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookService;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.entities.user.UserService;
-import com.system.libsystem.exceptions.*;
+import com.system.libsystem.exceptions.BookAlreadyExtendedException;
+import com.system.libsystem.exceptions.BookAlreadyReturnedException;
+import com.system.libsystem.exceptions.NewPasswordDuplicatedException;
+import com.system.libsystem.exceptions.OldPasswordNotMatchingException;
 import com.system.libsystem.helpermodels.UserBook;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
-import com.system.libsystem.rest.util.BookUtil;
 import com.system.libsystem.session.SessionRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +41,6 @@ public class UserProfileService {
     private final BorrowedBookService borrowedBookService;
     private final UserService userService;
     private final BookService bookService;
-    private final BookUtil bookUtil;
 
     @Value("${mail.sender.admin}")
     private String adminMail;
@@ -115,21 +116,20 @@ public class UserProfileService {
         final BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById(extendBookRequest
                 .getBorrowedBookId());
 
-        if (bookUtil.isCardNumberValid(userEntity.getCardNumber(), extendBookRequest.getCardNumber())) {
-            if (!borrowedBookEntity.isClosed()) {
-                if (!borrowedBookEntity.isExtended()) {
-                    sendBookReturnDateExtensionRequestMail(userEntity, borrowedBookEntity);
-                    log.info("New request for return date extension of borrowed book with id "
-                            + borrowedBookEntity.getId() + " has been issued by user with id " + userEntity.getId());
-                } else {
-                    throw new BookAlreadyExtendedException(borrowedBookEntity.getId());
-                }
+        if (!borrowedBookEntity.isClosed()) {
+            if (!borrowedBookEntity.isExtended()) {
+                borrowedBookEntity.setExtended(true);
+                borrowedBookRepository.save(borrowedBookEntity);
+                sendBookReturnDateExtensionRequestMail(userEntity, borrowedBookEntity);
+                log.info("New request for return date extension of borrowed book with id "
+                        + borrowedBookEntity.getId() + " has been issued by user with id " + userEntity.getId());
             } else {
-                throw new BookAlreadyReturnedException(borrowedBookEntity.getId());
+                throw new BookAlreadyExtendedException(borrowedBookEntity.getId());
             }
         } else {
-            throw new InvalidCardNumberException();
+            throw new BookAlreadyReturnedException(borrowedBookEntity.getId());
         }
+
     }
 
     private void saveNewPassword(UserEntity userEntity, String newPassword) {
@@ -141,11 +141,12 @@ public class UserProfileService {
 
     private void setUserBookDetails(UserBook userBook, BorrowedBookEntity borrowedBookEntity, BookEntity bookEntity) {
         userBook.setTitle(bookEntity.getTitle());
-        userBook.setAuthors(bookEntity.getAuthors());
-        userBook.setGenres(bookEntity.getGenres());
-        userBook.setPublisherName(bookEntity.getPublisherEntity().getName());
-        userBook.setYearOfPrint(Integer.toString(bookEntity.getYearOfPrintEntity().getYearOfPrint()));
+        userBook.setBorrowedBookId(borrowedBookEntity.getId());
+        userBook.setBookDetailsLink("/books/" + bookEntity.getId());
         userBook.setAffiliate(borrowedBookEntity.getAffiliateEntity().getName());
+        userBook.setExtended(borrowedBookEntity.isExtended());
+        userBook.setAccepted(borrowedBookEntity.isAccepted());
+        userBook.setClosed(borrowedBookEntity.isClosed());
     }
 
     private void setBorrowedBookDetails(UserBook userBook, BorrowedBookEntity borrowedBookEntity) {

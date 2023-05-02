@@ -24,14 +24,14 @@ export class NavigationMenuComponent implements OnInit {
 
   public logout() {
     this.http.post('/api/logout', {}).subscribe(() => {
-      console.log("Logout successful");
+      console.log('Logout successful');
       this.router.navigate(['/login'], { queryParams: { logout: true } });  
       sessionStorage.clear();
     });
   }
 
   private checkIfUserIsLoggedIn() {
-    let token = sessionStorage.getItem("token");
+    let token = sessionStorage.getItem('token');
     if (token != null) {
       this.loggedIn = true;
     } else {

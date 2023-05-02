@@ -12,11 +12,13 @@ import { RouterModule } from '@angular/router';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { RegisteredComponent } from './components/registered/registered.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
-import { BooksComponent } from './components/user-profile/books/books.component';
+import { UserBooksComponent } from './components/user-profile/user-books/user-books.component';
 import { ChangePasswordComponent } from './components/user-profile/change-password/change-password.component';
 import { NavigationMenuComponent } from './components/navigation-menu/navigation-menu.component';
 import { PasswordReminderComponent } from './components/password-reminder/password-reminder.component';
 import { NewPasswordComponent } from './components/password-reminder/new-password/new-password.component';
+import { BooksComponent } from './components/books/books.component';
+import { BookDetailsComponent } from './components/books/book-details/book-details.component';
 
 @NgModule({
   declarations: [
@@ -26,11 +28,13 @@ import { NewPasswordComponent } from './components/password-reminder/new-passwor
     HomeComponent,
     RegisteredComponent,
     UserProfileComponent,
-    BooksComponent,
+    UserBooksComponent,
     ChangePasswordComponent,
     NavigationMenuComponent,
     PasswordReminderComponent,
-    NewPasswordComponent
+    NewPasswordComponent,
+    BooksComponent,
+    BookDetailsComponent
   ],
   imports: [
     BrowserModule,

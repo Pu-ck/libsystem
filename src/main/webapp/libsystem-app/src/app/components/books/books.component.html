@@ -1,0 +1,53 @@
+<table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Authors</th>
+        <th>Genres</th>
+        <th>Affiliates</th>
+        <th>Publisher</th>
+        <th>Year of print</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let book of books">
+        <td>
+            {{book.title}}
+        </td>
+        <td>
+            <ul>
+                <li *ngFor="let author of book.authors">
+                    {{author.name}}
+                </li>
+            </ul>
+        </td>
+        <td>
+            <ul>
+                <li *ngFor="let genre of book.genres">
+                    {{genre.name}}
+                </li>
+            </ul>
+        </td>
+        <td>
+            <ul>
+                <li *ngFor="let affiliate of book.affiliates">
+                    {{affiliate.name}}
+                </li>
+            </ul>
+        </td>
+        <td>
+            {{book.publisherEntity.name}}
+        </td>
+        <td>
+            {{book.yearOfPrintEntity.yearOfPrint}}
+        </td>
+        <td>
+            <button (click)="redirectToBookDetails(book.id)">Details</button>
+        </td>
+      </tr>
+    </tbody>
+</table>
+
+<p></p>
+

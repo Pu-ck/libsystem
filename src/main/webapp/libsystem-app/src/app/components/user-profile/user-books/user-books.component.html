@@ -1,41 +1,21 @@
 <table>
     <thead>
       <tr>
-        <th>Title</th>
-        <th>Authors</th>
-        <th>Genres</th>
-        <th>Publisher</th>
-        <th>Year of print</th>
+        <th>Book details</th>
         <th>Borrow date</th>
         <th>Return date</th>
         <th>Ready for pickup date</th>
         <th>Current penalty</th>
         <th>Affiliate</th>
         <th>Status</th>
+        <th>Extended</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let book of books">
         <td>
-            {{book.title}}
-        </td>
-        <td>
-            <ul>
-                <li *ngFor="let author of book.authors">
-                    {{author.name}}
-                </li>
-            </ul>
-        </td>
-            <ul>
-                <li *ngFor="let genre of book.genres">
-                    {{genre.name}}
-                </li>
-            </ul>
-        <td>
-            {{book.publisherName}}
-        </td>
-        <td>
-            {{book.yearOfPrint}}
+            <a [routerLink]="book.bookDetailsLink">{{ book.title }}</a>
         </td>
         <td>
             {{book.borrowDate}}
@@ -55,6 +35,14 @@
         <td>
             {{book.status}}
         </td>
+        <td>
+            {{ book.extended ? 'Yes' : 'No' }}
+        </td>
+        <td>
+            <button [disabled]="book.extended || book.closed || !book.accepted" (click)="bookExtensionConfirmation(book.borrowedBookId)">Extend</button>
+        </td>
       </tr>
     </tbody>
   </table>
+
+<p *ngIf="bookExtended">Book extension request sent successfully - wait for an administrator to extended the book's return date</p>

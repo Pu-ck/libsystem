@@ -6,10 +6,12 @@ import { LoginComponent } from './components/login/login.component';
 import { RegisteredComponent } from './components/registered/registered.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
-import { BooksComponent } from './components/user-profile/books/books.component';
+import { UserBooksComponent } from './components/user-profile/user-books/user-books.component';
 import { ChangePasswordComponent } from './components/user-profile/change-password/change-password.component';
 import { PasswordReminderComponent } from './components/password-reminder/password-reminder.component';
 import { NewPasswordComponent } from './components/password-reminder/new-password/new-password.component';
+import { BooksComponent } from './components/books/books.component';
+import { BookDetailsComponent } from './components/books/book-details/book-details.component';
 
 const routes: Routes = [
   {path: '', canActivate:[AuthenticationGuard], children: [
@@ -18,8 +20,10 @@ const routes: Routes = [
     { path: 'registration', component: RegistrationComponent },
     { path: 'registered', component: RegisteredComponent },
     { path: 'user-profile', component: UserProfileComponent },
-    { path: 'user-profile/books', component: BooksComponent },
-    { path: 'user-profile/change-password', component: ChangePasswordComponent }
+    { path: 'user-profile/books', component: UserBooksComponent },
+    { path: 'user-profile/change-password', component: ChangePasswordComponent },
+    { path: 'books', component: BooksComponent },
+    { path: 'books/:id', component: BookDetailsComponent }
   ]},
   { path: 'password-reminder', component: PasswordReminderComponent },
   { path: 'password-reminder/new-password', component: NewPasswordComponent },

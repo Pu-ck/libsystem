@@ -30,12 +30,12 @@ export class ChangePasswordComponent implements OnInit {
         this.oldPasswordNotMatching = false;
     }, error => {
       if (error.status === 409) {
-        if (error.error.message === "New password same as old one") {
+        if (error.error.message === 'New password same as old one') {
           this.passwordDuplicated = true;
           this.oldPasswordNotMatching = false;
           this.newPasswordSet = false;
         }
-        if (error.error.message === "Old password not matching") {
+        if (error.error.message === 'Old password not matching') {
           this.oldPasswordNotMatching = true;
           this.passwordDuplicated = false;
           this.newPasswordSet = false;

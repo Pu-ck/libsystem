@@ -12,14 +12,15 @@ import java.util.Set;
 @Setter
 public class UserBook {
     private String title;
-    private Set<AuthorEntity> authors = new HashSet<>();
-    private Set<GenreEntity> genres = new HashSet<>();
-    private String publisherName;
-    private String yearOfPrint;
+    private int borrowedBookId;
+    private String bookDetailsLink;
     private String borrowDate;
     private String returnDate;
     private String readyDate;
     private String penalty;
     private String affiliate;
     private String status;
+    private boolean extended;
+    private boolean accepted;
+    private boolean closed;
 }

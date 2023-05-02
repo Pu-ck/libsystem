@@ -38,12 +38,12 @@ export class RegistrationComponent implements OnInit {
       this.router.navigate(['/registered'], { queryParams: { token: token, username: this.model.username } });
     }, error => {
       if (error.status === 409) {
-        if (error.error.message === "Username already taken") {
+        if (error.error.message === 'Username already taken') {
           this.usernameTaken = true;
         } else {
           this.usernameTaken = false;
         }
-        if (error.error.message === "Card number already taken") {
+        if (error.error.message === 'Card number already taken') {
           this.cardNumberTaken = true;
         } else {
           this.cardNumberTaken = false;

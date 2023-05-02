@@ -14,6 +14,7 @@ export class NewPasswordComponent implements OnInit {
   public token: string = '';
   public tokenVerified: boolean = false;
   public passwordReset: boolean = false;
+  public tokenExpired: boolean = false;
 
   constructor(
     private router: Router,
@@ -35,8 +36,15 @@ export class NewPasswordComponent implements OnInit {
       console.log(response);
       this.tokenVerified = true;
     }, error => {
-      console.log(error);
-      this.router.navigate(['/login']);
+      if (error.status === 404) {
+        if (error.error.message === 'Password reminder token expired') {
+          this.tokenVerified = false;
+          this.tokenExpired = true;
+        }
+        if (error.error.message === 'Password reminder token not found') {
+          this.router.navigate(['/login']);
+        }
+      }
     }
     );
   }

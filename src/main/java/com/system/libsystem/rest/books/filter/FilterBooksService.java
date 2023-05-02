@@ -39,7 +39,6 @@ public class FilterBooksService {
     }
 
     public List<BookEntity> filterByBookProperties(Map<String, String> requestParameters) {
-
         final String title = requestParameters.get("title");
         final String author = requestParameters.get("author");
         final String genre = requestParameters.get("genre");
@@ -48,7 +47,6 @@ public class FilterBooksService {
         final String affiliate = requestParameters.get("affiliate");
         final String sortType = requestParameters.get("sortType");
         final String sortDirection = requestParameters.get("sortDirection");
-
         List<BookEntity> bookEntities = new ArrayList<>();
 
         if (title.length() > 0) {

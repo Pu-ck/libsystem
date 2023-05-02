@@ -56,4 +56,10 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(passwordReminderTokenExpiredResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(BookNotFoundException.class)
+    public ResponseEntity<BookNotFoundResponse> handleBookNotFoundException() {
+        final BookNotFoundResponse bookNotFoundResponse = new BookNotFoundResponse();
+        return new ResponseEntity<>(bookNotFoundResponse, HttpStatus.NOT_FOUND);
+    }
+
 }
