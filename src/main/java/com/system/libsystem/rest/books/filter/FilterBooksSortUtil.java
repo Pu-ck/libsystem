@@ -34,9 +34,12 @@ public class FilterBooksSortUtil {
     public List<BookEntity> getBooksFilteredByAuthorSorted(String sortDirection,
                                                            List<BookEntity> bookEntities) {
         if (Objects.equals(sortDirection, SORT_DESCENDING)) {
-            return bookEntities.stream()
-                    .sorted(Comparator.comparing(BookEntity::getAuthors, Collections.reverseOrder()))
-                    .toList();
+            return bookEntities.stream().sorted(Comparator.comparing((BookEntity b) -> b.getAuthors().stream()
+                            .map(AuthorEntity::getName)
+                            .sorted()
+                            .collect(Collectors.joining(", ")))
+                            .reversed())
+                            .toList();
         }
         return bookEntities.stream().sorted(Comparator.comparing((BookEntity b) -> b.getAuthors().stream()
                     .map(AuthorEntity::getName)
@@ -48,9 +51,12 @@ public class FilterBooksSortUtil {
     public List<BookEntity> getBooksFilteredByGenreSorted(String sortDirection,
                                                           List<BookEntity> bookEntities) {
         if (Objects.equals(sortDirection, SORT_DESCENDING)) {
-            return bookEntities.stream()
-                    .sorted(Comparator.comparing(BookEntity::getGenres, Collections.reverseOrder()))
-                    .toList();
+            return bookEntities.stream().sorted(Comparator.comparing((BookEntity b) -> b.getGenres().stream()
+                            .map(GenreEntity::getName)
+                            .sorted()
+                            .collect(Collectors.joining(", ")))
+                            .reversed())
+                            .toList();
         }
         return bookEntities.stream().sorted(Comparator.comparing((BookEntity b) -> b.getGenres().stream()
                     .map(GenreEntity::getName)
@@ -85,12 +91,12 @@ public class FilterBooksSortUtil {
             final List<AffiliateBook> affiliateBooks = affiliateBookRepository.findAll().stream()
                     .sorted(Comparator.comparing(AffiliateBook::getCurrentQuantity, Collections.reverseOrder()))
                     .toList();
-            return getFilteredBooks(affiliateBooks);
+            return getFilteredBooks(affiliateBooks).stream().distinct().toList();
         }
 
         final List<AffiliateBook> affiliateBooks = affiliateBookRepository.findAll().stream()
                 .sorted(Comparator.comparing(AffiliateBook::getCurrentQuantity)).toList();
-        return getFilteredBooks(affiliateBooks);
+        return getFilteredBooks(affiliateBooks).stream().distinct().toList();
     }
 
     public List<BookEntity> getBooksFilteredByGeneralQuantity(String sortDirection) {
@@ -99,12 +105,12 @@ public class FilterBooksSortUtil {
             final List<AffiliateBook> affiliateBooks = affiliateBookRepository.findAll().stream()
                     .sorted(Comparator.comparing(AffiliateBook::getGeneralQuantity, Collections.reverseOrder()))
                     .toList();
-            return getFilteredBooks(affiliateBooks);
+            return getFilteredBooks(affiliateBooks).stream().distinct().toList();
         }
 
         final List<AffiliateBook> affiliateBooks = affiliateBookRepository.findAll().stream()
                 .sorted(Comparator.comparing(AffiliateBook::getGeneralQuantity)).toList();
-        return getFilteredBooks(affiliateBooks);
+        return getFilteredBooks(affiliateBooks).stream().distinct().toList();
     }
 
     private List<BookEntity> getFilteredBooks(List<AffiliateBook> affiliateBooks) {

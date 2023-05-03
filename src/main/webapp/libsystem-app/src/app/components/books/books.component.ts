@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router, ActivatedRoute  } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-books',
@@ -10,34 +10,39 @@ import { Router, ActivatedRoute  } from '@angular/router';
 export class BooksComponent implements OnInit {
 
   public books: any[] = [];
-  public title: string = '';
-  public author: string = '';
+  public noResultsFound: boolean = false;
+  public selectedSearchParam:string = 'title';
+  public searchedValue: string = '';
+  public selectedSortType: string = '1';
+  public selectedSortDirection: string = '';
   public genre: string = '';
-  public publisher: string = '';
-  public yearOfPrint: string = '';
   public affiliate: string = '';
-  public sortType: string = '';
-  public sortDirection: string = '';
 
   constructor(
     private http: HttpClient, 
-    private router: Router,
-    private route: ActivatedRoute
+    private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.getFilterParams()
     this.getBooks();
   }
 
   public getBooks() {
-    const url = `/api/books?title=${this.title}&author=${this.author}&genre=${this.genre}&publisher=${this.publisher}&yearOfPrint=${this.yearOfPrint}&affiliate=${this.affiliate}&sortType=${this.sortType}&sortDirection=${this.sortDirection}`;
+    const url = `/api/books?${this.selectedSearchParam}=${this.searchedValue}&title=&author=&genre=${this.genre}&publisher=&yearOfPrint=&affiliate=${this.affiliate}&sortType=${this.selectedSortType}&sortDirection=${this.selectedSortDirection}`;
 
     this.http.get<any[]>(url, {}).subscribe(
       response => {
+        console.log(url);
         this.books = response;
+        if (this.books.length == 0) {
+          this.noResultsFound = true;
+        } else {
+          this.noResultsFound = false;
+        }
       },
       error => {
+        this.noResultsFound = true;
+        this.books = [];
         console.log(error);
       }
     );
@@ -45,17 +50,6 @@ export class BooksComponent implements OnInit {
 
   public redirectToBookDetails(id: number) {
     this.router.navigate([`books/${id}`]);
-  }
-
-  private getFilterParams() {
-    this.title = this.route.snapshot.queryParamMap.get('title')! || '';
-    this.author = this.route.snapshot.queryParamMap.get('author')! || '';
-    this.genre = this.route.snapshot.queryParamMap.get('genre')! || '';
-    this.publisher = this.route.snapshot.queryParamMap.get('publisher')! || '';
-    this.yearOfPrint = this.route.snapshot.queryParamMap.get('yearOfPrint')! || '';
-    this.affiliate = this.route.snapshot.queryParamMap.get('affiliate')! || '';
-    this.sortType = this.route.snapshot.queryParamMap.get('sortType')! || '';
-    this.sortDirection = this.route.snapshot.queryParamMap.get('sortDirection')! || '';
   }
 
 }

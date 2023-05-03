@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -47,6 +48,7 @@ public class FilterBooksService {
         final String affiliate = requestParameters.get("affiliate");
         final String sortType = requestParameters.get("sortType");
         final String sortDirection = requestParameters.get("sortDirection");
+        final List<String> filterParameters = Arrays.asList(title, author, genre, publisher, yearOfPrint, affiliate);
         List<BookEntity> bookEntities = new ArrayList<>();
 
         if (title.length() > 0) {
@@ -72,7 +74,7 @@ public class FilterBooksService {
         if (affiliate.length() > 0) {
             bookEntities = getBooksFilteredByAffiliate(affiliate);
         }
-        if (bookEntities.isEmpty()) {
+        if (isFilterEmpty(filterParameters)) {
             bookEntities = bookRepository.findAll();
         }
 
@@ -80,15 +82,13 @@ public class FilterBooksService {
     }
 
     private List<BookEntity> getBooksFilteredByAffiliate(String affiliate) {
-
         final List<AffiliateEntity> affiliateEntities = affiliateRepository.findAllByName(affiliate);
         final List<Integer> affiliateEntitiesIds = affiliateEntities.stream().map(AffiliateEntity::getId).toList();
         final List<AffiliateBook> affiliateBooks = affiliateBookRepository.findByAffiliateIdIn(affiliateEntitiesIds);
-
         return affiliateBooks.stream().filter(affiliateBook -> affiliateBook.getCurrentQuantity() > 0)
-                        .map(affiliateBook -> bookRepository.findById(affiliateBook.getBookId())
-                        .orElseThrow(() -> new BookNotFoundException(affiliateBook.getBookId())))
-                        .toList();
+                .map(affiliateBook -> bookRepository.findById(affiliateBook.getBookId())
+                .orElseThrow(() -> new BookNotFoundException(affiliateBook.getBookId())))
+                .toList();
     }
 
     private List<BookEntity> getSortedBooks(String sortType, String sortDirection, List<BookEntity> bookEntities) {
@@ -104,6 +104,15 @@ public class FilterBooksService {
             case SORT_BY_GENERAL_QUANTITY -> filterBooksSortUtil.getBooksFilteredByGeneralQuantity(sortDirection);
             default -> bookEntities;
         };
+    }
+
+    private boolean isFilterEmpty(final List<String> filterParameters) {
+        return filterParameters.get(0).length() == 0
+                && filterParameters.get(1).length() == 0
+                && filterParameters.get(2).length() == 0
+                && filterParameters.get(3).length() == 0
+                && filterParameters.get(4).length() == 0
+                && filterParameters.get(5).length() == 0;
     }
 
 }
