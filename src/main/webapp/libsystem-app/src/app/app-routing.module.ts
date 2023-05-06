@@ -16,7 +16,7 @@ import { BookDetailsComponent } from './components/books/book-details/book-detai
 const routes: Routes = [
   {path: '', canActivate:[AuthenticationGuard], children: [
     { path: '', component: HomeComponent },
-    { path: 'login', component: LoginComponent },
+    { path: 'login', component: LoginComponent},
     { path: 'registration', component: RegistrationComponent },
     { path: 'registered', component: RegisteredComponent },
     { path: 'user-profile', component: UserProfileComponent },

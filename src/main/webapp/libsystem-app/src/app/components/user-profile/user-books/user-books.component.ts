@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class UserBooksComponent implements OnInit {
 
   public bookExtended: boolean = false;
+  public displayedStatus: string = 'Borrowed';
   public books: any[] = [];
 
   constructor(private http: HttpClient) { }
@@ -45,6 +46,20 @@ export class UserBooksComponent implements OnInit {
       console.log(error);
     }
     );
+  }
+
+  public setDisplayedStatus(status: string) {
+    if (status === 'Borrowed') {
+      this.displayedStatus = 'Borrowed';
+    } else if (status === 'Ordered') {
+      this.displayedStatus = 'Ordered';
+    } else if (status === 'Returned') {
+      this.displayedStatus = 'Returned';
+    } else if (status === 'Rejected') {
+      this.displayedStatus = 'Rejected';
+    } else if (status === 'All') {
+      this.displayedStatus = 'All';
+    }
   }
 
 }

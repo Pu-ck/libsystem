@@ -51,7 +51,8 @@ public class UserProfileService {
         final UserEntity userEntity = userService.getUserByUsername(username);
 
         return List.of(userEntity.getUsername(), userEntity.getFirstName(), userEntity.getLastName(),
-                userEntity.getCardNumber().toString());
+                userEntity.getCardNumber().toString(), Integer.toString(userEntity.getBorrowedBooks()),
+                Integer.toString(userEntity.getOrderedBooks()));
     }
 
     public List<UserBook> getUserBooks(HttpServletRequest httpServletRequest) {

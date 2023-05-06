@@ -40,6 +40,12 @@ public class UserEntity implements UserDetails {
     @Column(nullable = false)
     private boolean enabled;
 
+    @Column(nullable = false)
+    private int orderedBooks;
+
+    @Column(nullable = false)
+    private int borrowedBooks;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserType userType;

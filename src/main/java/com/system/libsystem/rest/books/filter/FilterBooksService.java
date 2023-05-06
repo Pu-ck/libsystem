@@ -1,21 +1,14 @@
 package com.system.libsystem.rest.books.filter;
 
-import com.system.libsystem.entities.affiliate.AffiliateEntity;
-import com.system.libsystem.entities.affiliate.AffiliateRepository;
-import com.system.libsystem.entities.affiliatebook.AffiliateBook;
-import com.system.libsystem.entities.affiliatebook.AffiliateBookRepository;
 import com.system.libsystem.entities.book.BookEntity;
 import com.system.libsystem.entities.book.BookRepository;
 import com.system.libsystem.entities.book.BookService;
-import com.system.libsystem.exceptions.BookNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +23,6 @@ public class FilterBooksService {
     private static final String SORT_BY_GENERAL_QUANTITY = "7";
 
     private final BookRepository bookRepository;
-    private final AffiliateRepository affiliateRepository;
-    private final AffiliateBookRepository affiliateBookRepository;
     private final FilterBooksSortUtil filterBooksSortUtil;
     private final BookService bookService;
 
@@ -49,46 +40,17 @@ public class FilterBooksService {
         final String sortType = requestParameters.get("sortType");
         final String sortDirection = requestParameters.get("sortDirection");
         final List<String> filterParameters = Arrays.asList(title, author, genre, publisher, yearOfPrint, affiliate);
-        List<BookEntity> bookEntities = new ArrayList<>();
 
-        if (title.length() > 0) {
-            bookEntities = Stream.concat(bookEntities.stream(),
-                    bookRepository.findByTitle(title).stream()).toList();
-        }
-        if (author.length() > 0) {
-            bookEntities = Stream.concat(bookEntities.stream(),
-                    bookRepository.findByAuthorName(author).stream()).toList();
-        }
-        if (genre.length() > 0) {
-            bookEntities = Stream.concat(bookEntities.stream(),
-                    bookRepository.findByGenreName(genre).stream()).toList();
-        }
-        if (publisher.length() > 0) {
-            bookEntities = Stream.concat(bookEntities.stream(),
-                    bookRepository.findByPublisherName(publisher).stream()).toList();
-        }
-        if (yearOfPrint.length() > 0) {
-            bookEntities = Stream.concat(bookEntities.stream(),
-                    bookRepository.findByYearOfPrint(Integer.parseInt(yearOfPrint)).stream()).toList();
-        }
-        if (affiliate.length() > 0) {
-            bookEntities = getBooksFilteredByAffiliate(affiliate);
-        }
+        List<BookEntity> bookEntities;
+
         if (isFilterEmpty(filterParameters)) {
             bookEntities = bookRepository.findAll();
+        } else {
+            bookEntities = bookRepository.findByTitlePublisherYearGenreAffiliateAndAuthor(title, publisher, yearOfPrint,
+                    genre, affiliate, author);
         }
 
         return getSortedBooks(sortType, sortDirection, bookEntities.stream().distinct().toList());
-    }
-
-    private List<BookEntity> getBooksFilteredByAffiliate(String affiliate) {
-        final List<AffiliateEntity> affiliateEntities = affiliateRepository.findAllByName(affiliate);
-        final List<Integer> affiliateEntitiesIds = affiliateEntities.stream().map(AffiliateEntity::getId).toList();
-        final List<AffiliateBook> affiliateBooks = affiliateBookRepository.findByAffiliateIdIn(affiliateEntitiesIds);
-        return affiliateBooks.stream().filter(affiliateBook -> affiliateBook.getCurrentQuantity() > 0)
-                .map(affiliateBook -> bookRepository.findById(affiliateBook.getBookId())
-                .orElseThrow(() -> new BookNotFoundException(affiliateBook.getBookId())))
-                .toList();
     }
 
     private List<BookEntity> getSortedBooks(String sortType, String sortDirection, List<BookEntity> bookEntities) {

@@ -1,4 +1,4 @@
-<div *ngIf="loggedIn">
+<ng-container *ngIf="loggedIn">
     <nav>
         <ul>
             <li><a href="/">Home</a></li>
@@ -7,4 +7,4 @@
             <li><a class="button" (click)="logout()">Logout</a></li>
         </ul>
     </nav>
-</div>
+</ng-container>

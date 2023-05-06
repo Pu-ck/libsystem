@@ -11,8 +11,10 @@ export class BooksComponent implements OnInit {
 
   public books: any[] = [];
   public noResultsFound: boolean = false;
-  public selectedSearchParam:string = 'title';
-  public searchedValue: string = '';
+  public title: string = '';
+  public author: string = '';
+  public publisher: string = '';
+  public yearOfPrint: string = '';
   public selectedSortType: string = '1';
   public selectedSortDirection: string = '';
   public genre: string = '';
@@ -28,7 +30,7 @@ export class BooksComponent implements OnInit {
   }
 
   public getBooks() {
-    const url = `/api/books?${this.selectedSearchParam}=${this.searchedValue}&title=&author=&genre=${this.genre}&publisher=&yearOfPrint=&affiliate=${this.affiliate}&sortType=${this.selectedSortType}&sortDirection=${this.selectedSortDirection}`;
+    const url = `/api/books?title=${this.title}&author=${this.author}&genre=${this.genre}&publisher=${this.publisher}&yearOfPrint=${this.yearOfPrint}&affiliate=${this.affiliate}&sortType=${this.selectedSortType}&sortDirection=${this.selectedSortDirection}`;
 
     this.http.get<any[]>(url, {}).subscribe(
       response => {

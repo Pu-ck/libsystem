@@ -11,22 +11,22 @@ import java.util.Optional;
 @Repository
 public interface BookRepository extends JpaRepository<BookEntity, Long> {
 
-    List<BookEntity> findByTitle(String title);
-
-    @Query("SELECT b FROM BookEntity b JOIN b.authors g WHERE g.name = :authorName")
-    List<BookEntity> findByAuthorName(@Param("authorName") String authorName);
-
-    @Query("SELECT b FROM BookEntity b JOIN b.genres g WHERE g.name = :genreName")
-    List<BookEntity> findByGenreName(@Param("genreName") String genreName);
-
-    @Query("SELECT b FROM BookEntity b JOIN b.publisherEntity p WHERE p.name = :publisherName")
-    List<BookEntity> findByPublisherName(@Param("publisherName") String publisherName);
-
-    @Query("SELECT b FROM BookEntity b JOIN b.yearOfPrintEntity p WHERE p.yearOfPrint = :yearOfPrint")
-    List<BookEntity> findByYearOfPrint(@Param("yearOfPrint") int yearOfPrint);
-
     List<BookEntity> findAll();
 
     Optional<BookEntity> findById(int id);
 
+    @Query("SELECT b FROM BookEntity b JOIN b.authors a JOIN b.publisherEntity p JOIN b.yearOfPrintEntity y " +
+            "JOIN b.genres g JOIN b.affiliates af WHERE " +
+            "(:title IS NULL OR :title = '' OR b.title = :title) AND " +
+            "(:publisher IS NULL OR :publisher = '' OR p.name = :publisher) AND " +
+            "(:yearOfPrint IS NULL OR :yearOfPrint = '' OR y.yearOfPrint = :yearOfPrint) AND " +
+            "(:genre IS NULL OR :genre = '' OR g.name = :genre) AND " +
+            "(:affiliate IS NULL OR :affiliate = '' OR af.name = :affiliate) AND " +
+            "(:author IS NULL OR :author = '' OR a.name = :author)")
+    List<BookEntity> findByTitlePublisherYearGenreAffiliateAndAuthor(@Param("title") String title,
+                                                                     @Param("publisher") String publisher,
+                                                                     @Param("yearOfPrint") String yearOfPrint,
+                                                                     @Param("genre") String genre,
+                                                                     @Param("affiliate") String affiliate,
+                                                                     @Param("author") String author);
 }

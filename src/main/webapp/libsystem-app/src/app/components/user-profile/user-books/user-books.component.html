@@ -1,3 +1,9 @@
+<button [disabled]="displayedStatus == 'Ordered'" (click)="setDisplayedStatus('Ordered')">Ordered</button>
+<button [disabled]="displayedStatus == 'Borrowed'" (click)="setDisplayedStatus('Borrowed')">Borrowed</button>
+<button [disabled]="displayedStatus == 'Returned'" (click)="setDisplayedStatus('Returned')">Returned</button>
+<button [disabled]="displayedStatus == 'Rejected'" (click)="setDisplayedStatus('Rejected')">Rejected</button>
+<button [disabled]="displayedStatus == 'All'" (click)="setDisplayedStatus('All')">All</button>
+
 <table>
     <thead>
       <tr>
@@ -14,33 +20,35 @@
     </thead>
     <tbody>
       <tr *ngFor="let book of books">
-        <td>
-            <a [routerLink]="book.bookDetailsLink">{{ book.title }}</a>
-        </td>
-        <td>
-            {{book.borrowDate}}
-        </td>
-        <td>
-            {{book.returnDate}}
-        </td>
-        <td>
-            {{book.readyDate}}
-        </td>
-        <td>
-            {{book.penalty}}
-        </td>
-        <td>
-            {{book.affiliate}}
-        </td>
-        <td>
-            {{book.status}}
-        </td>
-        <td>
-            {{ book.extended ? 'Yes' : 'No' }}
-        </td>
-        <td>
-            <button [disabled]="book.extended || book.closed || !book.accepted" (click)="bookExtensionConfirmation(book.borrowedBookId)">Extend</button>
-        </td>
+        <ng-container *ngIf="book.status == displayedStatus || displayedStatus == 'All'">
+          <td>
+              <a [routerLink]="book.bookDetailsLink">{{ book.title }}</a>
+          </td>
+          <td>
+              {{book.borrowDate}}
+          </td>
+          <td>
+              {{book.returnDate}}
+          </td>
+          <td>
+              {{book.readyDate}}
+          </td>
+          <td>
+              {{book.penalty}}
+          </td>
+          <td>
+              {{book.affiliate}}
+          </td>
+          <td>
+              {{book.status}}
+          </td>
+          <td>
+              {{ book.extended ? 'Yes' : 'No' }}
+          </td>
+          <td>
+              <button [disabled]="book.extended || book.closed || !book.accepted" (click)="bookExtensionConfirmation(book.borrowedBookId)">Extend</button>
+          </td>
+        </ng-container>
       </tr>
     </tbody>
   </table>

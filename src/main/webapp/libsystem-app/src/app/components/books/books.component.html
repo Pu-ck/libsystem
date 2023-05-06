@@ -1,13 +1,32 @@
 <form name="form" (submit)="getBooks()" #searchForm="ngForm">
     <div>
-        <label for="searchParam">Search with</label>
-        <select name="searchParam" [(ngModel)]="selectedSearchParam">
-            <option value="title">Title</option>
-            <option value="author">Author</option>
-            <option value="publisher">Publisher</option>
-            <option value="yearOfPrint">Year of print</option>
+        <label for="title">Title</label>
+        <input type="text" name="title" [(ngModel)]="title">
+
+        <label for="author">Author</label>
+        <input type="text" name="author" [(ngModel)]="author">
+
+        <label for="publisher">Publisher</label>
+        <input type="text" name="publisher" [(ngModel)]="publisher">
+
+        <label for="yearOfPrint">Year of print</label>
+        <input type="text" name="yearOfPrint" [(ngModel)]="yearOfPrint">
+
+        <label for="genre">Genre</label>
+        <select name="genre" [(ngModel)]="genre">
+            <option value=""></option>
+            <option value="Genre 1">Genre 1</option>
+            <option value="Genre 2">Genre 2</option>
+            <option value="Genre 3">Genre 3</option>
         </select>
-        <input type="text" name="searchedValue" [(ngModel)]="searchedValue">
+
+        <label for="affiliate">Affiliate</label>
+        <select name="affiliate" [(ngModel)]="affiliate">
+            <option value=""></option>
+            <option value="Affiliate A">Affiliate A</option>
+            <option value="Affiliate B">Affiliate B</option>
+        </select>
+
         <label for="sortBy">Sort by</label>
         <select name="sortBy" [(ngModel)]="selectedSortType">
             <option value="1">Title</option>
@@ -18,24 +37,13 @@
             <option value="6">Current quantity</option>
             <option value="7">General quantity</option>
         </select>
+
         <label for="sortDirection">Sort direction</label>
         <select name="sortDirection" [(ngModel)]="selectedSortDirection">
             <option value="">Ascending</option>
             <option value="1">Descending</option>
         </select>
-        <label for="genre">Genre</label>
-        <select name="genre" [(ngModel)]="genre">
-            <option value=""></option>
-            <option value="Genre 1">Genre 1</option>
-            <option value="Genre 2">Genre 2</option>
-            <option value="Genre 3">Genre 3</option>
-        </select>
-        <label for="genre">Affiliate</label>
-        <select name="affiliate" [(ngModel)]="affiliate">
-            <option value=""></option>
-            <option value="Affiliate A">Affiliate A</option>
-            <option value="Affiliate B">Affiliate B</option>
-        </select>
+
         <button type="submit">Search</button>
     </div>
 </form>

@@ -4,6 +4,7 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookEntity;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookRepository;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookService;
 import com.system.libsystem.entities.user.UserEntity;
+import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.exceptions.BookAlreadyAcceptedException;
 import com.system.libsystem.exceptions.BookAlreadyReturnedException;
@@ -24,6 +25,7 @@ public class AcceptOrderService {
     private static final int BORROWED_BOOK_KEEP_TIME = 1;
 
     private final BorrowedBookRepository borrowedBookRepository;
+    private final UserRepository userRepository;
     private final BookUtil bookUtil;
     private final BorrowedBookService borrowedBookService;
     private final UserService userService;
@@ -41,6 +43,7 @@ public class AcceptOrderService {
         if (bookUtil.isCardNumberValid(userEntity.getCardNumber(), acceptOrderRequest.getCardNumber())) {
             if (!borrowedBookEntity.isClosed()) {
                 if (!borrowedBookEntity.isAccepted()) {
+                    updateUserOrderedAndBorrowedBooksQuantity(userEntity);
                     saveBorrowedBookAsConfirmed(borrowedBookEntity, borrowDate, returnDate);
                 } else {
                     throw new BookAlreadyAcceptedException(borrowedBookEntity.getId());
@@ -59,6 +62,12 @@ public class AcceptOrderService {
         borrowedBookEntity.setReturnDate(returnDate);
         borrowedBookRepository.save(borrowedBookEntity);
         log.info("The borrowed book with id " + borrowedBookEntity.getId() + " has been set as accepted");
+    }
+
+    private void updateUserOrderedAndBorrowedBooksQuantity(UserEntity userEntity) {
+        userEntity.setOrderedBooks(userEntity.getOrderedBooks() - 1);
+        userEntity.setBorrowedBooks(userEntity.getBorrowedBooks() + 1);
+        userRepository.save(userEntity);
     }
 
 }

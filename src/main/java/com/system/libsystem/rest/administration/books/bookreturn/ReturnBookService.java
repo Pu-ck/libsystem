@@ -7,12 +7,14 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookEntity;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookRepository;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookService;
 import com.system.libsystem.entities.user.UserEntity;
+import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.exceptions.BookAlreadyAcceptedException;
 import com.system.libsystem.exceptions.InvalidCardNumberException;
 import com.system.libsystem.rest.util.BookUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -23,6 +25,7 @@ import javax.transaction.Transactional;
 public class ReturnBookService {
 
     private final BorrowedBookRepository borrowedBookRepository;
+    private final UserRepository userRepository;
     private final BookUtil bookUtil;
     private final BookRepository bookRepository;
     private final BorrowedBookService borrowedBookService;
@@ -40,6 +43,7 @@ public class ReturnBookService {
         if (!borrowedBookEntity.isClosed()) {
             if (bookUtil.isCardNumberValid(userEntity.getCardNumber(), returnBookRequest.getCardNumber())) {
                 returnBorrowedBook(borrowedBookEntity, bookEntity);
+                decreaseUserBorrowedBooksQuantityAndSaveInRepository(userEntity);
             } else {
                 throw new InvalidCardNumberException();
             }
@@ -55,6 +59,11 @@ public class ReturnBookService {
         bookRepository.save(bookEntity);
         log.info("The borrowed book with id " + borrowedBookEntity.getId() + " has been returned and set as closed " +
                 "in the repository");
+    }
+
+    private void decreaseUserBorrowedBooksQuantityAndSaveInRepository(UserEntity userEntity) {
+        userEntity.setBorrowedBooks(userEntity.getBorrowedBooks() - 1);
+        userRepository.save(userEntity);
     }
 
 }
