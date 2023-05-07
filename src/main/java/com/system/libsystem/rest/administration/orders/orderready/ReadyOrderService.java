@@ -8,7 +8,7 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookRepository;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookService;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserService;
-import com.system.libsystem.exceptions.BookAlreadyReturnedException;
+import com.system.libsystem.exceptions.book.BookAlreadyReturnedException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
 import com.system.libsystem.rest.util.BookUtil;

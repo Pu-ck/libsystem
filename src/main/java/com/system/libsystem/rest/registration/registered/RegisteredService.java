@@ -4,7 +4,7 @@ import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenEntity;
 import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenRepository;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
-import com.system.libsystem.exceptions.ConfirmationTokenNotFoundException;
+import com.system.libsystem.exceptions.registration.ConfirmationTokenNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

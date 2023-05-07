@@ -1,6 +1,13 @@
 package com.system.libsystem.rest.exceptionhandling;
 
-import com.system.libsystem.exceptions.*;
+import com.system.libsystem.exceptions.book.BookNotFoundException;
+import com.system.libsystem.exceptions.cardnumber.CardNumberAlreadyTakenException;
+import com.system.libsystem.exceptions.cardnumber.UnableToAuthenticateCardNumberException;
+import com.system.libsystem.exceptions.passwordreminder.PasswordReminderTokenExpiredException;
+import com.system.libsystem.exceptions.passwordreminder.PasswordReminderTokenNotFoundException;
+import com.system.libsystem.exceptions.passwordreset.NewPasswordDuplicatedException;
+import com.system.libsystem.exceptions.passwordreset.OldPasswordNotMatchingException;
+import com.system.libsystem.exceptions.registration.UsernameAlreadyTakenException;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

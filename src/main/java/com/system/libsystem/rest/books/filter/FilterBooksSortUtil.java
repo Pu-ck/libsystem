@@ -6,7 +6,7 @@ import com.system.libsystem.entities.author.AuthorEntity;
 import com.system.libsystem.entities.book.BookEntity;
 import com.system.libsystem.entities.book.BookRepository;
 import com.system.libsystem.entities.genre.GenreEntity;
-import com.system.libsystem.exceptions.BookNotFoundException;
+import com.system.libsystem.exceptions.book.BookNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

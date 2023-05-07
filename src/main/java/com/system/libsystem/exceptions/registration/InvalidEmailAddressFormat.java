@@ -1,4 +1,4 @@
-package com.system.libsystem.exceptions;
+package com.system.libsystem.exceptions.registration;
 
 public class InvalidEmailAddressFormat extends RuntimeException {
 

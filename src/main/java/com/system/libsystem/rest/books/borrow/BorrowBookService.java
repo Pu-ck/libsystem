@@ -12,8 +12,8 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookRepository;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.entities.user.UserService;
-import com.system.libsystem.exceptions.AffiliateNotFoundException;
-import com.system.libsystem.exceptions.InvalidCardNumberException;
+import com.system.libsystem.exceptions.affiliate.AffiliateNotFoundException;
+import com.system.libsystem.exceptions.cardnumber.InvalidCardNumberFormatException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
 import com.system.libsystem.rest.util.BookUtil;
@@ -94,7 +94,7 @@ public class BorrowBookService {
                         "quantity in stock of the library affiliate");
             }
         } else {
-            throw new InvalidCardNumberException();
+            throw new InvalidCardNumberFormatException();
         }
     }
 

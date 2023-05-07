@@ -5,9 +5,9 @@ import com.system.libsystem.entities.passwordremindertoken.PasswordReminderToken
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.entities.user.UserService;
-import com.system.libsystem.exceptions.PasswordReminderTokenExpiredException;
-import com.system.libsystem.exceptions.PasswordReminderTokenNotFoundException;
-import com.system.libsystem.exceptions.UnableToAuthenticateCardNumberException;
+import com.system.libsystem.exceptions.passwordreminder.PasswordReminderTokenExpiredException;
+import com.system.libsystem.exceptions.passwordreminder.PasswordReminderTokenNotFoundException;
+import com.system.libsystem.exceptions.cardnumber.UnableToAuthenticateCardNumberException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
 import com.system.libsystem.rest.util.BookUtil;

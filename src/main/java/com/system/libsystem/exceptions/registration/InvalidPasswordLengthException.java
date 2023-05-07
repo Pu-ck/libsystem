@@ -1,4 +1,4 @@
-package com.system.libsystem.exceptions;
+package com.system.libsystem.exceptions.registration;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

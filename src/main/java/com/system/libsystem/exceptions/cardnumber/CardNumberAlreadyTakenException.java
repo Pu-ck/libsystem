@@ -1,4 +1,4 @@
-package com.system.libsystem.exceptions;
+package com.system.libsystem.exceptions.cardnumber;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Getter
 @AllArgsConstructor
-@ResponseStatus(value = HttpStatus.CONFLICT, reason = "Old password not matching")
-public class OldPasswordNotMatchingException extends RuntimeException {
+@ResponseStatus(value = HttpStatus.CONFLICT, reason = "Username already taken")
+public class CardNumberAlreadyTakenException extends RuntimeException {
 
     @Override
     public String getMessage() {
-        return "The old password is not correct";
+        return "Card number already taken";
     }
 
 }

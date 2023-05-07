@@ -23,10 +23,10 @@ const routes: Routes = [
     { path: 'user-profile/books', component: UserBooksComponent },
     { path: 'user-profile/change-password', component: ChangePasswordComponent },
     { path: 'books', component: BooksComponent },
-    { path: 'books/:id', component: BookDetailsComponent }
+    { path: 'books/:id', component: BookDetailsComponent },
+    { path: 'password-reminder', component: PasswordReminderComponent },
+    { path: 'password-reminder/new-password', component: NewPasswordComponent },
   ]},
-  { path: 'password-reminder', component: PasswordReminderComponent },
-  { path: 'password-reminder/new-password', component: NewPasswordComponent },
   { path: '**', redirectTo: '' }
 ];
 

@@ -54,7 +54,7 @@
         <th>Title</th>
         <th>Authors</th>
         <th>Genres</th>
-        <th>Affiliates</th>
+        <th>Affiliates and quantity</th>
         <th>Publisher</th>
         <th>Year of print</th>
         <th></th>
@@ -81,8 +81,8 @@
         </td>
         <td>
             <ul>
-                <li *ngFor="let affiliate of book.affiliates">
-                    {{affiliate.name}}
+                <li *ngFor="let affiliate of book.affiliates; let i = index">
+                    {{affiliate.name}} {{book.affiliateBooks[i].currentQuantity}}/{{book.affiliateBooks[i].generalQuantity}}
                 </li>
             </ul>
         </td>

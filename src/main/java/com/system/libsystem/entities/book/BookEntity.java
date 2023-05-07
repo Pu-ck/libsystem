@@ -2,6 +2,7 @@ package com.system.libsystem.entities.book;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.system.libsystem.entities.affiliate.AffiliateEntity;
+import com.system.libsystem.entities.affiliatebook.AffiliateBook;
 import com.system.libsystem.entities.author.AuthorEntity;
 import com.system.libsystem.entities.genre.GenreEntity;
 import com.system.libsystem.entities.publisher.PublisherEntity;
@@ -10,7 +11,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -52,6 +55,10 @@ public class BookEntity {
     )
     @JsonManagedReference("book-affiliates")
     private Set<AffiliateEntity> affiliates = new HashSet<>();
+
+    @OneToMany(mappedBy = "bookId")
+    @JsonManagedReference("book-affiliatebook")
+    private List<AffiliateBook> affiliateBooks = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "publisher_id")

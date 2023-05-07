@@ -1,4 +1,4 @@
-package com.system.libsystem.exceptions;
+package com.system.libsystem.exceptions.cardnumber;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -2,7 +2,11 @@ package com.system.libsystem.entities.user;
 
 import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenEntity;
 import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenService;
-import com.system.libsystem.exceptions.*;
+import com.system.libsystem.exceptions.cardnumber.CardNumberAlreadyTakenException;
+import com.system.libsystem.exceptions.cardnumber.InvalidCardNumberFormatException;
+import com.system.libsystem.exceptions.registration.InvalidEmailAddressFormat;
+import com.system.libsystem.exceptions.registration.InvalidPasswordLengthException;
+import com.system.libsystem.exceptions.registration.UsernameAlreadyTakenException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -86,7 +90,7 @@ public class UserService implements UserDetailsService {
             throw new CardNumberAlreadyTakenException();
         }
         if (userEntity.getCardNumber().toString().length() != CARD_NUMBER_LENGTH) {
-            throw new InvalidCardNumberException();
+            throw new InvalidCardNumberFormatException();
         }
         if (userEntity.getPassword().length() < MIN_PASSWORD_LENGTH
                 || userEntity.getPassword().length() > MAX_PASSWORD_LENGTH) {

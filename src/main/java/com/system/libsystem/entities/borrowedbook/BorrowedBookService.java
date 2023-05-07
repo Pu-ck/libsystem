@@ -1,6 +1,6 @@
 package com.system.libsystem.entities.borrowedbook;
 
-import com.system.libsystem.exceptions.BorrowedBookNotFoundException;
+import com.system.libsystem.exceptions.book.BorrowedBookNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

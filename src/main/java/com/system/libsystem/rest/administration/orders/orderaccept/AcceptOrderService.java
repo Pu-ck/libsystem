@@ -6,9 +6,9 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookService;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.entities.user.UserService;
-import com.system.libsystem.exceptions.BookAlreadyAcceptedException;
-import com.system.libsystem.exceptions.BookAlreadyReturnedException;
-import com.system.libsystem.exceptions.InvalidCardNumberException;
+import com.system.libsystem.exceptions.book.BookAlreadyAcceptedException;
+import com.system.libsystem.exceptions.book.BookAlreadyReturnedException;
+import com.system.libsystem.exceptions.cardnumber.InvalidCardNumberFormatException;
 import com.system.libsystem.rest.util.BookUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,7 +52,7 @@ public class AcceptOrderService {
                 throw new BookAlreadyReturnedException(borrowedBookEntity.getId());
             }
         } else {
-            throw new InvalidCardNumberException();
+            throw new InvalidCardNumberFormatException();
         }
     }
 

@@ -9,12 +9,11 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookService;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.entities.user.UserService;
-import com.system.libsystem.exceptions.BookAlreadyAcceptedException;
-import com.system.libsystem.exceptions.InvalidCardNumberException;
+import com.system.libsystem.exceptions.book.BookAlreadyAcceptedException;
+import com.system.libsystem.exceptions.cardnumber.InvalidCardNumberFormatException;
 import com.system.libsystem.rest.util.BookUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -45,7 +44,7 @@ public class ReturnBookService {
                 returnBorrowedBook(borrowedBookEntity, bookEntity);
                 decreaseUserBorrowedBooksQuantityAndSaveInRepository(userEntity);
             } else {
-                throw new InvalidCardNumberException();
+                throw new InvalidCardNumberFormatException();
             }
         } else {
             throw new BookAlreadyAcceptedException(borrowedBookEntity.getId());
