@@ -81,8 +81,8 @@
         </td>
         <td>
             <ul>
-                <li *ngFor="let affiliate of book.affiliates; let i = index">
-                    {{affiliate.name}} {{book.affiliateBooks[i].currentQuantity}}/{{book.affiliateBooks[i].generalQuantity}}
+                <li *ngFor="let affiliate of book.affiliates">
+                    {{ affiliate.name }} {{ getAffiliateBookQuantity(book, affiliate.id) }}
                 </li>
             </ul>
         </td>
