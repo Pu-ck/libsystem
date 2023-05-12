@@ -16,17 +16,17 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
     Optional<BookEntity> findById(int id);
 
     @Query("SELECT b FROM BookEntity b JOIN b.authors a JOIN b.publisherEntity p JOIN b.yearOfPrintEntity y " +
-            "JOIN b.genres g JOIN b.affiliates af WHERE " +
-            "(:title IS NULL OR :title = '' OR b.title = :title) AND " +
-            "(:publisher IS NULL OR :publisher = '' OR p.name = :publisher) AND " +
+            "LEFT JOIN b.genres g JOIN b.affiliates af WHERE " +
+            "(:title IS NULL OR :title = '' OR b.title LIKE %:title%) AND " +
+            "(:author IS NULL OR :author = '' OR a.name LIKE %:author%) AND " +
+            "(:publisher IS NULL OR :publisher = '' OR p.name LIKE %:publisher%) AND " +
             "(:yearOfPrint IS NULL OR :yearOfPrint = '' OR y.yearOfPrint = :yearOfPrint) AND " +
-            "(:genre IS NULL OR :genre = '' OR g.name = :genre) AND " +
-            "(:affiliate IS NULL OR :affiliate = '' OR af.name = :affiliate) AND " +
-            "(:author IS NULL OR :author = '' OR a.name = :author)")
+            "(COALESCE(:genres, null) IS NULL OR COALESCE(:genres, null) = '' OR g.name IN (:genres)) AND " +
+            "(COALESCE(:affiliates, null) IS NULL OR COALESCE(:affiliates, null) = '' OR af.name IN (:affiliates))")
     List<BookEntity> findByTitlePublisherYearGenreAffiliateAndAuthor(@Param("title") String title,
+                                                                     @Param("author") String author,
                                                                      @Param("publisher") String publisher,
                                                                      @Param("yearOfPrint") String yearOfPrint,
-                                                                     @Param("genre") String genre,
-                                                                     @Param("affiliate") String affiliate,
-                                                                     @Param("author") String author);
+                                                                     @Param("genres") List<String> genres,
+                                                                     @Param("affiliates") List<String> affiliates);
 }

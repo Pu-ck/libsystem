@@ -9,18 +9,20 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class FilterBooksService {
 
-    private static final String SORT_BY_TITLE = "1";
-    private static final String SORT_BY_AUTHOR = "2";
-    private static final String SORT_BY_GENRE = "3";
-    private static final String SORT_BY_PUBLISHER = "4";
-    private static final String SORT_BY_YEAR_OF_PRINT = "5";
-    private static final String SORT_BY_CURRENT_QUANTITY = "6";
-    private static final String SORT_BY_GENERAL_QUANTITY = "7";
+    private static final String SORT_BY_TITLE = "title";
+    private static final String SORT_BY_AUTHOR = "author";
+    private static final String SORT_BY_GENRE = "genre";
+    private static final String SORT_BY_PUBLISHER = "publisher";
+    private static final String SORT_BY_YEAR_OF_PRINT = "year";
+    private static final String SORT_BY_CURRENT_QUANTITY = "currentQuantity";
+    private static final String SORT_BY_GENERAL_QUANTITY = "generalQuantity";
+    private static final int EMPTY_LIST_TO_STRING_LENGTH = 2;
 
     private final BookRepository bookRepository;
     private final FilterBooksSortUtil filterBooksSortUtil;
@@ -31,23 +33,27 @@ public class FilterBooksService {
     }
 
     public List<BookEntity> filterByBookProperties(Map<String, String> requestParameters) {
-        final String title = requestParameters.get("title");
-        final String author = requestParameters.get("author");
-        final String genre = requestParameters.get("genre");
-        final String publisher = requestParameters.get("publisher");
-        final String yearOfPrint = requestParameters.get("yearOfPrint");
-        final String affiliate = requestParameters.get("affiliate");
-        final String sortType = requestParameters.get("sortType");
-        final String sortDirection = requestParameters.get("sortDirection");
-        final List<String> filterParameters = Arrays.asList(title, author, genre, publisher, yearOfPrint, affiliate);
+        final String title = Optional.ofNullable(requestParameters.get("title")).orElse("");
+        final String author = Optional.ofNullable(requestParameters.get("author")).orElse("");
+        final String publisher = Optional.ofNullable(requestParameters.get("publisher")).orElse("");
+        final String yearOfPrint = Optional.ofNullable(requestParameters.get("yearOfPrint")).orElse("");
+        final String sortType = Optional.ofNullable(requestParameters.get("sortType")).orElse("");
+        final String sortDirection = Optional.ofNullable(requestParameters.get("sortDirection")).orElse("");
+
+        final List<String> genres = Arrays.asList(requestParameters.get("genres").split(","));
+        final List<String> affiliates = Arrays.asList(requestParameters.get("affiliates").split(","));
+
+        final Map<String, String> filterParameters = Map.of("title", title, "author", author,
+                "publisher", publisher, "yearOfPrint", yearOfPrint, "genres", genres.toString(),
+                "affiliates", affiliates.toString());
 
         List<BookEntity> bookEntities;
 
         if (isFilterEmpty(filterParameters)) {
             bookEntities = bookRepository.findAll();
         } else {
-            bookEntities = bookRepository.findByTitlePublisherYearGenreAffiliateAndAuthor(title, publisher, yearOfPrint,
-                    genre, affiliate, author);
+            bookEntities = bookRepository.findByTitlePublisherYearGenreAffiliateAndAuthor(title, author, publisher,
+                    yearOfPrint, genres, affiliates);
         }
 
         return getSortedBooks(sortType, sortDirection, bookEntities.stream().distinct().toList());
@@ -68,13 +74,13 @@ public class FilterBooksService {
         };
     }
 
-    private boolean isFilterEmpty(final List<String> filterParameters) {
-        return filterParameters.get(0).length() == 0
-                && filterParameters.get(1).length() == 0
-                && filterParameters.get(2).length() == 0
-                && filterParameters.get(3).length() == 0
-                && filterParameters.get(4).length() == 0
-                && filterParameters.get(5).length() == 0;
+    private boolean isFilterEmpty(final Map<String, String> filterParameters) {
+        return filterParameters.get("title").length() == 0
+                && filterParameters.get("author").length() == 0
+                && filterParameters.get("publisher").length() == 0
+                && filterParameters.get("yearOfPrint").length() == 0
+                && filterParameters.get("genres").length() == EMPTY_LIST_TO_STRING_LENGTH
+                && filterParameters.get("affiliates").length() == EMPTY_LIST_TO_STRING_LENGTH;
     }
 
 }

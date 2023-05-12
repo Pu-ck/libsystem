@@ -12,36 +12,34 @@
         <label for="yearOfPrint">Year of print</label>
         <input type="text" name="yearOfPrint" [(ngModel)]="yearOfPrint">
 
-        <label for="genre">Genre</label>
-        <select name="genre" [(ngModel)]="genre">
-            <option value=""></option>
-            <option value="Genre 1">Genre 1</option>
-            <option value="Genre 2">Genre 2</option>
-            <option value="Genre 3">Genre 3</option>
-        </select>
+        <label for="genres">Genres</label>
+        <form name="genres">
+            <input type="checkbox" name="myCheckbox" [(ngModel)]="genre1">Genre 1
+            <input type="checkbox" name="myCheckbox" [(ngModel)]="genre2">Genre 2
+            <input type="checkbox" name="myCheckbox" [(ngModel)]="genre3">Genre 3
+        </form>
 
-        <label for="affiliate">Affiliate</label>
-        <select name="affiliate" [(ngModel)]="affiliate">
-            <option value=""></option>
-            <option value="Affiliate A">Affiliate A</option>
-            <option value="Affiliate B">Affiliate B</option>
-        </select>
+        <label for="affiliates">Affiliates</label>
+        <form name="affiliates">
+            <input type="checkbox" name="myCheckbox" [(ngModel)]="affiliateA">Affiliate A
+            <input type="checkbox" name="myCheckbox" [(ngModel)]="affiliateB">Affiliate B
+        </form>
 
         <label for="sortBy">Sort by</label>
-        <select name="sortBy" [(ngModel)]="selectedSortType">
-            <option value="1">Title</option>
-            <option value="2">Author</option>
-            <option value="3">Genre</option>
-            <option value="4">Publisher</option>
-            <option value="5">Year of print</option>
-            <option value="6">Current quantity</option>
-            <option value="7">General quantity</option>
+        <select name="sortBy" [(ngModel)]="sortType">
+            <option value="title">Title</option>
+            <option value="author">Author</option>
+            <option value="genre">Genre</option>
+            <option value="publisher">Publisher</option>
+            <option value="year">Year of print</option>
+            <option value="currentQuantity">Current quantity</option>
+            <option value="generalQuantity">General quantity</option>
         </select>
 
         <label for="sortDirection">Sort direction</label>
-        <select name="sortDirection" [(ngModel)]="selectedSortDirection">
-            <option value="">Ascending</option>
-            <option value="1">Descending</option>
+        <select name="sortDirection" [(ngModel)]="sortDirection">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
         </select>
 
         <button type="submit">Search</button>

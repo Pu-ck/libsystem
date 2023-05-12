@@ -17,7 +17,8 @@ import java.util.stream.Collectors;
 @Component
 public class FilterBooksSortUtil {
 
-    private static final String SORT_DESCENDING = "1";
+    private static final String SORT_ASCENDING = "asc";
+    private static final String SORT_DESCENDING = "desc";
     private final AffiliateBookRepository affiliateBookRepository;
     private final BookRepository bookRepository;
 
@@ -27,25 +28,29 @@ public class FilterBooksSortUtil {
             return bookEntities.stream()
                     .sorted(Comparator.comparing(BookEntity::getTitle, Collections.reverseOrder()))
                     .toList();
+        } else if (Objects.equals(sortDirection, SORT_ASCENDING)) {
+            return bookEntities.stream().sorted(Comparator.comparing(BookEntity::getTitle)).toList();
         }
-        return bookEntities.stream().sorted(Comparator.comparing(BookEntity::getTitle)).toList();
+        return bookEntities;
     }
 
     public List<BookEntity> getBooksFilteredByAuthorSorted(String sortDirection,
                                                            List<BookEntity> bookEntities) {
         if (Objects.equals(sortDirection, SORT_DESCENDING)) {
             return bookEntities.stream().sorted(Comparator.comparing((BookEntity b) -> b.getAuthors().stream()
+                                    .map(AuthorEntity::getName)
+                                    .sorted()
+                                    .collect(Collectors.joining(", ")))
+                            .reversed())
+                    .toList();
+        } else if (Objects.equals(sortDirection, SORT_ASCENDING)) {
+            return bookEntities.stream().sorted(Comparator.comparing((BookEntity b) -> b.getAuthors().stream()
                             .map(AuthorEntity::getName)
                             .sorted()
-                            .collect(Collectors.joining(", ")))
-                            .reversed())
-                            .toList();
-        }
-        return bookEntities.stream().sorted(Comparator.comparing((BookEntity b) -> b.getAuthors().stream()
-                    .map(AuthorEntity::getName)
-                    .sorted()
-                    .collect(Collectors.joining(", "))))
+                            .collect(Collectors.joining(", "))))
                     .toList();
+        }
+        return bookEntities;
     }
 
     public List<BookEntity> getBooksFilteredByGenreSorted(String sortDirection,
@@ -57,12 +62,14 @@ public class FilterBooksSortUtil {
                             .collect(Collectors.joining(", ")))
                             .reversed())
                             .toList();
-        }
-        return bookEntities.stream().sorted(Comparator.comparing((BookEntity b) -> b.getGenres().stream()
-                    .map(GenreEntity::getName)
-                    .sorted()
-                    .collect(Collectors.joining(", "))))
+        } else if (Objects.equals(sortDirection, SORT_ASCENDING)) {
+            return bookEntities.stream().sorted(Comparator.comparing((BookEntity b) -> b.getGenres().stream()
+                            .map(GenreEntity::getName)
+                            .sorted()
+                            .collect(Collectors.joining(", "))))
                     .toList();
+        }
+        return bookEntities;
     }
 
     public List<BookEntity> getBooksFilteredByPublisherSorted(String sortDirection,
@@ -71,8 +78,10 @@ public class FilterBooksSortUtil {
             return bookEntities.stream()
                     .sorted(Comparator.comparing(o -> o.getPublisherEntity().getName(), Collections.reverseOrder()))
                     .toList();
+        } else if (Objects.equals(sortDirection, SORT_ASCENDING)) {
+            return bookEntities.stream().sorted(Comparator.comparing(o -> o.getPublisherEntity().getName())).toList();
         }
-        return bookEntities.stream().sorted(Comparator.comparing(o -> o.getPublisherEntity().getName())).toList();
+        return  bookEntities;
     }
 
     public List<BookEntity> getBooksFilteredByYearOfPrintSorted(String sortDirection,
@@ -81,8 +90,10 @@ public class FilterBooksSortUtil {
             return bookEntities.stream()
                     .sorted(Comparator.comparing(o -> o.getYearOfPrintEntity().getYearOfPrint(), Collections.reverseOrder()))
                     .toList();
+        } else if (Objects.equals(sortDirection, SORT_ASCENDING)) {
+            return bookEntities.stream().sorted(Comparator.comparing(o -> o.getYearOfPrintEntity().getYearOfPrint())).toList();
         }
-        return bookEntities.stream().sorted(Comparator.comparing(o -> o.getYearOfPrintEntity().getYearOfPrint())).toList();
+        return bookEntities;
     }
 
     public List<BookEntity> getBooksFilteredByCurrentQuantity(String sortDirection) {
@@ -93,7 +104,6 @@ public class FilterBooksSortUtil {
                     .toList();
             return getFilteredBooks(affiliateBooks).stream().distinct().toList();
         }
-
         final List<AffiliateBook> affiliateBooks = affiliateBookRepository.findAll().stream()
                 .sorted(Comparator.comparing(AffiliateBook::getCurrentQuantity)).toList();
         return getFilteredBooks(affiliateBooks).stream().distinct().toList();

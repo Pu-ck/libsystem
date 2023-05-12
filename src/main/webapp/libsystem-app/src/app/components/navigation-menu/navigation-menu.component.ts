@@ -23,7 +23,8 @@ export class NavigationMenuComponent implements OnInit {
   }
 
   public logout() {
-    this.http.post('/api/logout', {}).subscribe(() => {
+    const url = '/api/logout';
+    this.http.post(url, {}).subscribe(() => {
       console.log('Logout successful');
       this.router.navigate(['/login'], { queryParams: { logout: true } });  
       sessionStorage.clear();
