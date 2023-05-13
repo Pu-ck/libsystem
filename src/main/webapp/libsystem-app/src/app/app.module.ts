@@ -19,6 +19,7 @@ import { PasswordReminderComponent } from './components/password-reminder/passwo
 import { NewPasswordComponent } from './components/password-reminder/new-password/new-password.component';
 import { BooksComponent } from './components/books/books.component';
 import { BookDetailsComponent } from './components/books/book-details/book-details.component';
+import { BorrowBookComponent } from './components/books/book-details/borrow-book/borrow-book.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { BookDetailsComponent } from './components/books/book-details/book-detai
     PasswordReminderComponent,
     NewPasswordComponent,
     BooksComponent,
-    BookDetailsComponent
+    BookDetailsComponent,
+    BorrowBookComponent
   ],
   imports: [
     BrowserModule,

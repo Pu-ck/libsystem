@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
+import { CommonBookMethodsService } from '../../services/book/common-book-methods.service';
+import genres from 'src/config/genres.json';
+import affiliates from 'src/config/affiliates.json';
 
 @Component({
   selector: 'app-books',
@@ -19,18 +22,16 @@ export class BooksComponent implements OnInit {
   public sortDirection: string = 'asc';
 
   public genres: string[] = [];
-  public genre1: boolean = false;
-  public genre2: boolean = false;
-  public genre3: boolean = false;
-
+  public selectedGenres: any[] = genres;
+  
   public affiliates: string[] = [];
-  public affiliateA: boolean = false;
-  public affiliateB: boolean = false;
+  public selectedAffiliates: any[] = affiliates;
 
   constructor(
     private http: HttpClient, 
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public commonBookMethodsService: CommonBookMethodsService
   ) { }
 
   ngOnInit(): void {
@@ -48,10 +49,8 @@ export class BooksComponent implements OnInit {
   }
 
   public getBooks() {
-
     this.updateGenres();
     this.updateAffiliates();
-
     const url = '/api/books';
     let params = new HttpParams().set('title', this.title).set('author', this.author).set('genres', this.genres.join(',')).set('publisher', this.publisher).set('yearOfPrint', this.yearOfPrint).set('affiliates', this.affiliates.join(',')).set('sortType', this.sortType).set('sortDirection', this.sortDirection);
 
@@ -77,11 +76,6 @@ export class BooksComponent implements OnInit {
 
   public redirectToBookDetails(id: number) {
     this.router.navigate([`books/${id}`]);
-  }
-
-  public getAffiliateBookQuantity(book: any, affiliateId: number): string {
-    const affiliateBook = book.affiliateBooks.find((ab: any) => ab.affiliateId === affiliateId);
-    return affiliateBook ? `${affiliateBook.currentQuantity}/${affiliateBook.generalQuantity}` : '';
   }
 
   private setQueryParams(queryParams: {[key: string]: string}) {
@@ -113,25 +107,25 @@ export class BooksComponent implements OnInit {
 
   public updateGenres() {
     let genres = [];
-    if (this.genre1) {
-      genres.push('Genre 1');
+    if (this.selectedGenres[0].value) {
+      genres.push(this.selectedGenres[0].label);
     }
-    if (this.genre2) {
-      genres.push('Genre 2');
+    if (this.selectedGenres[1].value) {
+      genres.push(this.selectedGenres[1].label);
     }
-    if (this.genre3) {
-      genres.push('Genre 3');
+    if (this.selectedGenres[2].value) {
+      genres.push(this.selectedGenres[2].label);
     }
     this.genres = genres;
   }
 
   public updateAffiliates() {
     let affiliates = [];
-    if (this.affiliateA) {
-      affiliates.push('Affiliate A');
+    if (this.selectedAffiliates[0].value) {
+      affiliates.push(this.selectedAffiliates[0].label);
     }
-    if (this.affiliateB) {
-      affiliates.push('Affiliate B');
+    if (this.selectedAffiliates[1].value) {
+      affiliates.push(this.selectedAffiliates[1].label);
     }
     this.affiliates = affiliates;
   }

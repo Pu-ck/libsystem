@@ -6,10 +6,7 @@ import com.system.libsystem.entities.book.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +19,6 @@ public class FilterBooksService {
     private static final String SORT_BY_YEAR_OF_PRINT = "year";
     private static final String SORT_BY_CURRENT_QUANTITY = "currentQuantity";
     private static final String SORT_BY_GENERAL_QUANTITY = "generalQuantity";
-    private static final int EMPTY_LIST_TO_STRING_LENGTH = 2;
 
     private final BookRepository bookRepository;
     private final FilterBooksSortUtil filterBooksSortUtil;
@@ -40,16 +36,15 @@ public class FilterBooksService {
         final String sortType = Optional.ofNullable(requestParameters.get("sortType")).orElse("");
         final String sortDirection = Optional.ofNullable(requestParameters.get("sortDirection")).orElse("");
 
-        final List<String> genres = Arrays.asList(requestParameters.get("genres").split(","));
-        final List<String> affiliates = Arrays.asList(requestParameters.get("affiliates").split(","));
+        List<String> genres = new ArrayList<>();
+        List<String> affiliates = new ArrayList<>();
+        setFilterListParameters(requestParameters, genres, affiliates);
 
-        final Map<String, String> filterParameters = Map.of("title", title, "author", author,
-                "publisher", publisher, "yearOfPrint", yearOfPrint, "genres", genres.toString(),
-                "affiliates", affiliates.toString());
-
+        final List<String> filterParameters = Arrays.asList(title, author, publisher, yearOfPrint);
+        final List<List<String>> filterListParameters = Arrays.asList(genres, affiliates);
         List<BookEntity> bookEntities;
 
-        if (isFilterEmpty(filterParameters)) {
+        if (isFilterEmpty(filterParameters, filterListParameters)) {
             bookEntities = bookRepository.findAll();
         } else {
             bookEntities = bookRepository.findByTitlePublisherYearGenreAffiliateAndAuthor(title, author, publisher,
@@ -74,13 +69,24 @@ public class FilterBooksService {
         };
     }
 
-    private boolean isFilterEmpty(final Map<String, String> filterParameters) {
-        return filterParameters.get("title").length() == 0
-                && filterParameters.get("author").length() == 0
-                && filterParameters.get("publisher").length() == 0
-                && filterParameters.get("yearOfPrint").length() == 0
-                && filterParameters.get("genres").length() == EMPTY_LIST_TO_STRING_LENGTH
-                && filterParameters.get("affiliates").length() == EMPTY_LIST_TO_STRING_LENGTH;
+    private void setFilterListParameters(Map<String, String> requestParameters, List<String> genres, List<String> affiliates) {
+        final String genresParameter = Optional.ofNullable(requestParameters.get("genres")).orElse("");
+        final String affiliatesParameter = Optional.ofNullable(requestParameters.get("affiliates")).orElse("");
+        if (!genresParameter.equals("")) {
+            genres.addAll(Arrays.asList(genresParameter.split(",")));
+        }
+        if (!affiliatesParameter.equals("")) {
+            affiliates.addAll(Arrays.asList(affiliatesParameter.split(",")));
+        }
+    }
+
+    private boolean isFilterEmpty(final List<String> filterParameters, List<List<String>> filterListParameters) {
+        return filterParameters.get(0).length() == 0
+                && filterParameters.get(1).length() == 0
+                && filterParameters.get(2).length() == 0
+                && filterParameters.get(3).length() == 0
+                && filterListParameters.get(0).isEmpty()
+                && filterListParameters.get(1).isEmpty();
     }
 
 }

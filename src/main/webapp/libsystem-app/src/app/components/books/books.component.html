@@ -14,15 +14,16 @@
 
         <label for="genres">Genres</label>
         <form name="genres">
-            <input type="checkbox" name="myCheckbox" [(ngModel)]="genre1">Genre 1
-            <input type="checkbox" name="myCheckbox" [(ngModel)]="genre2">Genre 2
-            <input type="checkbox" name="myCheckbox" [(ngModel)]="genre3">Genre 3
+        <ng-container *ngFor="let selectedGenre of selectedGenres">
+            <input type="checkbox" name="myCheckbox" [(ngModel)]="selectedGenre.value">{{ selectedGenre.label }}
+        </ng-container>
         </form>
-
+        
         <label for="affiliates">Affiliates</label>
         <form name="affiliates">
-            <input type="checkbox" name="myCheckbox" [(ngModel)]="affiliateA">Affiliate A
-            <input type="checkbox" name="myCheckbox" [(ngModel)]="affiliateB">Affiliate B
+        <ng-container *ngFor="let selectedAffiliate of selectedAffiliates">
+            <input type="checkbox" name="myCheckbox" [(ngModel)]="selectedAffiliate.value">{{ selectedAffiliate.label }}
+        </ng-container>
         </form>
 
         <label for="sortBy">Sort by</label>
@@ -80,7 +81,7 @@
         <td>
             <ul>
                 <li *ngFor="let affiliate of book.affiliates">
-                    {{ affiliate.name }} {{ getAffiliateBookQuantity(book, affiliate.id) }}
+                    {{ affiliate.name }} {{ commonBookMethodsService.getAffiliateBookQuantity(book, affiliate.id) }}
                 </li>
             </ul>
         </td>

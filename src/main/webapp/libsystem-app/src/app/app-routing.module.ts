@@ -12,6 +12,7 @@ import { PasswordReminderComponent } from './components/password-reminder/passwo
 import { NewPasswordComponent } from './components/password-reminder/new-password/new-password.component';
 import { BooksComponent } from './components/books/books.component';
 import { BookDetailsComponent } from './components/books/book-details/book-details.component';
+import { BorrowBookComponent } from './components/books/book-details/borrow-book/borrow-book.component';
 
 const routes: Routes = [
   {path: '', canActivate:[AuthenticationGuard], children: [
@@ -24,6 +25,7 @@ const routes: Routes = [
     { path: 'user-profile/change-password', component: ChangePasswordComponent },
     { path: 'books', component: BooksComponent },
     { path: 'books/:id', component: BookDetailsComponent },
+    { path: 'books/:id/borrow-book', component: BorrowBookComponent },
     { path: 'password-reminder', component: PasswordReminderComponent },
     { path: 'password-reminder/new-password', component: NewPasswordComponent },
   ]},
