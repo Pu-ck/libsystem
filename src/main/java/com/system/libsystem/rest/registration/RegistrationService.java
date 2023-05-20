@@ -1,17 +1,21 @@
 package com.system.libsystem.rest.registration;
 
+import com.system.libsystem.entities.cardnumber.CardNumberEntity;
+import com.system.libsystem.entities.cardnumber.CardNumberRepository;
 import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenEntity;
 import com.system.libsystem.entities.confirmationtoken.ConfirmationTokenService;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserService;
+import com.system.libsystem.exceptions.cardnumber.CardNumberNotFoundException;
+import com.system.libsystem.exceptions.peselnumber.UnableToAuthenticatePeselNumberException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
-import com.system.libsystem.rest.login.LoginSessionResponse;
 import com.system.libsystem.util.UserType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +28,8 @@ import java.time.format.DateTimeFormatter;
 public class RegistrationService {
 
     private final ConfirmationTokenService confirmationTokenService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final CardNumberRepository cardNumberRepository;
     private final UserService userService;
     private final MailBuilder mailBuilder;
     private final MailSender mailSender;
@@ -36,29 +42,29 @@ public class RegistrationService {
     private String adminMail;
 
     public ResponseEntity<RegistrationResponse> register(RegistrationRequest registrationRequest) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setPassword(registrationRequest.getPassword());
-        userEntity.setUsername(registrationRequest.getUsername());
-        userEntity.setCardNumber(registrationRequest.getCardNumber());
-        userEntity.setFirstName(registrationRequest.getFirstName());
-        userEntity.setLastName(registrationRequest.getLastName());
-        userEntity.setEnabled(false);
-        userEntity.setUserType(UserType.USER);
+        if (isCardNumberRegistered(registrationRequest)) {
+            UserEntity userEntity = new UserEntity();
+            setUserDetails(registrationRequest, userEntity);
 
-        final LocalDateTime datetime = LocalDateTime.now();
-        final String registrationTime = datetime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+            final LocalDateTime datetime = LocalDateTime.now();
+            final String registrationTime = datetime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
 
-        final String token = userService.registerUser(userEntity);
-        final String confirmationAddress = userConfirmationAddress + token;
+            final String token = userService.registerUser(userEntity);
+            final String confirmationAddress = userConfirmationAddress + token;
 
-        sendAccountConfirmationMail(registrationRequest, registrationTime, confirmationAddress);
-        sendAccountRegistrationMail(registrationRequest);
-        log.info("New account created for user with id " + userEntity.getId());
+            sendAccountConfirmationMail(registrationRequest, registrationTime, confirmationAddress);
+            sendAccountRegistrationMail(registrationRequest);
+            log.info("New account created for user with id " + userEntity.getId());
 
-        RegistrationResponse registrationResponse = new RegistrationResponse();
-        registrationResponse.setToken(token);
+            RegistrationResponse registrationResponse = new RegistrationResponse();
+            registrationResponse.setToken(token);
 
-        return ResponseEntity.ok(registrationResponse);
+            return ResponseEntity.ok(registrationResponse);
+        } else {
+            log.error("Unable to authenticate card number " + registrationRequest.getCardNumber() + " and PESEL number" +
+                    registrationRequest.getPeselNumber());
+            throw new UnableToAuthenticatePeselNumberException();
+        }
     }
 
     @Transactional
@@ -67,6 +73,22 @@ public class RegistrationService {
                 new IllegalStateException("Confirmation token not found"));
         userService.enableUser(confirmationTokenEntity.getUserEntity().getUsername());
         sendAccountEnabledMail(confirmationTokenEntity);
+    }
+
+    private void setUserDetails(RegistrationRequest registrationRequest, UserEntity userEntity) {
+        userEntity.setPassword(registrationRequest.getPassword());
+        userEntity.setUsername(registrationRequest.getUsername());
+        userEntity.setCardNumber(registrationRequest.getCardNumber());
+        userEntity.setFirstName(registrationRequest.getFirstName());
+        userEntity.setLastName(registrationRequest.getLastName());
+        userEntity.setEnabled(false);
+        userEntity.setUserType(UserType.USER);
+    }
+
+    private boolean isCardNumberRegistered(RegistrationRequest registrationRequest) {
+        final CardNumberEntity cardNumberEntity = cardNumberRepository.findByCardNumber(registrationRequest
+                .getCardNumber()).orElseThrow(() -> new CardNumberNotFoundException(registrationRequest.getCardNumber()));
+        return bCryptPasswordEncoder.matches(registrationRequest.getPeselNumber(), cardNumberEntity.getPeselNumber());
     }
 
     private void sendAccountEnabledMail(ConfirmationTokenEntity confirmationTokenEntity) {

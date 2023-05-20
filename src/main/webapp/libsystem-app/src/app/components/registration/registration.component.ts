@@ -13,6 +13,8 @@ export class RegistrationComponent implements OnInit {
   public model: any = {};
   public usernameTaken: boolean = false;
   public cardNumberTaken: boolean = false;
+  public cardNumberNotFound: boolean = false;
+  public peselNumberNotAuthenticated: boolean = false;
 
   constructor(
       private router: Router,
@@ -30,10 +32,13 @@ export class RegistrationComponent implements OnInit {
       password: this.model.password,
       firstName: this.model.firstName,
       lastName: this.model.lastName,
-      cardNumber: this.model.cardNumber
+      cardNumber: this.model.cardNumber,
+      peselNumber: this.model.peselNumber
     }).subscribe(response => {
       this.usernameTaken = false;
       this.cardNumberTaken = false;
+      this.cardNumberNotFound = false;
+      this.peselNumberNotAuthenticated = false;
       const token = response.token;
       this.router.navigate(['/registered'], { queryParams: { token: token, username: this.model.username } });
     }, error => {
@@ -48,6 +53,16 @@ export class RegistrationComponent implements OnInit {
         } else {
           this.cardNumberTaken = false;
         }
+      }
+      if (error.status === 404 && error.error.message === 'Card number not found') {
+        this.cardNumberNotFound = true;
+      } else {
+        this.cardNumberNotFound = false;
+      }
+      if (error.status === 401 && error.error.message === 'PESEL number not authenticated') {
+        this.peselNumberNotAuthenticated = true;
+      } else {
+        this.peselNumberNotAuthenticated = false;
       }
     });
   }

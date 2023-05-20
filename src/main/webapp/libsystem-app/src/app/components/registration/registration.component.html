@@ -42,9 +42,21 @@
         </div>
     </div>
     <div>
+        <label for="peselNumber">PESEL number</label>
+        <input type="text" name="peselNumber" [(ngModel)]="model.peselNumber" #peselNumber="ngModel" required minlength="11" maxlength="11" pattern="^[0-9]+$">
+        <div *ngIf="peselNumber?.invalid && (peselNumber?.dirty || peselNumber?.touched)">
+            <div *ngIf="peselNumber?.errors?.['required']">PESEL is required</div>
+            <div *ngIf="peselNumber?.errors?.['minlength']">Invalid PESEL number length</div>
+            <div *ngIf="peselNumber?.errors?.['maxlength']">Invalid PESEL number length</div>
+            <div *ngIf="peselNumber.errors?.['pattern']">Invalid PESEL number format</div>
+        </div>
+    </div>
+    <div>
         <button type="submit" [disabled]="!registrationForm.valid">Register</button>
         <div *ngIf="usernameTaken">Provided username is already taken</div>
         <div *ngIf="cardNumberTaken">Provided card number is already taken</div>
+        <div *ngIf="cardNumberNotFound">Provided card number is not registered in the library</div>
+        <div *ngIf="peselNumberNotAuthenticated">Provided PESEL number is not associated with any library card</div>
     </div>
 </form>
 

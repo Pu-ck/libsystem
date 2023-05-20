@@ -1,4 +1,6 @@
-package com.system.libsystem.rest.exceptionhandling.errorresponses;
+package com.system.libsystem.rest.exceptionhandling.errorresponses.password;
+
+import com.system.libsystem.rest.exceptionhandling.errorresponses.ErrorResponse;
 
 public class PasswordReminderTokenExpiredResponse extends ErrorResponse {
     public PasswordReminderTokenExpiredResponse() {

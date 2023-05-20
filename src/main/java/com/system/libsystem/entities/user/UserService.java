@@ -22,7 +22,8 @@ import java.util.regex.Pattern;
 @Slf4j
 public class UserService implements UserDetailsService {
 
-    public static final String FIND_USER_EXCEPTION_LOG = "Unable to find user ";
+    private static final String FIND_USER_EXCEPTION_LOG = "Unable to find user ";
+    private static final String EMAIL_ADDRESS_REGEX_PATTERN = "^(.+)@(\\S+)$";
     private static final int CARD_NUMBER_LENGTH = 10;
     private static final int MIN_PASSWORD_LENGTH = 8;
     private static final int MAX_PASSWORD_LENGTH = 25;
@@ -35,7 +36,6 @@ public class UserService implements UserDetailsService {
     public UserEntity loadUserByUsername(String username) throws UsernameNotFoundException {
         final UserEntity userEntity = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(FIND_USER_EXCEPTION_LOG + username));
-
         userEntity.setUsername(userEntity.getUsername());
         userEntity.setPassword(userEntity.getPassword());
         userEntity.setEnabled(userEntity.isEnabled());
@@ -68,13 +68,13 @@ public class UserService implements UserDetailsService {
         return token;
     }
 
-    public int enableUser(String username) {
+    public void enableUser(String username) {
         UserEntity userEntity = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(FIND_USER_EXCEPTION_LOG + username));
         userEntity.setEnabled(true);
         loadUserByUsername(username).setEnabled(true);
         log.info("New user with id " + userEntity.getId() + " enabled");
-        return userRepository.enableUser(username);
+        userRepository.enableUser(username);
     }
 
     private void validateUserRegistrationData(UserEntity userEntity) {
@@ -99,7 +99,7 @@ public class UserService implements UserDetailsService {
     }
 
     private static boolean isEmailAddressValid(String emailAddress) {
-        return Pattern.compile("^(.+)@(\\S+)$").matcher(emailAddress).matches();
+        return Pattern.compile(EMAIL_ADDRESS_REGEX_PATTERN).matcher(emailAddress).matches();
     }
 
 }

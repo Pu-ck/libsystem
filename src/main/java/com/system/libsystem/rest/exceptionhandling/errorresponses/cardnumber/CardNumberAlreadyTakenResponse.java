@@ -1,4 +1,6 @@
-package com.system.libsystem.rest.exceptionhandling.errorresponses;
+package com.system.libsystem.rest.exceptionhandling.errorresponses.cardnumber;
+
+import com.system.libsystem.rest.exceptionhandling.errorresponses.ErrorResponse;
 
 public class CardNumberAlreadyTakenResponse extends ErrorResponse {
     public CardNumberAlreadyTakenResponse() {

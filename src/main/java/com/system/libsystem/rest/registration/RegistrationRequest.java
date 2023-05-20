@@ -12,4 +12,5 @@ public class RegistrationRequest {
     private final String firstName;
     private final String lastName;
     private final Long cardNumber;
+    private final String peselNumber;
 }

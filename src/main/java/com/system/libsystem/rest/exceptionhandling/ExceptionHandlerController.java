@@ -2,13 +2,30 @@ package com.system.libsystem.rest.exceptionhandling;
 
 import com.system.libsystem.exceptions.book.BookNotFoundException;
 import com.system.libsystem.exceptions.cardnumber.CardNumberAlreadyTakenException;
+import com.system.libsystem.exceptions.cardnumber.CardNumberNotFoundException;
+import com.system.libsystem.exceptions.cardnumber.InvalidCardNumberFormatException;
 import com.system.libsystem.exceptions.cardnumber.UnableToAuthenticateCardNumberException;
 import com.system.libsystem.exceptions.passwordreminder.PasswordReminderTokenExpiredException;
 import com.system.libsystem.exceptions.passwordreminder.PasswordReminderTokenNotFoundException;
 import com.system.libsystem.exceptions.passwordreset.NewPasswordDuplicatedException;
 import com.system.libsystem.exceptions.passwordreset.OldPasswordNotMatchingException;
+import com.system.libsystem.exceptions.peselnumber.InvalidPeselNumberFormatException;
+import com.system.libsystem.exceptions.peselnumber.PeselNumberAlreadyTakenException;
+import com.system.libsystem.exceptions.peselnumber.UnableToAuthenticatePeselNumberException;
 import com.system.libsystem.exceptions.registration.UsernameAlreadyTakenException;
-import com.system.libsystem.rest.exceptionhandling.errorresponses.*;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.book.BookNotFoundResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.cardnumber.CardNumberAlreadyTakenResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.cardnumber.CardNumberNotFoundResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.cardnumber.InvalidCardNumberFormatResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.cardnumber.UnableToAuthenticateCardNumberResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.password.NewPasswordDuplicatedResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.password.OldPasswordNotMatchingResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.password.PasswordReminderTokenExpiredResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.password.PasswordReminderTokenNotFoundResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.peselnumber.InvalidPeselNumberFormatResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.peselnumber.PeselNumberAlreadyTakenResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.peselnumber.UnableToAuthenticatePeselNumberResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.user.UsernameAlreadyTakenResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -67,6 +84,37 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     public ResponseEntity<BookNotFoundResponse> handleBookNotFoundException() {
         final BookNotFoundResponse bookNotFoundResponse = new BookNotFoundResponse();
         return new ResponseEntity<>(bookNotFoundResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CardNumberNotFoundException.class)
+    public ResponseEntity<CardNumberNotFoundResponse> handleCardNumberNotFoundException() {
+        final CardNumberNotFoundResponse cardNumberNotFoundResponse = new CardNumberNotFoundResponse();
+        return new ResponseEntity<>(cardNumberNotFoundResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UnableToAuthenticatePeselNumberException.class)
+    public ResponseEntity<UnableToAuthenticatePeselNumberResponse> handleUnableToAuthenticatePeselNumberException() {
+        final UnableToAuthenticatePeselNumberResponse unableToAuthenticatePeselNumberResponse =
+                new UnableToAuthenticatePeselNumberResponse();
+        return new ResponseEntity<>(unableToAuthenticatePeselNumberResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(InvalidCardNumberFormatException.class)
+    public ResponseEntity<InvalidCardNumberFormatResponse> handleInvalidCardNumberFormatException() {
+        final InvalidCardNumberFormatResponse invalidCardNumberFormatResponse = new InvalidCardNumberFormatResponse();
+        return new ResponseEntity<>(invalidCardNumberFormatResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidPeselNumberFormatException.class)
+    public ResponseEntity<InvalidPeselNumberFormatResponse> handleInvalidPeselNumberFormatException() {
+        final InvalidPeselNumberFormatResponse invalidCardNumberFormatResponse = new InvalidPeselNumberFormatResponse();
+        return new ResponseEntity<>(invalidCardNumberFormatResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PeselNumberAlreadyTakenException.class)
+    public ResponseEntity<PeselNumberAlreadyTakenResponse> handlePeselNumberAlreadyTakenException() {
+        final PeselNumberAlreadyTakenResponse peselNumberAlreadyTakenResponse = new PeselNumberAlreadyTakenResponse();
+        return new ResponseEntity<>(peselNumberAlreadyTakenResponse, HttpStatus.CONFLICT);
     }
 
 }

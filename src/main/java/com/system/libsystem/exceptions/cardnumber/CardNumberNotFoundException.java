@@ -7,12 +7,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Getter
 @AllArgsConstructor
-@ResponseStatus(value = HttpStatus.CONFLICT, reason = "Card number already taken")
-public class CardNumberAlreadyTakenException extends RuntimeException {
+@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Card number not found")
+public class CardNumberNotFoundException extends RuntimeException {
+
+    private final long cardNumber;
 
     @Override
     public String getMessage() {
-        return "Card number already taken";
+        return "Unable to find card number " + cardNumber;
     }
 
 }
