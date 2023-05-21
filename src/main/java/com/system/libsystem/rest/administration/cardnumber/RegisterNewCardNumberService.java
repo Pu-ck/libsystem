@@ -4,14 +4,16 @@ import com.system.libsystem.entities.cardnumber.CardNumberEntity;
 import com.system.libsystem.entities.cardnumber.CardNumberRepository;
 import com.system.libsystem.exceptions.cardnumber.CardNumberAlreadyTakenException;
 import com.system.libsystem.exceptions.cardnumber.InvalidCardNumberFormatException;
+import com.system.libsystem.exceptions.hashing.HashingException;
 import com.system.libsystem.exceptions.peselnumber.InvalidPeselNumberFormatException;
 import com.system.libsystem.exceptions.peselnumber.PeselNumberAlreadyTakenException;
+import com.system.libsystem.util.HashingUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -21,14 +23,17 @@ public class RegisterNewCardNumberService {
     private static final int PESEL_NUMBER_LENGTH = 11;
     private static final int CARD_NUMBER_LENGTH = 10;
     private final CardNumberRepository cardNumberRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public void registerNewCardNumber(RegisterNewCardNumberRequest registerNewCardNumberRequest) {
         validateCardNumberAndPeselNumberFormats(registerNewCardNumberRequest);
         checkIfCardNumberIsAlreadyRegistered(registerNewCardNumberRequest);
+
         CardNumberEntity cardNumberEntity = new CardNumberEntity();
+        final String hashedPeselNumber = Optional.ofNullable(HashingUtil.hashData(registerNewCardNumberRequest
+                .getPeselNumber())).orElseThrow(() -> new HashingException("Unable to hash the PESEL number"));
+
         cardNumberEntity.setCardNumber(registerNewCardNumberRequest.getCardNumber());
-        cardNumberEntity.setPeselNumber(bCryptPasswordEncoder.encode(registerNewCardNumberRequest.getPeselNumber()));
+        cardNumberEntity.setPeselNumber(hashedPeselNumber);
         cardNumberRepository.save(cardNumberEntity);
         log.error("New card number " + registerNewCardNumberRequest.getCardNumber() + " registered");
     }
@@ -44,8 +49,8 @@ public class RegisterNewCardNumberService {
 
     private void checkIfCardNumberIsAlreadyRegistered(RegisterNewCardNumberRequest registerNewCardNumberRequest) {
         final List<CardNumberEntity> cardNumberEntities = cardNumberRepository.findAll();
-        if (cardNumberEntities.stream().anyMatch(cardNumberEntity -> bCryptPasswordEncoder
-                .matches(registerNewCardNumberRequest.getPeselNumber(), cardNumberEntity.getPeselNumber()))) {
+        if (cardNumberEntities.stream().anyMatch(cardNumberEntity -> HashingUtil
+                .compareRawAndHashedData(registerNewCardNumberRequest.getPeselNumber(), cardNumberEntity.getPeselNumber()))) {
             throw new PeselNumberAlreadyTakenException();
         }
         if (cardNumberRepository.findByCardNumber(registerNewCardNumberRequest.getCardNumber()).isPresent()) {

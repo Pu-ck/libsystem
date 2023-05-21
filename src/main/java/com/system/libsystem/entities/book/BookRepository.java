@@ -23,10 +23,10 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
             "(:yearOfPrint IS NULL OR :yearOfPrint = '' OR y.yearOfPrint = :yearOfPrint) AND " +
             "(COALESCE(:genres, null) IS NULL OR COALESCE(:genres, null) = '' OR g.name IN (:genres)) AND " +
             "(COALESCE(:affiliates, null) IS NULL OR COALESCE(:affiliates, null) = '' OR af.name IN (:affiliates))")
-    List<BookEntity> findByTitlePublisherYearGenreAffiliateAndAuthor(@Param("title") String title,
-                                                                     @Param("author") String author,
-                                                                     @Param("publisher") String publisher,
-                                                                     @Param("yearOfPrint") String yearOfPrint,
-                                                                     @Param("genres") List<String> genres,
-                                                                     @Param("affiliates") List<String> affiliates);
+    List<BookEntity> findByTitleAuthorPublisherYearGenresAndAffiliates(@Param("title") String title,
+                                                                       @Param("author") String author,
+                                                                       @Param("publisher") String publisher,
+                                                                       @Param("yearOfPrint") String yearOfPrint,
+                                                                       @Param("genres") List<String> genres,
+                                                                       @Param("affiliates") List<String> affiliates);
 }

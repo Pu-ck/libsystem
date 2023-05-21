@@ -18,8 +18,8 @@ export class BooksComponent implements OnInit {
   public author: string = '';
   public publisher: string = '';
   public yearOfPrint: string = '';
-  public sortType: string = 'title';
-  public sortDirection: string = 'asc';
+  public sortType: string = '';
+  public sortDirection: string = '';
 
   public genres: string[] = [];
   public selectedGenres: any[] = genres;

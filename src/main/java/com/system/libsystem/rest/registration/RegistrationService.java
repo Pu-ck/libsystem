@@ -10,12 +10,12 @@ import com.system.libsystem.exceptions.cardnumber.CardNumberNotFoundException;
 import com.system.libsystem.exceptions.peselnumber.UnableToAuthenticatePeselNumberException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
+import com.system.libsystem.util.HashingUtil;
 import com.system.libsystem.util.UserType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +28,6 @@ import java.time.format.DateTimeFormatter;
 public class RegistrationService {
 
     private final ConfirmationTokenService confirmationTokenService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final CardNumberRepository cardNumberRepository;
     private final UserService userService;
     private final MailBuilder mailBuilder;
@@ -42,7 +41,7 @@ public class RegistrationService {
     private String adminMail;
 
     public ResponseEntity<RegistrationResponse> register(RegistrationRequest registrationRequest) {
-        if (isCardNumberRegistered(registrationRequest)) {
+        if (isCardNumberAlreadyRegistered(registrationRequest)) {
             UserEntity userEntity = new UserEntity();
             setUserDetails(registrationRequest, userEntity);
 
@@ -85,10 +84,10 @@ public class RegistrationService {
         userEntity.setUserType(UserType.USER);
     }
 
-    private boolean isCardNumberRegistered(RegistrationRequest registrationRequest) {
+    private boolean isCardNumberAlreadyRegistered(RegistrationRequest registrationRequest) {
         final CardNumberEntity cardNumberEntity = cardNumberRepository.findByCardNumber(registrationRequest
                 .getCardNumber()).orElseThrow(() -> new CardNumberNotFoundException(registrationRequest.getCardNumber()));
-        return bCryptPasswordEncoder.matches(registrationRequest.getPeselNumber(), cardNumberEntity.getPeselNumber());
+        return HashingUtil.compareRawAndHashedData(registrationRequest.getPeselNumber(), cardNumberEntity.getPeselNumber());
     }
 
     private void sendAccountEnabledMail(ConfirmationTokenEntity confirmationTokenEntity) {

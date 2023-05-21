@@ -47,7 +47,7 @@ public class FilterBooksService {
         if (isFilterEmpty(filterParameters, filterListParameters)) {
             bookEntities = bookRepository.findAll();
         } else {
-            bookEntities = bookRepository.findByTitlePublisherYearGenreAffiliateAndAuthor(title, author, publisher,
+            bookEntities = bookRepository.findByTitleAuthorPublisherYearGenresAndAffiliates(title, author, publisher,
                     yearOfPrint, genres, affiliates);
         }
 
@@ -63,8 +63,8 @@ public class FilterBooksService {
                     filterBooksSortUtil.getBooksFilteredByPublisherSorted(sortDirection, bookEntities);
             case SORT_BY_YEAR_OF_PRINT ->
                     filterBooksSortUtil.getBooksFilteredByYearOfPrintSorted(sortDirection, bookEntities);
-            case SORT_BY_CURRENT_QUANTITY -> filterBooksSortUtil.getBooksFilteredByCurrentQuantity(sortDirection);
-            case SORT_BY_GENERAL_QUANTITY -> filterBooksSortUtil.getBooksFilteredByGeneralQuantity(sortDirection);
+            case SORT_BY_CURRENT_QUANTITY -> filterBooksSortUtil.getBooksFilteredByCurrentQuantity(sortDirection, bookEntities);
+            case SORT_BY_GENERAL_QUANTITY -> filterBooksSortUtil.getBooksFilteredByGeneralQuantity(sortDirection, bookEntities);
             default -> bookEntities;
         };
     }
