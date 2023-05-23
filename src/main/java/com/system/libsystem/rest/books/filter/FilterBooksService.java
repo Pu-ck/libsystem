@@ -24,7 +24,7 @@ public class FilterBooksService {
     private final FilterBooksSortUtil filterBooksSortUtil;
     private final BookService bookService;
 
-    public BookEntity getBookDetails(int bookId) {
+    public BookEntity getBookDetails(Long bookId) {
         return bookService.getBookById(bookId);
     }
 

@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 public class RegisteredService {
@@ -22,9 +24,9 @@ public class RegisteredService {
                 .orElseThrow(() -> new ConfirmationTokenNotFoundException(token));
         final UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(()
                 -> new UsernameNotFoundException(username));
-        final int userId = confirmationTokenEntity.getUserEntity().getId();
+        final Long userId = confirmationTokenEntity.getUserEntity().getId();
 
-        if (userEntity.getId() == userId) {
+        if (Objects.equals(userEntity.getId(), userId)) {
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.notFound().build();

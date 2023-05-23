@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ReadyOrderRequest {
-    private int borrowedBookId;
+    private Long borrowedBookId;
     private boolean accepted;
 }

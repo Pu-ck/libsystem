@@ -12,7 +12,7 @@ public class ReadyOrderController {
 
     @PutMapping
     public void setOrderStatus(@RequestBody ReadyOrderRequest readyOrderRequest,
-                               @PathVariable("book_id") int bookId) {
+                               @PathVariable("book_id") Long bookId) {
         readyOrderRequest.setBorrowedBookId(bookId);
         readyOrderService.setOrderStatus(readyOrderRequest);
     }

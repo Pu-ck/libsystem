@@ -15,11 +15,11 @@ public class AffiliateBook implements Serializable  {
 
     @Id
     @Column(name = "affiliate_id")
-    private int affiliateId;
+    private Long affiliateId;
 
     @Id
     @Column(name = "book_id")
-    private int bookId;
+    private Long bookId;
 
     @Column(name = "currentQuantity")
     private int currentQuantity;

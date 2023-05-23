@@ -33,7 +33,6 @@ public class ReadyOrderService {
     private final UserService userService;
     private final BookService bookService;
     private final MailSender mailSender;
-    private final MailBuilder mailBuilder;
 
     @Transactional
     public void setOrderStatus(ReadyOrderRequest readyOrderRequest) {
@@ -76,21 +75,21 @@ public class ReadyOrderService {
     }
 
     private void sendBorrowedBookOrderReadyMail(UserEntity userEntity, BookEntity bookEntity, String affiliate) {
-        mailSender.send(userEntity.getUsername(), mailBuilder.getBorrowedBookOrderReadyMailBody
+        mailSender.send(userEntity.getUsername(), MailBuilder.getBorrowedBookOrderReadyMailBody
                 (userEntity.getFirstName(),
                         userEntity.getLastName(),
                         bookEntity.getTitle(),
-                        String.join(",", bookEntity.getAuthors().stream().toList().toString()),
+                        bookEntity.getFormattedAuthorsAsString(),
                         affiliate), "Ordered book ready");
         log.info("New sendBorrowedBookOrderReadyMail message sent to " + userEntity.getUsername());
     }
 
     private void sendBorrowedBookOrderRejected(UserEntity userEntity, BookEntity bookEntity, String affiliate) {
-        mailSender.send(userEntity.getUsername(), mailBuilder.getBorrowedBookOrderRejectedMailBody
+        mailSender.send(userEntity.getUsername(), MailBuilder.getBorrowedBookOrderRejectedMailBody
                 (userEntity.getFirstName(),
                         userEntity.getLastName(),
                         bookEntity.getTitle(),
-                        String.join(",", bookEntity.getAuthors().stream().toList().toString()),
+                        bookEntity.getFormattedAuthorsAsString(),
                         affiliate), "Ordered book rejected");
         log.info("New sendBorrowedBookOrderRejected message sent to " + userEntity.getUsername());
     }

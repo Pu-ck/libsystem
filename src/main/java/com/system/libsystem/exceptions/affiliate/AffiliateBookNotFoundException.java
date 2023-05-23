@@ -8,7 +8,7 @@ import lombok.Getter;
 public class AffiliateBookNotFoundException extends RuntimeException {
 
     private final String name;
-    private final int bookId;
+    private final Long bookId;
 
     @Override
     public String getMessage() {

@@ -9,10 +9,8 @@ import java.util.Optional;
 @Repository
 public interface BorrowedBookRepository extends JpaRepository<BorrowedBookEntity, Long> {
 
-    List<BorrowedBookEntity> findAll();
+    List<BorrowedBookEntity> findByUserId(Long userId);
 
-    List<BorrowedBookEntity> findByUserId(int userId);
-
-    Optional<BorrowedBookEntity> findById(int id);
+    Optional<BorrowedBookEntity> findById(Long id);
 
 }

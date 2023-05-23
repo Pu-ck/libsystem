@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class BorrowBookRequest {
-    private int bookId;
+    private Long bookId;
     private Long cardNumber;
     private int quantity;
     private String affiliate;

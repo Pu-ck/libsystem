@@ -16,13 +16,13 @@ public class BorrowedBookEntity {
     @Id
     @SequenceGenerator(name = "borrowed_book_id_seq", sequenceName = "borrowed_book_id_seq")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "borrowed_book_id_seq")
-    private int id;
+    private Long id;
 
     @Column(nullable = false)
-    private int bookId;
+    private Long bookId;
 
     @Column(nullable = false)
-    private int userId;
+    private Long userId;
 
     @Column(nullable = false)
     private Long cardNumber;

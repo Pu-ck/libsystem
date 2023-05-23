@@ -42,7 +42,7 @@ public class UserService implements UserDetailsService {
         return userEntity;
     }
 
-    public UserEntity getUserById(int userId) throws UsernameNotFoundException {
+    public UserEntity getUserById(Long userId) throws UsernameNotFoundException {
         return userRepository.findById(userId).orElseThrow(() -> new UsernameNotFoundException(FIND_USER_EXCEPTION_LOG
                 + userId));
     }

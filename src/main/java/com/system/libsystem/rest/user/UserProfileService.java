@@ -36,7 +36,6 @@ public class UserProfileService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final SessionRegistry sessionRegistry;
     private final UserRepository userRepository;
-    private final MailBuilder mailBuilder;
     private final MailSender mailSender;
     private final BorrowedBookService borrowedBookService;
     private final UserService userService;
@@ -59,7 +58,7 @@ public class UserProfileService {
         final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         final String username = sessionRegistry.getSessionUsername(sessionID);
         final UserEntity userEntity = userService.getUserByUsername(username);
-        final int userId = userEntity.getId();
+        final Long userId = userEntity.getId();
 
         List<UserBook> userBooks = new ArrayList<>();
 
@@ -198,7 +197,7 @@ public class UserProfileService {
     }
 
     private void sendBookReturnDateExtensionRequestMail(UserEntity userEntity, BorrowedBookEntity borrowedBookEntity) {
-        mailSender.send(adminMail, mailBuilder.getBookReturnDateExtensionRequestMailBody(
+        mailSender.send(adminMail, MailBuilder.getBookReturnDateExtensionRequestMailBody(
                         userEntity.getId(),
                         userEntity.getCardNumber().toString(),
                         borrowedBookEntity.getId(),
@@ -211,7 +210,7 @@ public class UserProfileService {
     }
 
     private void sendNewPasswordSetInApplicationMail(UserEntity userEntity) {
-        mailSender.send(userEntity.getUsername(), mailBuilder.getNewPasswordSetInApplicationMailBody(
+        mailSender.send(userEntity.getUsername(), MailBuilder.getNewPasswordSetInApplicationMailBody(
                         userEntity.getFirstName(),
                         userEntity.getLastName()),
                 "Password successfully updated");

@@ -12,7 +12,7 @@ public class ReturnBookController {
 
     @PutMapping
     public void returnBook(@RequestBody ReturnBookRequest returnBookRequest,
-                           @PathVariable("book_id") int bookId) {
+                           @PathVariable("book_id") Long bookId) {
         returnBookRequest.setBorrowedBookId(bookId);
         returnBookService.returnBook(returnBookRequest);
     }

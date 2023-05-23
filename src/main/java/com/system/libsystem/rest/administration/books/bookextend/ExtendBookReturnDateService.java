@@ -27,7 +27,6 @@ public class ExtendBookReturnDateService {
     private final UserService userService;
     private final BookService bookService;
     private final BorrowedBookService borrowedBookService;
-    private final MailBuilder mailBuilder;
     private final MailSender mailSender;
 
     public void extendRequestedBookReturnDate(ExtendBookReturnDateRequest extendBookReturnDateRequest) {
@@ -67,11 +66,11 @@ public class ExtendBookReturnDateService {
 
     private void sendBookReturnDateExtensionConfirmationMail(UserEntity userEntity, BorrowedBookEntity borrowedBookEntity,
                                                              BookEntity bookEntity) {
-        mailSender.send(userEntity.getUsername(), mailBuilder.getBookReturnDateExtensionConfirmationMailBody(
+        mailSender.send(userEntity.getUsername(), MailBuilder.getBookReturnDateExtensionConfirmationMailBody(
                         userEntity.getFirstName(),
                         userEntity.getLastName(),
                         bookEntity.getTitle(),
-                        String.join(",", bookEntity.getAuthors().stream().toList().toString()),
+                        bookEntity.getFormattedAuthorsAsString(),
                         borrowedBookEntity.getReturnDate().toString(),
                         borrowedBookEntity.getAffiliateEntity().getName()),
                 "Book return date extension request accepted");

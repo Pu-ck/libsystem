@@ -27,7 +27,6 @@ public class ReturnDateCheckerTask {
     private static final int INCOMING_RETURN_DATE_REMINDER_PERIOD = 7;
 
     private final BorrowedBookRepository borrowedBookRepository;
-    private final MailBuilder mailBuilder;
     private final MailSender mailSender;
     private final UserService userService;
     private final BookService bookService;
@@ -73,11 +72,11 @@ public class ReturnDateCheckerTask {
 
     private void sendIncreasedPenaltyInformationMail(UserEntity userEntity, BorrowedBookEntity borrowedBookEntity,
                                                      BookEntity bookEntity) {
-        mailSender.send(userEntity.getUsername(), mailBuilder.getOrderedBookPenaltyInformationMailBody(
+        mailSender.send(userEntity.getUsername(), MailBuilder.getOrderedBookPenaltyInformationMailBody(
                         userEntity.getFirstName(),
                         userEntity.getLastName(),
                         bookEntity.getTitle(),
-                        String.join(",", bookEntity.getAuthors().stream().toList().toString()),
+                        bookEntity.getFormattedAuthorsAsString(),
                         borrowedBookEntity.getReturnDate().toString(),
                         borrowedBookEntity.getAffiliateEntity().getName(),
                         borrowedBookEntity.getPenalty()),
@@ -87,11 +86,11 @@ public class ReturnDateCheckerTask {
 
     private void sendComingUpBorrowedBookReturnDateMail(UserEntity userEntity, BorrowedBookEntity borrowedBookEntity,
                                                         BookEntity bookEntity, long daysToReturnDate) {
-        mailSender.send(userEntity.getUsername(), mailBuilder.getComingUpBorrowedBookReturnDateMailBody(
+        mailSender.send(userEntity.getUsername(), MailBuilder.getComingUpBorrowedBookReturnDateMailBody(
                         userEntity.getFirstName(),
                         userEntity.getLastName(),
                         bookEntity.getTitle(),
-                        String.join(",", bookEntity.getAuthors().stream().toList().toString()),
+                        bookEntity.getFormattedAuthorsAsString(),
                         borrowedBookEntity.getReturnDate().toString(),
                         borrowedBookEntity.getAffiliateEntity().getName(),
                         daysToReturnDate),

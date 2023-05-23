@@ -2,6 +2,7 @@
 <button [disabled]="displayedStatus == 'Borrowed'" (click)="setDisplayedStatus('Borrowed')">Borrowed</button>
 <button [disabled]="displayedStatus == 'Returned'" (click)="setDisplayedStatus('Returned')">Returned</button>
 <button [disabled]="displayedStatus == 'Rejected'" (click)="setDisplayedStatus('Rejected')">Rejected</button>
+<button [disabled]="displayedStatus == 'Ready'" (click)="setDisplayedStatus('Ready')">Ready</button>
 <button [disabled]="displayedStatus == 'All'" (click)="setDisplayedStatus('All')">All</button>
 
 <table>

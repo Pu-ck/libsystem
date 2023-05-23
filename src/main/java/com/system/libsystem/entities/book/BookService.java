@@ -12,7 +12,7 @@ public class BookService {
 
     private final BookRepository bookRepository;
 
-    public BookEntity getBookById(int bookId) throws BookNotFoundException {
+    public BookEntity getBookById(Long bookId) throws BookNotFoundException {
         return bookRepository.findById(bookId).orElseThrow(() -> new BookNotFoundException(bookId));
     }
 

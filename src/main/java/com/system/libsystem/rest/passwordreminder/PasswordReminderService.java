@@ -30,7 +30,6 @@ public class PasswordReminderService {
     private static final int PASSWORD_REMINDER_TOKEN_EXPIRATION_TIME = 8;
 
     private final MailSender mailSender;
-    private final MailBuilder mailBuilder;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final PasswordReminderTokenRepository passwordReminderTokenRepository;
@@ -107,7 +106,7 @@ public class PasswordReminderService {
     private void sendPasswordReminderMail(UserEntity userEntity,
                                           PasswordReminderRequest passwordReminderRequest,
                                           String token) {
-        mailSender.send(passwordReminderRequest.getUsername(), mailBuilder.getPasswordReminderMailBody(
+        mailSender.send(passwordReminderRequest.getUsername(), MailBuilder.getPasswordReminderMailBody(
                 passwordReminderAddress + token,
                 userEntity.getFirstName(),
                 userEntity.getLastName(),
@@ -116,7 +115,7 @@ public class PasswordReminderService {
     }
 
     private void sendNewPasswordSetMail(UserEntity userEntity) {
-        mailSender.send(userEntity.getUsername(), mailBuilder.getNewPasswordSetMailBody(
+        mailSender.send(userEntity.getUsername(), MailBuilder.getNewPasswordSetMailBody(
                 userEntity.getFirstName(),
                 userEntity.getLastName(),
                 loginPageAddress), "New password successfully set");

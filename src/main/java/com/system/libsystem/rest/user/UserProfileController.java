@@ -26,7 +26,7 @@ public class UserProfileController {
 
     @PutMapping("/books/{book_id}/extend-book")
     public void extendBookReturnDate(@RequestBody ExtendBookRequest extendBookRequest,
-                                     @PathVariable("book_id") int bookId,
+                                     @PathVariable("book_id") Long bookId,
                                      HttpServletRequest httpServletRequest) {
         extendBookRequest.setBorrowedBookId(bookId);
         userProfileService.extendBookReturnDate(extendBookRequest, httpServletRequest);

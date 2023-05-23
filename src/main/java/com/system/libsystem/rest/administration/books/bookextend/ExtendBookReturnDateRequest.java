@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ExtendBookReturnDateRequest {
-    private int borrowedBookId;
+    private Long borrowedBookId;
     private int extendTime;
 }

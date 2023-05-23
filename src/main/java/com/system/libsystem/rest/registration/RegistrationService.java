@@ -30,7 +30,6 @@ public class RegistrationService {
     private final ConfirmationTokenService confirmationTokenService;
     private final CardNumberRepository cardNumberRepository;
     private final UserService userService;
-    private final MailBuilder mailBuilder;
     private final MailSender mailSender;
 
     @Value("${server.confirmation.address}")
@@ -92,7 +91,7 @@ public class RegistrationService {
 
     private void sendAccountEnabledMail(ConfirmationTokenEntity confirmationTokenEntity) {
         mailSender.send(confirmationTokenEntity.getUserEntity().getUsername(),
-                mailBuilder.getAccountEnabledMailBody(
+                MailBuilder.getAccountEnabledMailBody(
                         confirmationTokenEntity.getUserEntity().getFirstName(),
                         confirmationTokenEntity.getUserEntity().getLastName(),
                         loginPageAddress), "Account enabled");
@@ -101,7 +100,7 @@ public class RegistrationService {
 
     private void sendAccountConfirmationMail(RegistrationRequest registrationRequest, String registrationTime
             , String confirmationAddress) {
-        mailSender.send(adminMail, mailBuilder.getAccountConfirmationMailBody(
+        mailSender.send(adminMail, MailBuilder.getAccountConfirmationMailBody(
                         registrationRequest.getUsername(),
                         registrationRequest.getFirstName(),
                         registrationRequest.getLastName(),
@@ -113,7 +112,7 @@ public class RegistrationService {
     }
 
     private void sendAccountRegistrationMail(RegistrationRequest registrationRequest) {
-        mailSender.send(registrationRequest.getUsername(), mailBuilder.getAccountRegisteredMailBody(
+        mailSender.send(registrationRequest.getUsername(), MailBuilder.getAccountRegisteredMailBody(
                         registrationRequest.getUsername(),
                         registrationRequest.getFirstName(),
                         registrationRequest.getLastName(),

@@ -13,7 +13,7 @@ public class CardNumberEntity {
     @Id
     @SequenceGenerator(name = "card_number_id_seq", sequenceName = "card_number_id_seq")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "card_number_id_seq")
-    private int id;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private Long cardNumber;

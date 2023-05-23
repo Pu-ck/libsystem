@@ -57,6 +57,8 @@ export class UserBooksComponent implements OnInit {
       this.displayedStatus = 'Returned';
     } else if (status === 'Rejected') {
       this.displayedStatus = 'Rejected';
+    } else if (status === 'Ready') {
+      this.displayedStatus = 'Ready';
     } else if (status === 'All') {
       this.displayedStatus = 'All';
     }

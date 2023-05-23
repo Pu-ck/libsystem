@@ -12,7 +12,7 @@ public class BorrowedBookService {
 
     private final BorrowedBookRepository borrowedBookRepository;
 
-    public BorrowedBookEntity getBorrowedBookById(int borrowedBookId) throws BorrowedBookNotFoundException {
+    public BorrowedBookEntity getBorrowedBookById(Long borrowedBookId) throws BorrowedBookNotFoundException {
         return borrowedBookRepository.findById(borrowedBookId)
                 .orElseThrow(() -> new BorrowedBookNotFoundException(borrowedBookId));
     }

@@ -8,6 +8,6 @@ import java.util.Optional;
 @Repository
 public interface AffiliateBookRepository extends JpaRepository<AffiliateBook, Long> {
 
-    Optional<AffiliateBook> findByBookIdAndAffiliateId(int bookId, int affiliateId);
+    Optional<AffiliateBook> findByBookIdAndAffiliateId(Long bookId, Long affiliateId);
 
 }

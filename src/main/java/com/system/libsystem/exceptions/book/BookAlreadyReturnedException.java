@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class BookAlreadyReturnedException extends RuntimeException {
 
-    private final int id;
+    private final Long id;
 
     @Override
     public String getMessage() {

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -24,7 +25,7 @@ public class BookEntity {
     @Id
     @SequenceGenerator(name = "book_id_seq", sequenceName = "book_id_seq")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "book_id_seq")
-    private int id;
+    private Long id;
 
     @Column(nullable = false)
     private String title;
@@ -70,5 +71,9 @@ public class BookEntity {
 
     @Column(nullable = false)
     private String description;
+
+    public String getFormattedAuthorsAsString() {
+        return this.getAuthors().stream().map(AuthorEntity::getName).collect(Collectors.joining(","));
+    }
 
 }

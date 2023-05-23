@@ -12,7 +12,7 @@ public class AcceptOrderController {
 
     @PutMapping
     public void confirmOrder(@RequestBody AcceptOrderRequest acceptOrderRequest,
-                             @PathVariable("book_id") int bookId) {
+                             @PathVariable("book_id") Long bookId) {
         acceptOrderRequest.setBorrowedBookId(bookId);
         acceptOrderService.confirmOrder(acceptOrderRequest);
     }

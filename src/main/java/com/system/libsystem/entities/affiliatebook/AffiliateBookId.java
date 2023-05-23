@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Setter
 public class AffiliateBookId implements Serializable {
 
-    private int affiliateId;
-    private int bookId;
+    private Long affiliateId;
+    private Long bookId;
 
 }

@@ -12,7 +12,7 @@ public class ExtendBookReturnDateController {
 
     @PutMapping
     public void extendRequestedBookReturnDate(@RequestBody ExtendBookReturnDateRequest extendBookReturnDateRequest,
-                                              @PathVariable("book_id") int bookId) {
+                                              @PathVariable("book_id") Long bookId) {
         extendBookReturnDateRequest.setBorrowedBookId(bookId);
         extendBookReturnDateService.extendRequestedBookReturnDate(extendBookReturnDateRequest);
     }

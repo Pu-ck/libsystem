@@ -14,7 +14,7 @@ public class BorrowBookController {
 
     @PutMapping("/{book_id}/borrow-book")
     public void borrow(@RequestBody BorrowBookRequest borrowBookRequest,
-                       @PathVariable("book_id") int bookId,
+                       @PathVariable("book_id") Long bookId,
                        HttpServletRequest httpServletRequest) {
         borrowBookRequest.setBookId(bookId);
         borrowBookService.borrow(borrowBookRequest, httpServletRequest);

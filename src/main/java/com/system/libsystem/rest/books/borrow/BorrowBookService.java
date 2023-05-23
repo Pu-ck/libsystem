@@ -1,9 +1,9 @@
 package com.system.libsystem.rest.books.borrow;
 
-import com.system.libsystem.entities.affiliatebook.AffiliateBook;
-import com.system.libsystem.entities.affiliatebook.AffiliateBookRepository;
 import com.system.libsystem.entities.affiliate.AffiliateEntity;
 import com.system.libsystem.entities.affiliate.AffiliateRepository;
+import com.system.libsystem.entities.affiliatebook.AffiliateBook;
+import com.system.libsystem.entities.affiliatebook.AffiliateBookRepository;
 import com.system.libsystem.entities.book.BookEntity;
 import com.system.libsystem.entities.book.BookRepository;
 import com.system.libsystem.entities.book.BookService;
@@ -38,7 +38,6 @@ public class BorrowBookService {
     private final AffiliateRepository affiliateRepository;
     private final BookRepository bookRepository;
     private final SessionRegistry sessionRegistry;
-    private final MailBuilder mailBuilder;
     private final MailSender mailSender;
     private final UserService userService;
     private final BookService bookService;
@@ -57,9 +56,9 @@ public class BorrowBookService {
         final UserEntity userEntity = userService.getUserByUsername(username);
         BookEntity bookEntity = bookService.getBookById(borrowBookRequest.getBookId());
 
-        final int userId = userEntity.getId();
+        final Long userId = userEntity.getId();
         final Long cardNumber = userEntity.getCardNumber();
-        final int bookId = bookEntity.getId();
+        final Long bookId = bookEntity.getId();
         final int orderQuantity = borrowBookRequest.getQuantity();
         final int currentQuantity = getCurrentQuantityFromAffiliate(borrowBookRequest.getAffiliate(), bookEntity);
         final String affiliate = borrowBookRequest.getAffiliate();
@@ -136,11 +135,11 @@ public class BorrowBookService {
     private void sendBookBorrowConfirmationMail(UserEntity userEntity, BookEntity bookEntity,
                                                 BorrowedBookEntity borrowedBookEntity,
                                                 String affiliate) {
-        mailSender.send(userEntity.getUsername(), mailBuilder.getBookBorrowMailBody
+        mailSender.send(userEntity.getUsername(), MailBuilder.getBookBorrowMailBody
                 (userEntity.getFirstName(),
                         userEntity.getLastName(),
                         bookEntity.getTitle(),
-                        String.join(",", bookEntity.getAuthors().stream().toList().toString()),
+                        bookEntity.getFormattedAuthorsAsString(),
                         borrowedBookEntity.getId(),
                         affiliate), "New book ordered");
         log.info("New sendBookBorrowConfirmationMail message sent to " + userEntity.getUsername());

@@ -1,5 +1,6 @@
 package com.system.libsystem.mail;
 
+import com.system.libsystem.exceptions.mail.MailSendingException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +35,7 @@ public class MailService implements MailSender {
             mimeMessageHelper.setFrom(confirmationMail);
             javaMailSender.send(mimeMessage);
         } catch (MessagingException exception) {
-            throw new IllegalStateException("Mail sending failure " + exception.getMessage());
+            throw new MailSendingException("Mail sending failure " + exception.getMessage());
         }
 
     }

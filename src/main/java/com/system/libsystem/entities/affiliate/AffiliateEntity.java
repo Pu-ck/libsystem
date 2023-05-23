@@ -17,7 +17,7 @@ public class AffiliateEntity {
     @Id
     @SequenceGenerator(name = "affiliate_id_seq", sequenceName = "affiliate_id_seq")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "affiliate_id_seq")
-    private int id;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String name;

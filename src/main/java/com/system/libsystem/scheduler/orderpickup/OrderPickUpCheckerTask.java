@@ -28,7 +28,6 @@ public class OrderPickUpCheckerTask {
     private final BookRepository bookRepository;
     private final UserService userService;
     private final BookService bookService;
-    private final MailBuilder mailBuilder;
     private final MailSender mailSender;
     private final BookUtil bookUtil;
 
@@ -66,11 +65,11 @@ public class OrderPickUpCheckerTask {
     }
 
     private void sendBorrowedBookOrderPickUpTimeExpired(UserEntity userEntity, BookEntity bookEntity, String affiliate) {
-        mailSender.send(userEntity.getUsername(), mailBuilder.getBorrowedBookOrderPickUpTimeExpired
+        mailSender.send(userEntity.getUsername(), MailBuilder.getBorrowedBookOrderPickUpTimeExpired
                 (userEntity.getFirstName(),
                         userEntity.getLastName(),
                         bookEntity.getTitle(),
-                        String.join(",", bookEntity.getAuthors().stream().toList().toString()),
+                        bookEntity.getFormattedAuthorsAsString(),
                         affiliate), "Ordered book pick up time expired");
         log.info("New sendBorrowedBookOrderPickUpTimeExpired message sent to " + userEntity.getUsername());
     }
