@@ -1,5 +1,8 @@
 package com.system.libsystem.session;
 
+import com.system.libsystem.exceptions.session.UnableToGetSessionUsernameException;
+import com.system.libsystem.exceptions.session.UnableToRegisterSessionException;
+import com.system.libsystem.exceptions.session.UsernameSessionNotProvidedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -23,7 +26,7 @@ public class SessionRegistry {
 
     public String registerSession(final String username) {
         if (username == null) {
-            throw new IllegalStateException("Username must be provided");
+            throw new UsernameSessionNotProvidedException("Username must be provided");
         }
 
         final String sessionID = getSessionID();
@@ -31,7 +34,7 @@ public class SessionRegistry {
         try {
             redisSessionStorage.set(sessionID, username);
         } catch (final Exception exception) {
-            exception.printStackTrace();
+            throw new UnableToRegisterSessionException(exception.getMessage());
         }
 
         log.info("New session with id " + sessionID + " set and saved in Redis repository");
@@ -43,8 +46,7 @@ public class SessionRegistry {
         try {
             return redisSessionStorage.get(sessionID);
         } catch (final Exception exception) {
-            exception.printStackTrace();
-            return null;
+            throw new UnableToGetSessionUsernameException(exception.getMessage());
         }
     }
 

@@ -8,6 +8,7 @@ import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.exceptions.cardnumber.CardNumberNotFoundException;
 import com.system.libsystem.exceptions.peselnumber.UnableToAuthenticatePeselNumberException;
+import com.system.libsystem.exceptions.registration.ConfirmationTokenNotFoundException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
 import com.system.libsystem.util.HashingUtil;
@@ -68,7 +69,7 @@ public class RegistrationService {
     @Transactional
     public void confirmToken(String token) {
         ConfirmationTokenEntity confirmationTokenEntity = confirmationTokenService.getToken(token).orElseThrow(() ->
-                new IllegalStateException("Confirmation token not found"));
+                new ConfirmationTokenNotFoundException(token));
         userService.enableUser(confirmationTokenEntity.getUserEntity().getUsername());
         sendAccountEnabledMail(confirmationTokenEntity);
     }

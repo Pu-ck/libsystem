@@ -82,15 +82,15 @@ public class UserProfileService {
         return userBooks;
     }
 
-    public void changeUserPassword(ChangePasswordRequest request, HttpServletRequest httpServletRequest) {
+    public void changeUserPassword(ChangePasswordRequest changePasswordRequest, HttpServletRequest httpServletRequest) {
         final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         final String username = sessionRegistry.getSessionUsername(sessionID);
 
         UserEntity userEntity = userService.getUserByUsername(username);
 
         final String oldPassword = userEntity.getPassword();
-        final String newPassword = request.getNewPassword();
-        final String requestOldPassword = request.getOldPassword();
+        final String newPassword = changePasswordRequest.getNewPassword();
+        final String requestOldPassword = changePasswordRequest.getOldPassword();
 
         if (isRequestOldPasswordMatchingOldPassword(requestOldPassword, oldPassword)) {
             if (isNewPasswordSameAsOldPassword(newPassword, oldPassword)) {

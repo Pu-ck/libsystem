@@ -13,6 +13,8 @@ import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.exceptions.affiliate.AffiliateNotFoundException;
+import com.system.libsystem.exceptions.borrow.BookOutOfStockException;
+import com.system.libsystem.exceptions.borrow.TooManyBorrowedBooksException;
 import com.system.libsystem.exceptions.cardnumber.InvalidCardNumberFormatException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
@@ -84,13 +86,10 @@ public class BorrowBookService {
                                 + " has been set for user with id " + userEntity.getId());
                     }
                 } else {
-                    throw new IllegalStateException("The order is exceeding borrowed or ordered books of user with " +
-                            "id " + userEntity.getId());
+                    throw new TooManyBorrowedBooksException(userId);
                 }
             } else {
-                throw new IllegalStateException("Book with id " + bookEntity.getId() + " is not available in stock " +
-                        "of the library affiliate or the requested quantity of books to borrow is larger than the " +
-                        "quantity in stock of the library affiliate");
+                throw new BookOutOfStockException(bookId);
             }
         } else {
             throw new InvalidCardNumberFormatException();

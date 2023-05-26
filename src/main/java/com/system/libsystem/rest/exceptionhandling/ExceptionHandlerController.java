@@ -1,6 +1,8 @@
 package com.system.libsystem.rest.exceptionhandling;
 
 import com.system.libsystem.exceptions.book.BookNotFoundException;
+import com.system.libsystem.exceptions.borrow.BookOutOfStockException;
+import com.system.libsystem.exceptions.borrow.TooManyBorrowedBooksException;
 import com.system.libsystem.exceptions.cardnumber.CardNumberAlreadyTakenException;
 import com.system.libsystem.exceptions.cardnumber.CardNumberNotFoundException;
 import com.system.libsystem.exceptions.cardnumber.InvalidCardNumberFormatException;
@@ -14,6 +16,8 @@ import com.system.libsystem.exceptions.peselnumber.PeselNumberAlreadyTakenExcept
 import com.system.libsystem.exceptions.peselnumber.UnableToAuthenticatePeselNumberException;
 import com.system.libsystem.exceptions.registration.UsernameAlreadyTakenException;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.book.BookNotFoundResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.borrow.BookOutOfStockResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.borrow.TooManyBorrowedBooksResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.cardnumber.CardNumberAlreadyTakenResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.cardnumber.CardNumberNotFoundResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.cardnumber.InvalidCardNumberFormatResponse;
@@ -115,6 +119,18 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     public ResponseEntity<PeselNumberAlreadyTakenResponse> handlePeselNumberAlreadyTakenException() {
         final PeselNumberAlreadyTakenResponse peselNumberAlreadyTakenResponse = new PeselNumberAlreadyTakenResponse();
         return new ResponseEntity<>(peselNumberAlreadyTakenResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(BookOutOfStockException.class)
+    public ResponseEntity<BookOutOfStockResponse> handleBookOutOfStockException() {
+        final BookOutOfStockResponse bookOutOfStockResponse = new BookOutOfStockResponse();
+        return new ResponseEntity<>(bookOutOfStockResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(TooManyBorrowedBooksException.class)
+    public ResponseEntity<TooManyBorrowedBooksResponse> handleTooManyBorrowedBooksException() {
+        final TooManyBorrowedBooksResponse tooManyBorrowedBooksResponse = new TooManyBorrowedBooksResponse();
+        return new ResponseEntity<>(tooManyBorrowedBooksResponse, HttpStatus.BAD_REQUEST);
     }
 
 }

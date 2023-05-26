@@ -9,6 +9,7 @@ import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.exceptions.book.BookAlreadyExtendedException;
 import com.system.libsystem.exceptions.book.BookAlreadyReturnedException;
+import com.system.libsystem.exceptions.book.UnableToExtendNotAcceptedBookException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
 import lombok.AllArgsConstructor;
@@ -48,8 +49,7 @@ public class ExtendBookReturnDateService {
                     throw new BookAlreadyExtendedException(borrowedBookEntity.getId());
                 }
             } else {
-                throw new IllegalStateException("Unable to extended return date of the requested borrowed book with id "
-                        + borrowedBookEntity.getId() + " because the book is not accepted");
+                throw new UnableToExtendNotAcceptedBookException(borrowedBookEntity.getId());
             }
         } else {
             throw new BookAlreadyReturnedException(borrowedBookEntity.getId());
