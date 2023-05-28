@@ -22,7 +22,7 @@ export class NavigationMenuComponent implements OnInit {
     this.checkIfUserIsLoggedIn();
   }
 
-  public logout() {
+  public logout(): void {
     const url = '/api/logout';
     this.http.post(url, {}).subscribe(() => {
       console.log('Logout successful');
@@ -31,7 +31,7 @@ export class NavigationMenuComponent implements OnInit {
     });
   }
 
-  private checkIfUserIsLoggedIn() {
+  private checkIfUserIsLoggedIn(): void {
     let token = sessionStorage.getItem('token');
     if (token != null) {
       this.loggedIn = true;
@@ -40,7 +40,7 @@ export class NavigationMenuComponent implements OnInit {
     }
   }
 
-  private hideNavbarOnLogout() {
+  private hideNavbarOnLogout(): void {
     this.route.queryParams.subscribe(params => {
       if (params['logout'] === 'true') {
         this.loggedIn = false;

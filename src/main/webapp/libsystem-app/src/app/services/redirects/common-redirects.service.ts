@@ -8,7 +8,7 @@ export class CommonRedirectsService {
 
   constructor(private router: Router) { }
 
-  public redirectToLoginForm() {
+  public redirectToLoginForm(): void {
     this.router.navigate(['/login']);
   }
 

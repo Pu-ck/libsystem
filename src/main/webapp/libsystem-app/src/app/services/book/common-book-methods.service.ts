@@ -12,4 +12,17 @@ export class CommonBookMethodsService {
     return affiliateBook ? `${affiliateBook.currentQuantity}/${affiliateBook.generalQuantity}` : '';
   }
 
+  public areBooksOnStock(bookDetails: any): boolean {
+    let currentQuantityInAllAffiliates = 0;
+    for (let affiliateBook of bookDetails.affiliateBooks) {
+      currentQuantityInAllAffiliates += affiliateBook.currentQuantity;
+    }
+    if (currentQuantityInAllAffiliates === 0) {
+      return false;
+    } 
+    else {
+      return true;
+    }
+  }
+
 }

@@ -31,5 +31,5 @@
     </p>
 </div>
 
-<button (click)="redirectToOrderForm()" [disabled]="noBooksOnStock">Order book</button>
+<button (click)="redirectToOrderForm()" [disabled]="!booksOnStock">Borrow book</button>
 

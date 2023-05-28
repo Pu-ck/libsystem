@@ -48,7 +48,7 @@ export class BooksComponent implements OnInit {
     });
   }
 
-  public getBooks() {
+  public getBooks(): void {
     this.updateGenres();
     this.updateAffiliates();
     const url = '/api/books';
@@ -74,11 +74,11 @@ export class BooksComponent implements OnInit {
     );
   }
 
-  public redirectToBookDetails(id: number) {
+  public redirectToBookDetails(id: number): void {
     this.router.navigate([`books/${id}`]);
   }
 
-  private setQueryParams(queryParams: {[key: string]: string}) {
+  private setQueryParams(queryParams: {[key: string]: string}): void {
     if (this.title) {
       queryParams['title'] = this.title;
     }
@@ -105,7 +105,7 @@ export class BooksComponent implements OnInit {
     }
   }
 
-  public updateGenres() {
+  public updateGenres(): void {
     let genres = [];
     if (this.selectedGenres[0].value) {
       genres.push(this.selectedGenres[0].label);
@@ -119,7 +119,7 @@ export class BooksComponent implements OnInit {
     this.genres = genres;
   }
 
-  public updateAffiliates() {
+  public updateAffiliates(): void {
     let affiliates = [];
     if (this.selectedAffiliates[0].value) {
       affiliates.push(this.selectedAffiliates[0].label);

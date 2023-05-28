@@ -18,7 +18,7 @@ export class ChangePasswordComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public changePassword() {
+  public changePassword(): void {
     const url = '/api/userprofile/change-password';
     this.http.put<any>(url, {
       oldPassword: this.model.oldPassword,

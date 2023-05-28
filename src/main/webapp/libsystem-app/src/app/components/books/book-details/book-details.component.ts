@@ -12,7 +12,7 @@ export class BookDetailsComponent implements OnInit {
 
   private id: string = '';
   public bookDetails: any;
-  public noBooksOnStock: boolean = false;
+  public booksOnStock: boolean = true;
 
   constructor(
     private http: HttpClient, 
@@ -25,7 +25,7 @@ export class BookDetailsComponent implements OnInit {
     this.getBookDetails();
   }
 
-  private getBookDetails() {
+  private getBookDetails(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.id = params.get('id')!;
     });
@@ -33,7 +33,7 @@ export class BookDetailsComponent implements OnInit {
     const url = `api/books/${this.id}`;
     this.http.get<any>(url, { }).subscribe(response => {
       this.bookDetails = response;
-      this.checkIfBooksAreOnStock();
+      this.checkIfBooksOnStock();
     }, error => {
         if (error.status === 404 && error.error.message === 'Book not found') {
             console.log(error);
@@ -43,18 +43,12 @@ export class BookDetailsComponent implements OnInit {
     );
   }
 
-  public redirectToOrderForm() {
+  public redirectToOrderForm(): void {
     this.router.navigate([`/books/${this.id}/borrow-book`]);
   }
 
-  private checkIfBooksAreOnStock() {
-    let currentQuantityInAllAffiliates = 0;
-    for (let affiliateBook of this.bookDetails.affiliateBooks) {
-      currentQuantityInAllAffiliates += affiliateBook.currentQuantity;
-    }
-    if (currentQuantityInAllAffiliates === 0) {
-      this.noBooksOnStock = true;
-    }
+  private checkIfBooksOnStock(): void {
+    this.booksOnStock = this.commonBookMethodsService.areBooksOnStock(this.bookDetails);
   }
 
 }

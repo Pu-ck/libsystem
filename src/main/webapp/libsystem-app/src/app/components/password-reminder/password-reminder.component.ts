@@ -21,7 +21,7 @@ export class PasswordReminderComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public remindPassword() {
+  public remindPassword(): void {
     const url = '/api/password-reminder';
     this.http.post<any>(url, {
       username: this.model.username,

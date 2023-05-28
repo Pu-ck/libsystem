@@ -25,7 +25,7 @@ export class RegistrationComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public register() {
+  public register(): void {
     const url = '/api/registration';
     this.http.post<any>(url, {
       username: this.model.username,

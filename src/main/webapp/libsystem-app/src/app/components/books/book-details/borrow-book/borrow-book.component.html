@@ -1,1 +1,29 @@
-<p>Borrow book</p>
+<p>Borrow book {{ title }}</p>
+
+<form name="form" (ngSubmit)="borrow()" #borrowForm="ngForm">
+    <label for="affiliates">Choose affiliate</label>
+    <select name="affiliates" [(ngModel)]="model.affiliate" required (change)="specifyQuantityForChosenAffiliate()">
+        <ng-container *ngFor="let affiliateOptionForBook of affiliateOptionsForBook">
+            <option [value]="affiliateOptionForBook.label">{{ affiliateOptionForBook.label }}</option>
+        </ng-container>
+    </select>
+
+    <label for="quantity">Choose quantity</label>
+        <select name="quantity" [(ngModel)]="model.quantity" required>
+            <option *ngFor="let i of setQunatityRange(1, maxQuantity, 1)" [value]="i">{{ i }}</option>
+    </select>
+
+    <label for="cardNumber">Card number</label>
+    <input type="text" name="cardNumber" [(ngModel)]="model.cardNumber" #cardNumber="ngModel" required minlength="10" maxlength="10" pattern="^[0-9]+$" required>
+    <div *ngIf="cardNumber?.invalid && (cardNumber?.dirty || cardNumber?.touched)">
+        <div *ngIf="cardNumber?.errors?.['required']">Card number is required</div>
+        <div *ngIf="cardNumber?.errors?.['minlength']">Invalid card number length</div>
+        <div *ngIf="cardNumber?.errors?.['maxlength']">Invalid card number length</div>
+        <div *ngIf="cardNumber.errors?.['pattern']">Invalid card number format</div>
+    </div>
+
+    <div>
+        <button type="submit" [disabled]="!borrowForm.valid">Borrow</button>
+    </div>
+
+</form>

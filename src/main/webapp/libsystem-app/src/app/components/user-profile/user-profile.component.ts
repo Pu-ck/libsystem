@@ -16,7 +16,7 @@ export class UserProfileComponent implements OnInit {
     this.getUserDetails();
   }
 
-  private getUserDetails() {
+  private getUserDetails(): void {
     const url = '/api/userprofile';
     this.http.get<any>(url, {}).subscribe(
       response => {

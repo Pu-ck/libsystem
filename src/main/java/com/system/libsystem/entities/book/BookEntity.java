@@ -1,5 +1,6 @@
 package com.system.libsystem.entities.book;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.system.libsystem.entities.affiliate.AffiliateEntity;
 import com.system.libsystem.entities.affiliatebook.AffiliateBook;
@@ -59,7 +60,7 @@ public class BookEntity {
 
     @OneToMany(mappedBy = "bookId")
     @JsonManagedReference("book-affiliatebook")
-    private List<AffiliateBook> affiliateBooks = new ArrayList<>();
+    private Set<AffiliateBook> affiliateBooks = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "publisher_id")
@@ -72,6 +73,7 @@ public class BookEntity {
     @Column(nullable = false)
     private String description;
 
+    @JsonIgnore
     public String getFormattedAuthorsAsString() {
         return this.getAuthors().stream().map(AuthorEntity::getName).collect(Collectors.joining(","));
     }

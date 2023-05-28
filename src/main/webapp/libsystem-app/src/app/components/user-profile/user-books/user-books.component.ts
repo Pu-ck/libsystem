@@ -18,7 +18,7 @@ export class UserBooksComponent implements OnInit {
     this.getUserBooks();
   }
 
-  private getUserBooks() {
+  private getUserBooks(): void {
     const url = '/api/userprofile/books';
     this.http.get<any[]>(url, {}).subscribe(
       response => {
@@ -30,13 +30,13 @@ export class UserBooksComponent implements OnInit {
     );
   }
 
-  public bookExtensionConfirmation(borrowedBookId: number) {
+  public bookExtensionConfirmation(borrowedBookId: number): void {
     if (window.confirm('Are you sure you want to send an return date extension request for this book? You can extend the borrowed book only once.')) {
       this.requestBookExtension(borrowedBookId);
     }
   }
 
-  private requestBookExtension(borrowedBookId: number) {
+  private requestBookExtension(borrowedBookId: number): void {
     const url = `/api/userprofile/books/${borrowedBookId}/extend-book`
     this.http.put<any>(url, {
     }).subscribe(response => {
@@ -48,7 +48,7 @@ export class UserBooksComponent implements OnInit {
     );
   }
 
-  public setDisplayedStatus(status: string) {
+  public setDisplayedStatus(status: string): void {
     if (status === 'Borrowed') {
       this.displayedStatus = 'Borrowed';
     } else if (status === 'Ordered') {

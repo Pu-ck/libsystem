@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  public login() {
+  public login(): void {
     const url = '/api/login';
     this.http.post<any>(url, {
       username: this.model.username,
@@ -48,11 +48,11 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  public redirectToRegistrationForm() {
+  public redirectToRegistrationForm(): void {
     this.router.navigate(['/registration']);
   }
 
-  public redirectToPasswordReminderForm() {
+  public redirectToPasswordReminderForm(): void {
     this.router.navigate(['/password-reminder']);
   }
   

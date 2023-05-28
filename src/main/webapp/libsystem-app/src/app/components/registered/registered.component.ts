@@ -27,7 +27,7 @@ export class RegisteredComponent implements OnInit {
     this.verifyToken();
   }
 
-  private verifyToken() {
+  private verifyToken(): void {
     const url = '/api/registered';
     let params = new HttpParams().set('token', this.token).set('username', this.username);
     this.http.get<any>(url, { params,
