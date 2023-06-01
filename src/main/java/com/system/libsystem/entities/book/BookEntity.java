@@ -1,5 +1,6 @@
 package com.system.libsystem.entities.book;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.system.libsystem.entities.affiliate.AffiliateEntity;
@@ -7,6 +8,7 @@ import com.system.libsystem.entities.affiliatebook.AffiliateBook;
 import com.system.libsystem.entities.author.AuthorEntity;
 import com.system.libsystem.entities.genre.GenreEntity;
 import com.system.libsystem.entities.publisher.PublisherEntity;
+import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.yearofprint.YearOfPrintEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +32,10 @@ public class BookEntity {
 
     @Column(nullable = false)
     private String title;
+
+    @ManyToMany(mappedBy = "favouriteBooks")
+    @JsonBackReference("user-books-favourites")
+    private Set<UserEntity> users = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -73,9 +79,8 @@ public class BookEntity {
     @Column(nullable = false)
     private String description;
 
-    @JsonIgnore
     public String getFormattedAuthorsAsString() {
-        return this.getAuthors().stream().map(AuthorEntity::getName).collect(Collectors.joining(","));
+        return this.getAuthors().stream().map(AuthorEntity::getName).collect(Collectors.joining(", "));
     }
 
 }

@@ -1,11 +1,13 @@
 package com.system.libsystem.rest.user;
 
+import com.system.libsystem.entities.book.BookEntity;
 import com.system.libsystem.helpermodels.UserBook;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @AllArgsConstructor
@@ -22,6 +24,11 @@ public class UserProfileController {
     @GetMapping("/books")
     public List<UserBook> getUserBooks(HttpServletRequest httpServletRequest) {
         return userProfileService.getUserBooks(httpServletRequest);
+    }
+
+    @GetMapping("/favourites")
+    public Set<BookEntity> getUserFavouriteBooks(HttpServletRequest httpServletRequest) {
+        return userProfileService.getUserFavouriteBooks(httpServletRequest);
     }
 
     @PutMapping("/books/{book_id}/extend-book")

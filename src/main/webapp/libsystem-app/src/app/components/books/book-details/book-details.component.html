@@ -32,4 +32,5 @@
 </div>
 
 <button (click)="redirectToOrderForm()" [disabled]="!booksOnStock">Borrow book</button>
-
+<button (click)="addToFavourites()" *ngIf="!isFavourite">Add to favourites</button>
+<button (click)="removeFromFavourites()" *ngIf="isFavourite">Remove from favourites</button>

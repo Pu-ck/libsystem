@@ -1,0 +1,19 @@
+Your favourite books
+<table>
+    <thead>
+      <tr>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let favouriteBook of favouriteBooks">
+        <td>
+            <a [routerLink]="'/books/' + favouriteBook.id">{{ favouriteBook.title }}</a> by
+        </td>
+        <td>
+            <a>{{ favouriteBook.formattedAuthorsAsString }}</a>
+        </td>
+      </tr>
+    </tbody>
+</table>

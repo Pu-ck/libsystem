@@ -41,19 +41,16 @@ public class ExtendBookReturnDateService {
         final LocalDate extendTime = currentReturnDate.toLocalDate().plusDays(extendBookReturnDateRequest.getExtendTime());
         final Date newReturnDate = Date.valueOf(extendTime);
 
-        if (!borrowedBookEntity.isClosed()) {
-            if (borrowedBookEntity.isAccepted()) {
-                if (!borrowedBookEntity.isExtended()) {
-                    saveBorrowedBookNewReturnDate(borrowedBookEntity, newReturnDate, userEntity, bookEntity);
-                } else {
-                    throw new BookAlreadyExtendedException(borrowedBookEntity.getId());
-                }
-            } else {
-                throw new UnableToExtendNotAcceptedBookException(borrowedBookEntity.getId());
-            }
-        } else {
+        if (borrowedBookEntity.isClosed()) {
             throw new BookAlreadyReturnedException(borrowedBookEntity.getId());
         }
+        if (!borrowedBookEntity.isAccepted()) {
+            throw new UnableToExtendNotAcceptedBookException(borrowedBookEntity.getId());
+        }
+        if (borrowedBookEntity.isExtended()) {
+            throw new BookAlreadyExtendedException(borrowedBookEntity.getId());
+        }
+        saveBorrowedBookNewReturnDate(borrowedBookEntity, newReturnDate, userEntity, bookEntity);
     }
 
     private void saveBorrowedBookNewReturnDate(BorrowedBookEntity borrowedBookEntity, Date newReturnDate,

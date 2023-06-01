@@ -20,6 +20,8 @@ import { NewPasswordComponent } from './components/password-reminder/new-passwor
 import { BooksComponent } from './components/books/books.component';
 import { BookDetailsComponent } from './components/books/book-details/book-details.component';
 import { BorrowBookComponent } from './components/books/book-details/borrow-book/borrow-book.component';
+import { BorrowedComponent } from './components/books/book-details/borrow-book/borrowed/borrowed.component';
+import { FavouritesComponent } from './components/user-profile/favourites/favourites.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import { BorrowBookComponent } from './components/books/book-details/borrow-book
     NewPasswordComponent,
     BooksComponent,
     BookDetailsComponent,
-    BorrowBookComponent
+    BorrowBookComponent,
+    BorrowedComponent,
+    FavouritesComponent
   ],
   imports: [
     BrowserModule,

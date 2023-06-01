@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Getter
 @AllArgsConstructor
-@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Too many books borrowed")
-public class TooManyBorrowedBooksException extends RuntimeException {
+@ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Too many books borrowed or ordered")
+public class TooManyBorrowedOrOrderedBooksException extends RuntimeException {
 
     private final Long id;
 

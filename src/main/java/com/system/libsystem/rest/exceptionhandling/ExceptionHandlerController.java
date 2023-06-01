@@ -2,11 +2,12 @@ package com.system.libsystem.rest.exceptionhandling;
 
 import com.system.libsystem.exceptions.book.BookNotFoundException;
 import com.system.libsystem.exceptions.borrow.BookOutOfStockException;
-import com.system.libsystem.exceptions.borrow.TooManyBorrowedBooksException;
+import com.system.libsystem.exceptions.borrow.TooManyBorrowedOrOrderedBooksException;
 import com.system.libsystem.exceptions.cardnumber.CardNumberAlreadyTakenException;
 import com.system.libsystem.exceptions.cardnumber.CardNumberNotFoundException;
 import com.system.libsystem.exceptions.cardnumber.InvalidCardNumberFormatException;
 import com.system.libsystem.exceptions.cardnumber.UnableToAuthenticateCardNumberException;
+import com.system.libsystem.exceptions.favourite.BookNotFoundInUserFavouriteBooksException;
 import com.system.libsystem.exceptions.passwordreminder.PasswordReminderTokenExpiredException;
 import com.system.libsystem.exceptions.passwordreminder.PasswordReminderTokenNotFoundException;
 import com.system.libsystem.exceptions.passwordreset.NewPasswordDuplicatedException;
@@ -22,6 +23,7 @@ import com.system.libsystem.rest.exceptionhandling.errorresponses.cardnumber.Car
 import com.system.libsystem.rest.exceptionhandling.errorresponses.cardnumber.CardNumberNotFoundResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.cardnumber.InvalidCardNumberFormatResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.cardnumber.UnableToAuthenticateCardNumberResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.favourite.BookNotFoundInUserFavouriteBooksResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.password.NewPasswordDuplicatedResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.password.OldPasswordNotMatchingResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.password.PasswordReminderTokenExpiredResponse;
@@ -127,10 +129,17 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(bookOutOfStockResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(TooManyBorrowedBooksException.class)
+    @ExceptionHandler(TooManyBorrowedOrOrderedBooksException.class)
     public ResponseEntity<TooManyBorrowedBooksResponse> handleTooManyBorrowedBooksException() {
         final TooManyBorrowedBooksResponse tooManyBorrowedBooksResponse = new TooManyBorrowedBooksResponse();
         return new ResponseEntity<>(tooManyBorrowedBooksResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BookNotFoundInUserFavouriteBooksException.class)
+    public ResponseEntity<BookNotFoundInUserFavouriteBooksResponse> handleBookNotFoundInUserFavouriteBooksException() {
+        final BookNotFoundInUserFavouriteBooksResponse bookNotFoundInUserFavouriteBooksResponse
+                = new BookNotFoundInUserFavouriteBooksResponse();
+        return new ResponseEntity<>(bookNotFoundInUserFavouriteBooksResponse, HttpStatus.NOT_FOUND);
     }
 
 }

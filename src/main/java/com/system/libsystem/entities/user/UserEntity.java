@@ -1,5 +1,7 @@
 package com.system.libsystem.entities.user;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.system.libsystem.entities.book.BookEntity;
 import com.system.libsystem.util.UserType;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,9 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Getter
@@ -45,6 +45,15 @@ public class UserEntity implements UserDetails {
 
     @Column(nullable = false)
     private int borrowedBooks;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_book_favourites",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
+    @JsonManagedReference("user-books-favourites")
+    private Set<BookEntity> favouriteBooks = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

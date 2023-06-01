@@ -79,6 +79,10 @@ class UserProfileServiceTest {
         userEntity.setFirstName("firstName");
         userEntity.setLastName("lastName");
 
+        Set<BookEntity> userFavouriteBooks = new HashSet<>();
+        userFavouriteBooks.add(new BookEntity());
+        userEntity.setFavouriteBooks(userFavouriteBooks);
+
         when(sessionRegistry.getSessionUsername(anyString())).thenReturn("username");
         when(userService.getUserByUsername(anyString())).thenReturn(userEntity);
     }
@@ -89,7 +93,7 @@ class UserProfileServiceTest {
         final YearOfPrintEntity yearOfPrintEntity = getDummyYearOfPrintEntity();
 
         final AffiliateBook affiliateBook = getDummyAffiliateBook();
-        List<AffiliateBook> affiliateBooks = new ArrayList<>();
+        Set<AffiliateBook> affiliateBooks = new HashSet<>();
         affiliateBooks.add(affiliateBook);
 
         Set<AffiliateEntity> affiliates = new HashSet<>();
@@ -156,13 +160,13 @@ class UserProfileServiceTest {
     void changeUserPassword_WithValidUser_SetsNewPasswordForUser() {
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername("username");
-        userEntity.setPassword("password");
+        userEntity.setPassword("oldPassword");
 
         ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
         changePasswordRequest.setOldPassword("oldPassword");
         changePasswordRequest.setNewPassword("newPassword");
 
-        when(bCryptPasswordEncoder.matches("password", "password")).thenReturn(true);
+        when(bCryptPasswordEncoder.matches("oldPassword", "oldPassword")).thenReturn(true);
         when(bCryptPasswordEncoder.matches("password", "newPassword")).thenReturn(false);
         when(bCryptPasswordEncoder.encode("newPassword")).thenReturn("newPassword");
 
@@ -190,6 +194,13 @@ class UserProfileServiceTest {
         userProfileService.extendBookReturnDate(extendBookRequest, getMockedHttpServletRequest());
 
         assertTrue(borrowedBookEntity.isExtended());
+    }
+
+    @Test
+    void getUserFavouriteBooks_withValidUser_ReturnsSetOfUserFavouriteBooks() {
+        Set<BookEntity> userFavouriteBooks = userProfileService.getUserFavouriteBooks(getMockedHttpServletRequest());
+        assertNotNull(userFavouriteBooks);
+        assertEquals(1, userFavouriteBooks.size());
     }
 
     MockHttpServletRequest getMockedHttpServletRequest() {
@@ -244,7 +255,7 @@ class UserProfileServiceTest {
     }
 
     BookEntity getDummyBookEntity(PublisherEntity publisherEntity, Set<AffiliateEntity> affiliates,
-                                  List<AffiliateBook> affiliateBooks, Set<AuthorEntity> authors, Set<GenreEntity> genres,
+                                  Set<AffiliateBook> affiliateBooks, Set<AuthorEntity> authors, Set<GenreEntity> genres,
                                   YearOfPrintEntity yearOfPrintEntity) {
         BookEntity bookEntity = new BookEntity();
         bookEntity.setId(1L);

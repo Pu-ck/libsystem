@@ -46,14 +46,13 @@ public class ReadyOrderService {
         final UserEntity userEntity = userService.getUserById(borrowedBookEntity.getUserId());
         final BookEntity bookEntity = bookService.getBookById(borrowedBookEntity.getBookId());
 
-        if (!borrowedBookEntity.isClosed()) {
-            if (readyOrderRequest.isAccepted()) {
-                setOrderAsReady(borrowedBookEntity, userEntity, bookEntity, readyDate);
-            } else {
-                setOrderAsRejected(borrowedBookEntity, userEntity, bookEntity);
-            }
-        } else {
+        if (borrowedBookEntity.isClosed()) {
             throw new BookAlreadyReturnedException(borrowedBookEntity.getId());
+        }
+        if (readyOrderRequest.isAccepted()) {
+            setOrderAsReady(borrowedBookEntity, userEntity, bookEntity, readyDate);
+        } else {
+            setOrderAsRejected(borrowedBookEntity, userEntity, bookEntity);
         }
     }
 

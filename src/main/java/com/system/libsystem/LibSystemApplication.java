@@ -12,5 +12,4 @@ public class LibSystemApplication {
     public static void main(String[] args) {
         SpringApplication.run(LibSystemApplication.class, args);
     }
-
 }

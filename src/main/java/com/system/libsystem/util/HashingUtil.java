@@ -16,8 +16,8 @@ public class HashingUtil {
 
     public static String hashData(String data) {
         try {
-            final MessageDigest digest = MessageDigest.getInstance(SHA_256_ALGORITHM);
-            final byte[] hashedBytes = digest.digest(data.getBytes(StandardCharsets.UTF_8));
+            final MessageDigest messageDigest = MessageDigest.getInstance(SHA_256_ALGORITHM);
+            final byte[] hashedBytes = messageDigest.digest(data.getBytes(StandardCharsets.UTF_8));
             StringBuilder hexString = new StringBuilder();
             for (byte b : hashedBytes) {
                 String hex = String.format("%02x", b);
@@ -32,8 +32,8 @@ public class HashingUtil {
 
     public static boolean compareRawAndHashedData(String rawData, String storedHashedData) {
         try {
-            final MessageDigest digest = MessageDigest.getInstance(SHA_256_ALGORITHM);
-            final byte[] hashedBytes = digest.digest(rawData.getBytes(StandardCharsets.UTF_8));
+            final MessageDigest messageDigest = MessageDigest.getInstance(SHA_256_ALGORITHM);
+            final byte[] hashedBytes = messageDigest.digest(rawData.getBytes(StandardCharsets.UTF_8));
             StringBuilder hexString = new StringBuilder();
             for (byte b : hashedBytes) {
                 String hex = String.format("%02x", b);

@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -92,20 +93,18 @@ public class UserProfileService {
         final String newPassword = changePasswordRequest.getNewPassword();
         final String requestOldPassword = changePasswordRequest.getOldPassword();
 
-        if (isRequestOldPasswordMatchingOldPassword(requestOldPassword, oldPassword)) {
-            if (isNewPasswordSameAsOldPassword(newPassword, oldPassword)) {
-                log.error("The new password set by user " + username + " with id " + userEntity.getId()
-                        + " is the same as old one");
-                throw new NewPasswordDuplicatedException();
-            } else {
-                saveNewPassword(userEntity, newPassword);
-                sendNewPasswordSetInApplicationMail(userEntity);
-            }
-        } else {
+        if (!isRequestOldPasswordMatchingOldPassword(requestOldPassword, oldPassword)) {
             log.error("The validation password provided by user " + username + " with id " + userEntity.getId()
                     + " is not matching the old password");
             throw new OldPasswordNotMatchingException();
         }
+        if (isNewPasswordSameAsOldPassword(newPassword, oldPassword)) {
+            log.error("The new password set by user " + username + " with id " + userEntity.getId()
+                    + " is the same as old one");
+            throw new NewPasswordDuplicatedException();
+        }
+        saveNewPassword(userEntity, newPassword);
+        sendNewPasswordSetInApplicationMail(userEntity);
     }
 
     public void extendBookReturnDate(ExtendBookRequest extendBookRequest, HttpServletRequest httpServletRequest) {
@@ -116,20 +115,24 @@ public class UserProfileService {
         final BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById(extendBookRequest
                 .getBorrowedBookId());
 
-        if (!borrowedBookEntity.isClosed()) {
-            if (!borrowedBookEntity.isExtended()) {
-                borrowedBookEntity.setExtended(true);
-                borrowedBookRepository.save(borrowedBookEntity);
-                sendBookReturnDateExtensionRequestMail(userEntity, borrowedBookEntity);
-                log.info("New request for return date extension of borrowed book with id "
-                        + borrowedBookEntity.getId() + " has been issued by user with id " + userEntity.getId());
-            } else {
-                throw new BookAlreadyExtendedException(borrowedBookEntity.getId());
-            }
-        } else {
+        if (borrowedBookEntity.isClosed()) {
             throw new BookAlreadyReturnedException(borrowedBookEntity.getId());
         }
+        if (borrowedBookEntity.isExtended()) {
+            throw new BookAlreadyExtendedException(borrowedBookEntity.getId());
+        }
+        borrowedBookEntity.setExtended(true);
+        borrowedBookRepository.save(borrowedBookEntity);
+        sendBookReturnDateExtensionRequestMail(userEntity, borrowedBookEntity);
+        log.info("New request for return date extension of borrowed book with id "
+                + borrowedBookEntity.getId() + " has been issued by user with id " + userEntity.getId());
+    }
 
+    public Set<BookEntity> getUserFavouriteBooks(HttpServletRequest httpServletRequest) {
+        final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
+        final String username = sessionRegistry.getSessionUsername(sessionID);
+        final UserEntity userEntity = userService.getUserByUsername(username);
+        return userEntity.getFavouriteBooks();
     }
 
     private void saveNewPassword(UserEntity userEntity, String newPassword) {

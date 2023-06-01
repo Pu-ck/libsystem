@@ -14,8 +14,8 @@ import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.exceptions.affiliate.AffiliateNotFoundException;
 import com.system.libsystem.exceptions.borrow.BookOutOfStockException;
-import com.system.libsystem.exceptions.borrow.TooManyBorrowedBooksException;
-import com.system.libsystem.exceptions.cardnumber.InvalidCardNumberFormatException;
+import com.system.libsystem.exceptions.borrow.TooManyBorrowedOrOrderedBooksException;
+import com.system.libsystem.exceptions.cardnumber.UnableToAuthenticateCardNumberException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
 import com.system.libsystem.rest.util.BookUtil;
@@ -45,12 +45,10 @@ public class BorrowBookService {
     private final BookService bookService;
     private final BookUtil bookUtil;
 
-    private static final int MAX_BORROWED_BOOKS = 10;
-    private static final int MAX_ORDERED_BOOKS = 10;
+    private static final int MAX_BOOKS_PER_USER = 10;
 
     @Transactional
     public void borrow(BorrowBookRequest borrowBookRequest, HttpServletRequest httpServletRequest) {
-
         final BigDecimal penalty = new BigDecimal("0.00");
         final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         final String username = sessionRegistry.getSessionUsername(sessionID);
@@ -67,33 +65,32 @@ public class BorrowBookService {
         final AffiliateEntity affiliateEntity = affiliateRepository.findByName(affiliate).orElseThrow(() ->
                 new AffiliateNotFoundException(affiliate));
 
-        if (bookUtil.isCardNumberValid(borrowBookRequest.getCardNumber(), cardNumber)) {
-            if (isOrderQuantityValid(currentQuantity, orderQuantity)) {
-                if (!isOrderExceedingUserBorrowedBooks(userEntity, orderQuantity)
-                        || !isOrderExceedingUserOrderedBooks(userEntity, orderQuantity)) {
-                    for (int i = 0; i < orderQuantity; i++) {
-                        BorrowedBookEntity borrowedBookEntity = new BorrowedBookEntity();
-                        borrowedBookEntity.setBookId(bookId);
-                        borrowedBookEntity.setUserId(userId);
-                        borrowedBookEntity.setPenalty(penalty);
-                        borrowedBookEntity.setCardNumber(cardNumber);
-                        borrowedBookEntity.setAffiliateEntity(affiliateEntity);
-                        decreaseBookQuantityAndSaveInRepository(bookEntity, affiliate);
-                        increaseUserOrderedBooksQuantityAndSaveInRepository(userEntity);
-                        borrowedBookRepository.save(borrowedBookEntity);
-                        sendBookBorrowConfirmationMail(userEntity, bookEntity, borrowedBookEntity, affiliate);
-                        log.info("New borrowed book order with id " + borrowedBookEntity.getId()
-                                + " has been set for user with id " + userEntity.getId());
-                    }
-                } else {
-                    throw new TooManyBorrowedBooksException(userId);
-                }
-            } else {
-                throw new BookOutOfStockException(bookId);
+        if (!bookUtil.isCardNumberValid(borrowBookRequest.getCardNumber(), cardNumber)) {
+            throw new UnableToAuthenticateCardNumberException();
+        }
+        if (!isOrderQuantityValid(currentQuantity, orderQuantity)) {
+            throw new BookOutOfStockException(bookId);
+        }
+
+        if (!isOrderExceedingMaximumBooksAllowedPerUser(userEntity, orderQuantity)) {
+            for (int i = 0; i < orderQuantity; i++) {
+                BorrowedBookEntity borrowedBookEntity = new BorrowedBookEntity();
+                borrowedBookEntity.setBookId(bookId);
+                borrowedBookEntity.setUserId(userId);
+                borrowedBookEntity.setPenalty(penalty);
+                borrowedBookEntity.setCardNumber(cardNumber);
+                borrowedBookEntity.setAffiliateEntity(affiliateEntity);
+                decreaseBookQuantityAndSaveInRepository(bookEntity, affiliate);
+                increaseUserOrderedBooksQuantityAndSaveInRepository(userEntity);
+                borrowedBookRepository.save(borrowedBookEntity);
+                sendBookBorrowConfirmationMail(userEntity, bookEntity, borrowedBookEntity, affiliate);
+                log.info("New borrowed book order with id " + borrowedBookEntity.getId()
+                        + " has been set for user with id " + userEntity.getId());
             }
         } else {
-            throw new InvalidCardNumberFormatException();
+            throw new TooManyBorrowedOrOrderedBooksException(userId);
         }
+
     }
 
     private void decreaseBookQuantityAndSaveInRepository(BookEntity bookEntity, String affiliate) {
@@ -102,7 +99,7 @@ public class BorrowBookService {
     }
 
     private void increaseUserOrderedBooksQuantityAndSaveInRepository(UserEntity userEntity) {
-        userEntity.setBorrowedBooks(userEntity.getBorrowedBooks() + 1);
+        userEntity.setOrderedBooks(userEntity.getOrderedBooks() + 1);
         userRepository.save(userEntity);
     }
 
@@ -123,12 +120,8 @@ public class BorrowBookService {
         return currentQuantity > 0 && orderQuantity <= currentQuantity;
     }
 
-    private boolean isOrderExceedingUserBorrowedBooks(UserEntity userEntity, int orderQuantity) {
-        return userEntity.getBorrowedBooks() + orderQuantity > MAX_BORROWED_BOOKS;
-    }
-
-    private boolean isOrderExceedingUserOrderedBooks(UserEntity userEntity, int orderQuantity) {
-        return userEntity.getOrderedBooks() + orderQuantity > MAX_ORDERED_BOOKS;
+    private boolean isOrderExceedingMaximumBooksAllowedPerUser(UserEntity userEntity, int orderQuantity) {
+        return userEntity.getOrderedBooks() + userEntity.getBorrowedBooks() + orderQuantity > MAX_BOOKS_PER_USER;
     }
 
     private void sendBookBorrowConfirmationMail(UserEntity userEntity, BookEntity bookEntity,

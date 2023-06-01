@@ -9,7 +9,7 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookService;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.entities.user.UserService;
-import com.system.libsystem.exceptions.book.BookAlreadyAcceptedException;
+import com.system.libsystem.exceptions.book.BookAlreadyReturnedException;
 import com.system.libsystem.exceptions.cardnumber.InvalidCardNumberFormatException;
 import com.system.libsystem.rest.util.BookUtil;
 import lombok.AllArgsConstructor;
@@ -39,16 +39,14 @@ public class ReturnBookService {
         BookEntity bookEntity = bookService.getBookById(borrowedBookEntity.getBookId());
         final UserEntity userEntity = userService.getUserById(borrowedBookEntity.getUserId());
 
-        if (!borrowedBookEntity.isClosed()) {
-            if (bookUtil.isCardNumberValid(userEntity.getCardNumber(), returnBookRequest.getCardNumber())) {
-                returnBorrowedBook(borrowedBookEntity, bookEntity);
-                decreaseUserBorrowedBooksQuantityAndSaveInRepository(userEntity);
-            } else {
-                throw new InvalidCardNumberFormatException();
-            }
-        } else {
-            throw new BookAlreadyAcceptedException(borrowedBookEntity.getId());
+        if (borrowedBookEntity.isClosed()) {
+            throw new BookAlreadyReturnedException(borrowedBookEntity.getId());
         }
+        if (!bookUtil.isCardNumberValid(userEntity.getCardNumber(), returnBookRequest.getCardNumber())) {
+            throw new InvalidCardNumberFormatException();
+        }
+        returnBorrowedBook(borrowedBookEntity, bookEntity);
+        decreaseUserBorrowedBooksQuantityAndSaveInRepository(userEntity);
     }
 
     private void returnBorrowedBook(BorrowedBookEntity borrowedBookEntity, BookEntity bookEntity) {

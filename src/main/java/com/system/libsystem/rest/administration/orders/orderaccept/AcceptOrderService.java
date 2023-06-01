@@ -40,20 +40,17 @@ public class AcceptOrderService {
                 .getBorrowedBookId());
         final UserEntity userEntity = userService.getUserById(borrowedBookEntity.getUserId());
 
-        if (bookUtil.isCardNumberValid(userEntity.getCardNumber(), acceptOrderRequest.getCardNumber())) {
-            if (!borrowedBookEntity.isClosed()) {
-                if (!borrowedBookEntity.isAccepted()) {
-                    updateUserOrderedAndBorrowedBooksQuantity(userEntity);
-                    saveBorrowedBookAsConfirmed(borrowedBookEntity, borrowDate, returnDate);
-                } else {
-                    throw new BookAlreadyAcceptedException(borrowedBookEntity.getId());
-                }
-            } else {
-                throw new BookAlreadyReturnedException(borrowedBookEntity.getId());
-            }
-        } else {
+        if (!bookUtil.isCardNumberValid(userEntity.getCardNumber(), acceptOrderRequest.getCardNumber())) {
             throw new InvalidCardNumberFormatException();
         }
+        if (borrowedBookEntity.isClosed()) {
+            throw new BookAlreadyReturnedException(borrowedBookEntity.getId());
+        }
+        if (borrowedBookEntity.isAccepted()) {
+            throw new BookAlreadyAcceptedException(borrowedBookEntity.getId());
+        }
+        updateUserOrderedAndBorrowedBooksQuantity(userEntity);
+        saveBorrowedBookAsConfirmed(borrowedBookEntity, borrowDate, returnDate);
     }
 
     private void saveBorrowedBookAsConfirmed(BorrowedBookEntity borrowedBookEntity, Date borrowDate, Date returnDate) {

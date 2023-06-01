@@ -10,7 +10,7 @@
 
     <label for="quantity">Choose quantity</label>
         <select name="quantity" [(ngModel)]="model.quantity" required>
-            <option *ngFor="let i of setQunatityRange(1, maxQuantity, 1)" [value]="i">{{ i }}</option>
+            <option *ngFor="let i of setQuantityRange(1, maxQuantity, 1)" [value]="i">{{ i }}</option>
     </select>
 
     <label for="cardNumber">Card number</label>
@@ -24,6 +24,9 @@
 
     <div>
         <button type="submit" [disabled]="!borrowForm.valid">Borrow</button>
+        <div *ngIf="bookOutOfStock">This book is currently out of stock</div>
+        <div *ngIf="invalidCardNumber">Invalid card number</div>
+        <div *ngIf="tooManyBooks">You have reached the limit of your ordered or borrowed books</div>
     </div>
 
 </form>

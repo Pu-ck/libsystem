@@ -13,6 +13,8 @@ import { NewPasswordComponent } from './components/password-reminder/new-passwor
 import { BooksComponent } from './components/books/books.component';
 import { BookDetailsComponent } from './components/books/book-details/book-details.component';
 import { BorrowBookComponent } from './components/books/book-details/borrow-book/borrow-book.component';
+import { BorrowedComponent } from './components/books/book-details/borrow-book/borrowed/borrowed.component';
+import { FavouritesComponent } from './components/user-profile/favourites/favourites.component';
 
 const routes: Routes = [
   {path: '', canActivate:[AuthenticationGuard], children: [
@@ -23,9 +25,11 @@ const routes: Routes = [
     { path: 'user-profile', component: UserProfileComponent },
     { path: 'user-profile/books', component: UserBooksComponent },
     { path: 'user-profile/change-password', component: ChangePasswordComponent },
+    { path: 'user-profile/favourites', component: FavouritesComponent },
     { path: 'books', component: BooksComponent },
     { path: 'books/:id', component: BookDetailsComponent },
     { path: 'books/:id/borrow-book', component: BorrowBookComponent },
+    { path: 'books/:id/borrow-book/borrowed', component: BorrowedComponent },
     { path: 'password-reminder', component: PasswordReminderComponent },
     { path: 'password-reminder/new-password', component: NewPasswordComponent },
   ]},
