@@ -6,7 +6,6 @@ import com.system.libsystem.entities.borrowedbook.BorrowedBookEntity;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookRepository;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookService;
 import com.system.libsystem.entities.user.UserEntity;
-import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.exceptions.book.BookAlreadyExtendedException;
 import com.system.libsystem.exceptions.book.BookAlreadyReturnedException;
@@ -19,12 +18,12 @@ import com.system.libsystem.session.SessionRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -36,7 +35,6 @@ public class UserProfileService {
     private final BorrowedBookRepository borrowedBookRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final SessionRegistry sessionRegistry;
-    private final UserRepository userRepository;
     private final MailSender mailSender;
     private final BorrowedBookService borrowedBookService;
     private final UserService userService;
@@ -46,26 +44,20 @@ public class UserProfileService {
     private String adminMail;
 
     public List<String> getUserProfileInformation(HttpServletRequest httpServletRequest) {
-        final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        final String username = sessionRegistry.getSessionUsername(sessionID);
-        final UserEntity userEntity = userService.getUserByUsername(username);
-
+        final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
         return List.of(userEntity.getUsername(), userEntity.getFirstName(), userEntity.getLastName(),
                 userEntity.getCardNumber().toString(), Integer.toString(userEntity.getBorrowedBooks()),
                 Integer.toString(userEntity.getOrderedBooks()));
     }
 
     public List<UserBook> getUserBooks(HttpServletRequest httpServletRequest) {
-        final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        final String username = sessionRegistry.getSessionUsername(sessionID);
-        final UserEntity userEntity = userService.getUserByUsername(username);
+        final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
         final Long userId = userEntity.getId();
-
-        List<UserBook> userBooks = new ArrayList<>();
+        final List<UserBook> userBooks = new ArrayList<>();
 
         for (BorrowedBookEntity borrowedBookEntity : borrowedBookRepository.findByUserId(userId)) {
             final BookEntity bookEntity = bookService.getBookById(borrowedBookEntity.getBookId());
-            UserBook userBook = new UserBook();
+            final UserBook userBook = new UserBook();
             setUserBookDetails(userBook, borrowedBookEntity, bookEntity);
 
             if (borrowedBookEntity.isClosed()) {
@@ -84,34 +76,27 @@ public class UserProfileService {
     }
 
     public void changeUserPassword(ChangePasswordRequest changePasswordRequest, HttpServletRequest httpServletRequest) {
-        final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        final String username = sessionRegistry.getSessionUsername(sessionID);
-
-        UserEntity userEntity = userService.getUserByUsername(username);
-
+        final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
         final String oldPassword = userEntity.getPassword();
         final String newPassword = changePasswordRequest.getNewPassword();
         final String requestOldPassword = changePasswordRequest.getOldPassword();
 
         if (!isRequestOldPasswordMatchingOldPassword(requestOldPassword, oldPassword)) {
-            log.error("The validation password provided by user " + username + " with id " + userEntity.getId()
+            log.error("The validation password provided by user " + userEntity.getUsername() + " with id " + userEntity.getId()
                     + " is not matching the old password");
             throw new OldPasswordNotMatchingException();
         }
         if (isNewPasswordSameAsOldPassword(newPassword, oldPassword)) {
-            log.error("The new password set by user " + username + " with id " + userEntity.getId()
+            log.error("The new password set by user " + userEntity.getUsername() + " with id " + userEntity.getId()
                     + " is the same as old one");
             throw new NewPasswordDuplicatedException();
         }
-        saveNewPassword(userEntity, newPassword);
+        userService.setOrUpdateUserPassword(userEntity, newPassword);
         sendNewPasswordSetInApplicationMail(userEntity);
     }
 
     public void extendBookReturnDate(ExtendBookRequest extendBookRequest, HttpServletRequest httpServletRequest) {
-        final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        final String username = sessionRegistry.getSessionUsername(sessionID);
-
-        final UserEntity userEntity = userService.getUserByUsername(username);
+        final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
         final BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById(extendBookRequest
                 .getBorrowedBookId());
 
@@ -121,6 +106,7 @@ public class UserProfileService {
         if (borrowedBookEntity.isExtended()) {
             throw new BookAlreadyExtendedException(borrowedBookEntity.getId());
         }
+
         borrowedBookEntity.setExtended(true);
         borrowedBookRepository.save(borrowedBookEntity);
         sendBookReturnDateExtensionRequestMail(userEntity, borrowedBookEntity);
@@ -128,18 +114,17 @@ public class UserProfileService {
                 + borrowedBookEntity.getId() + " has been issued by user with id " + userEntity.getId());
     }
 
-    public Set<BookEntity> getUserFavouriteBooks(HttpServletRequest httpServletRequest) {
-        final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        final String username = sessionRegistry.getSessionUsername(sessionID);
-        final UserEntity userEntity = userService.getUserByUsername(username);
-        return userEntity.getFavouriteBooks();
-    }
-
-    private void saveNewPassword(UserEntity userEntity, String newPassword) {
-        String encodedPassword = bCryptPasswordEncoder.encode(newPassword);
-        userEntity.setPassword(encodedPassword);
-        userRepository.save(userEntity);
-        log.info("New password for user with id " + userEntity.getId() + " has been set (via user profile)");
+    public Set<FavouriteBookDTO> getUserFavouriteBooks(HttpServletRequest httpServletRequest) {
+        final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
+        final Set<FavouriteBookDTO> favouriteBookDTOs = new HashSet<>();
+        for (BookEntity bookEntity : userEntity.getFavouriteBooks()) {
+            FavouriteBookDTO favouriteBookDTO = new FavouriteBookDTO();
+            favouriteBookDTO.setId(bookEntity.getId());
+            favouriteBookDTO.setTitle(bookEntity.getTitle());
+            favouriteBookDTO.setAuthors(bookEntity.getFormattedAuthorsAsString());
+            favouriteBookDTOs.add(favouriteBookDTO);
+        }
+        return favouriteBookDTOs;
     }
 
     private void setUserBookDetails(UserBook userBook, BorrowedBookEntity borrowedBookEntity, BookEntity bookEntity) {

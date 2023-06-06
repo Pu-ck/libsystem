@@ -53,7 +53,9 @@ public class MailBuilder {
 
     public static String getNewPasswordSetInApplicationMailBody(String firstName, String lastName) {
         return "Hello " + firstName + " " + lastName + "," +
-                "<p>Your new password has been successfully updated.";
+                "<p>Your new password has been successfully updated. From now on use the new password to log into " +
+                "the application. If you haven't changed the password and yet you received this email, contact the " +
+                "administration if you suspect someone can have an unauthorized access to your account.";
     }
 
     public static String getBookBorrowMailBody(String firstName, String lastName, String title, String author,

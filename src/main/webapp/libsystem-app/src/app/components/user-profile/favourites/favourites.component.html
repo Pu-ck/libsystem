@@ -12,8 +12,10 @@ Your favourite books
             <a [routerLink]="'/books/' + favouriteBook.id">{{ favouriteBook.title }}</a> by
         </td>
         <td>
-            <a>{{ favouriteBook.formattedAuthorsAsString }}</a>
+            <a>{{ favouriteBook.authors }}</a>
         </td>
       </tr>
     </tbody>
 </table>
+
+<p *ngIf="favouriteBooks.length === 0">Your list of favourite books is currently empty</p>

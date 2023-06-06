@@ -36,13 +36,10 @@ public class ReadyOrderService {
 
     @Transactional
     public void setOrderStatus(ReadyOrderRequest readyOrderRequest) {
-
         final Date currentDate = new Date(System.currentTimeMillis());
         final Date readyDate = Date.valueOf(currentDate.toLocalDate().plusDays(DAYS_TO_PICK_UP_ORDERED_BOOK));
-
-        BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById
+        final BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById
                 (readyOrderRequest.getBorrowedBookId());
-
         final UserEntity userEntity = userService.getUserById(borrowedBookEntity.getUserId());
         final BookEntity bookEntity = bookService.getBookById(borrowedBookEntity.getBookId());
 

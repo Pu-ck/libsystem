@@ -29,6 +29,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -37,8 +38,8 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -67,7 +68,7 @@ class UserProfileServiceTest {
 
     @BeforeEach
     void commonSetupForTests() {
-        UserEntity userEntity = new UserEntity();
+        final UserEntity userEntity = new UserEntity();
         userEntity.setId(1L);
         userEntity.setPassword("password");
         userEntity.setUsername("username");
@@ -79,10 +80,11 @@ class UserProfileServiceTest {
         userEntity.setFirstName("firstName");
         userEntity.setLastName("lastName");
 
-        Set<BookEntity> userFavouriteBooks = new HashSet<>();
+        final Set<BookEntity> userFavouriteBooks = new HashSet<>();
         userFavouriteBooks.add(new BookEntity());
         userEntity.setFavouriteBooks(userFavouriteBooks);
 
+        when(userService.getCurrentlyLoggedUser(any(HttpServletRequest.class))).thenReturn(userEntity);
         when(sessionRegistry.getSessionUsername(anyString())).thenReturn("username");
         when(userService.getUserByUsername(anyString())).thenReturn(userEntity);
     }
@@ -93,21 +95,21 @@ class UserProfileServiceTest {
         final YearOfPrintEntity yearOfPrintEntity = getDummyYearOfPrintEntity();
 
         final AffiliateBook affiliateBook = getDummyAffiliateBook();
-        Set<AffiliateBook> affiliateBooks = new HashSet<>();
+        final Set<AffiliateBook> affiliateBooks = new HashSet<>();
         affiliateBooks.add(affiliateBook);
 
-        Set<AffiliateEntity> affiliates = new HashSet<>();
-        AffiliateEntity affiliateEntity = getDummyAffiliateEntity();
+        final Set<AffiliateEntity> affiliates = new HashSet<>();
+        final AffiliateEntity affiliateEntity = getDummyAffiliateEntity();
 
         final Set<AuthorEntity> authors = new HashSet<>();
-        AuthorEntity authorEntity = getDummyAuthorEntity();
+        final AuthorEntity authorEntity = getDummyAuthorEntity();
 
         final Set<GenreEntity> genres = new HashSet<>();
-        GenreEntity genreEntity = getDummyGenreEntity();
+        final GenreEntity genreEntity = getDummyGenreEntity();
 
         final BookEntity bookEntity = getDummyBookEntity(publisherEntity, affiliates, affiliateBooks, authors, genres, yearOfPrintEntity);
 
-        Set<BookEntity> bookEntities = new HashSet<>();
+        final Set<BookEntity> bookEntities = new HashSet<>();
         bookEntities.add(bookEntity);
         affiliateEntity.setBooks(bookEntities);
         affiliates.add(affiliateEntity);
@@ -124,8 +126,7 @@ class UserProfileServiceTest {
 
     @Test
     void getUserProfileInformation_WithValidUser_ReturnsListOfUserProfileInformation() {
-        List<String> userProfileInformation = userProfileService.getUserProfileInformation(getMockedHttpServletRequest());
-
+        final List<String> userProfileInformation = userProfileService.getUserProfileInformation(getMockedHttpServletRequest());
         assertNotNull(userProfileInformation);
         assertEquals(6, userProfileInformation.size());
         assertEquals("username", userProfileInformation.get(0));
@@ -138,8 +139,7 @@ class UserProfileServiceTest {
 
     @Test
     void getUserBooks_WithValidUser_ReturnsListOfUserBooks() {
-        List<UserBook> userBooks = userProfileService.getUserBooks(getMockedHttpServletRequest());
-
+        final List<UserBook> userBooks = userProfileService.getUserBooks(getMockedHttpServletRequest());
         assertNotNull(userBooks);
         assertEquals(1, userBooks.size());
         assertEquals("Title 1", userBooks.get(0).getTitle());
@@ -157,28 +157,31 @@ class UserProfileServiceTest {
     }
 
     @Test
-    void changeUserPassword_WithValidUser_SetsNewPasswordForUser() {
-        UserEntity userEntity = new UserEntity();
+    void changeUserPassword_WithValidUserAndChangePasswordRequest_SetsNewPasswordForUser() {
+        final UserEntity userEntity = new UserEntity();
         userEntity.setUsername("username");
         userEntity.setPassword("oldPassword");
 
-        ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
+        final ChangePasswordRequest changePasswordRequest = new ChangePasswordRequest();
         changePasswordRequest.setOldPassword("oldPassword");
         changePasswordRequest.setNewPassword("newPassword");
 
+        when(userService.getCurrentlyLoggedUser(any(HttpServletRequest.class))).thenReturn(userEntity);
         when(bCryptPasswordEncoder.matches("oldPassword", "oldPassword")).thenReturn(true);
-        when(bCryptPasswordEncoder.matches("password", "newPassword")).thenReturn(false);
+        when(bCryptPasswordEncoder.matches("oldPassword", "newPassword")).thenReturn(false);
         when(bCryptPasswordEncoder.encode("newPassword")).thenReturn("newPassword");
-
         when(userService.getUserByUsername("username")).thenReturn(userEntity);
+
         userProfileService.changeUserPassword(changePasswordRequest, getMockedHttpServletRequest());
+        verify(userService).setOrUpdateUserPassword(userEntity, "newPassword");
+        userEntity.setPassword("newPassword");
 
         assertEquals("newPassword", userEntity.getPassword());
     }
 
     @Test
-    void extendBookReturnDate_WithValidBorrowedBook_SetsBorrowedBookExtendedStatusToTrue() {
-        BorrowedBookEntity borrowedBookEntity = new BorrowedBookEntity();
+    void extendBookReturnDate_WithValidBorrowedBookAndExtendBookRequest_SetsBorrowedBookExtendedStatusToTrue() {
+        final BorrowedBookEntity borrowedBookEntity = new BorrowedBookEntity();
         borrowedBookEntity.setId(1L);
         borrowedBookEntity.setExtended(false);
         borrowedBookEntity.setClosed(false);
@@ -187,7 +190,7 @@ class UserProfileServiceTest {
         borrowedBookEntity.setAffiliateEntity(new AffiliateEntity());
         borrowedBookEntity.setPenalty(BigDecimal.valueOf(0.00));
 
-        ExtendBookRequest extendBookRequest = new ExtendBookRequest(1L, 11234567890L);
+        final ExtendBookRequest extendBookRequest = new ExtendBookRequest(1L, 11234567890L);
         when(borrowedBookService.getBorrowedBookById(1L)).thenReturn(borrowedBookEntity);
 
         when(borrowedBookService.getBorrowedBookById(1L)).thenReturn(borrowedBookEntity);
@@ -198,33 +201,33 @@ class UserProfileServiceTest {
 
     @Test
     void getUserFavouriteBooks_withValidUser_ReturnsSetOfUserFavouriteBooks() {
-        Set<BookEntity> userFavouriteBooks = userProfileService.getUserFavouriteBooks(getMockedHttpServletRequest());
-        assertNotNull(userFavouriteBooks);
-        assertEquals(1, userFavouriteBooks.size());
+        final Set<FavouriteBookDTO> userFavouriteBookDTOs = userProfileService.getUserFavouriteBooks(getMockedHttpServletRequest());
+        assertNotNull(userFavouriteBookDTOs);
+        assertEquals(1, userFavouriteBookDTOs.size());
     }
 
     MockHttpServletRequest getMockedHttpServletRequest() {
-        MockHttpServletRequest mockHttpServletRequest = new MockHttpServletRequest();
+        final MockHttpServletRequest mockHttpServletRequest = new MockHttpServletRequest();
         mockHttpServletRequest.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + anyString());
         return mockHttpServletRequest;
     }
 
     PublisherEntity getDummyPublisherEntity() {
-        PublisherEntity publisherEntity = new PublisherEntity();
+        final PublisherEntity publisherEntity = new PublisherEntity();
         publisherEntity.setName("Publisher 1");
         publisherEntity.setId(1L);
         return publisherEntity;
     }
 
     YearOfPrintEntity getDummyYearOfPrintEntity() {
-        YearOfPrintEntity yearOfPrintEntity = new YearOfPrintEntity();
+        final YearOfPrintEntity yearOfPrintEntity = new YearOfPrintEntity();
         yearOfPrintEntity.setYearOfPrint(1999);
         yearOfPrintEntity.setId(1L);
         return yearOfPrintEntity;
     }
 
     AffiliateBook getDummyAffiliateBook() {
-        AffiliateBook affiliateBook = new AffiliateBook();
+        final AffiliateBook affiliateBook = new AffiliateBook();
         affiliateBook.setBookId(1L);
         affiliateBook.setAffiliateId(1L);
         affiliateBook.setCurrentQuantity(2);
@@ -233,7 +236,7 @@ class UserProfileServiceTest {
     }
 
     AffiliateEntity getDummyAffiliateEntity() {
-        AffiliateEntity affiliateEntity = new AffiliateEntity();
+        final AffiliateEntity affiliateEntity = new AffiliateEntity();
         affiliateEntity.setPhoneNumber("123123123");
         affiliateEntity.setAddress("Address");
         affiliateEntity.setName("Affiliate 1");
@@ -241,14 +244,14 @@ class UserProfileServiceTest {
     }
 
     AuthorEntity getDummyAuthorEntity() {
-        AuthorEntity authorEntity = new AuthorEntity();
+        final AuthorEntity authorEntity = new AuthorEntity();
         authorEntity.setName("Author 1");
         authorEntity.setId(1L);
         return authorEntity;
     }
 
     GenreEntity getDummyGenreEntity() {
-        GenreEntity genreEntity = new GenreEntity();
+        final GenreEntity genreEntity = new GenreEntity();
         genreEntity.setName("Genre 1");
         genreEntity.setId(1L);
         return genreEntity;
@@ -257,7 +260,7 @@ class UserProfileServiceTest {
     BookEntity getDummyBookEntity(PublisherEntity publisherEntity, Set<AffiliateEntity> affiliates,
                                   Set<AffiliateBook> affiliateBooks, Set<AuthorEntity> authors, Set<GenreEntity> genres,
                                   YearOfPrintEntity yearOfPrintEntity) {
-        BookEntity bookEntity = new BookEntity();
+        final BookEntity bookEntity = new BookEntity();
         bookEntity.setId(1L);
         bookEntity.setTitle("Title 1");
         bookEntity.setPublisherEntity(publisherEntity);
@@ -271,7 +274,7 @@ class UserProfileServiceTest {
     }
 
     BorrowedBookEntity getDummyBorrowedBookEntity(AffiliateEntity affiliateEntity) {
-        BorrowedBookEntity borrowedBookEntity = new BorrowedBookEntity();
+        final BorrowedBookEntity borrowedBookEntity = new BorrowedBookEntity();
         borrowedBookEntity.setId(1L);
         borrowedBookEntity.setBookId(1L);
         borrowedBookEntity.setExtended(false);

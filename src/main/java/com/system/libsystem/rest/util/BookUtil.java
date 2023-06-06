@@ -20,13 +20,11 @@ public final class BookUtil {
     private final AffiliateBookRepository affiliateBookRepository;
 
     public void setCurrentQuantityInAffiliate(BookEntity bookEntity, String affiliate, int changeQuantityValue) {
-
         final AffiliateEntity affiliateEntity = bookEntity.getAffiliates().stream()
                 .filter(searchedAffiliate -> searchedAffiliate.getName().equals(affiliate))
                 .findFirst()
                 .orElseThrow(() -> new AffiliateNotFoundException(affiliate));
-
-        AffiliateBook affiliateBook = affiliateBookRepository.findByBookIdAndAffiliateId(bookEntity.getId(),
+        final AffiliateBook affiliateBook = affiliateBookRepository.findByBookIdAndAffiliateId(bookEntity.getId(),
                 affiliateEntity.getId()).orElseThrow(() ->
                 new AffiliateBookNotFoundException(affiliate, bookEntity.getId()));
 

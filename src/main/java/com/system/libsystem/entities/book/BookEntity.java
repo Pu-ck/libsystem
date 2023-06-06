@@ -1,7 +1,6 @@
 package com.system.libsystem.entities.book;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.system.libsystem.entities.affiliate.AffiliateEntity;
 import com.system.libsystem.entities.affiliatebook.AffiliateBook;
@@ -14,9 +13,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -78,6 +76,9 @@ public class BookEntity {
 
     @Column(nullable = false)
     private String description;
+
+    @Column(nullable = false)
+    private Date addDate;
 
     public String getFormattedAuthorsAsString() {
         return this.getAuthors().stream().map(AuthorEntity::getName).collect(Collectors.joining(", "));

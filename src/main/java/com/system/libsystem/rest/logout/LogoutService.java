@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 public class LogoutService {
 
     public ResponseEntity<Void> logout(HttpServletRequest httpServletRequest) {
-        HttpSession session = httpServletRequest.getSession(false);
+        final HttpSession session = httpServletRequest.getSession(false);
         if (session != null) {
             session.invalidate();
         }

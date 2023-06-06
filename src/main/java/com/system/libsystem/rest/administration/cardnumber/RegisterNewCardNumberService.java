@@ -28,7 +28,7 @@ public class RegisterNewCardNumberService {
         validateCardNumberAndPeselNumberFormats(registerNewCardNumberRequest);
         checkIfCardNumberIsAlreadyRegistered(registerNewCardNumberRequest);
 
-        CardNumberEntity cardNumberEntity = new CardNumberEntity();
+        final CardNumberEntity cardNumberEntity = new CardNumberEntity();
         final String hashedPeselNumber = Optional.ofNullable(HashingUtil.hashData(registerNewCardNumberRequest
                 .getPeselNumber())).orElseThrow(() -> new HashingException("Unable to hash the PESEL number"));
 

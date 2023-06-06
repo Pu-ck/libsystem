@@ -7,13 +7,16 @@ import com.system.libsystem.exceptions.cardnumber.InvalidCardNumberFormatExcepti
 import com.system.libsystem.exceptions.registration.InvalidEmailAddressFormat;
 import com.system.libsystem.exceptions.registration.InvalidPasswordLengthException;
 import com.system.libsystem.exceptions.registration.UsernameAlreadyTakenException;
+import com.system.libsystem.session.SessionRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -31,6 +34,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ConfirmationTokenService confirmationTokenService;
+    private final SessionRegistry sessionRegistry;
 
     @Override
     public UserEntity loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -55,26 +59,32 @@ public class UserService implements UserDetailsService {
     public String registerUser(UserEntity userEntity) {
         log.info("New user " + userEntity.getUsername() + " with id " + userEntity.getId() + " registration attempt");
         validateUserRegistrationData(userEntity);
-
-        String encodedPassword = bCryptPasswordEncoder.encode(userEntity.getPassword());
-        userEntity.setPassword(encodedPassword);
-        userRepository.save(userEntity);
+        setOrUpdateUserPassword(userEntity, userEntity.getPassword());
         log.info("New user with id " + userEntity.getId() + " account created");
-
-        String token = UUID.randomUUID().toString();
-        ConfirmationTokenEntity confirmationTokenEntity = new ConfirmationTokenEntity(token, userEntity);
+        final String token = UUID.randomUUID().toString();
+        final ConfirmationTokenEntity confirmationTokenEntity = new ConfirmationTokenEntity(token, userEntity);
         confirmationTokenService.saveConfirmationToken(confirmationTokenEntity);
-
         return token;
     }
 
     public void enableUser(String username) {
-        UserEntity userEntity = userRepository.findByUsername(username)
+        final UserEntity userEntity = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(FIND_USER_EXCEPTION_LOG + username));
         userEntity.setEnabled(true);
-        loadUserByUsername(username).setEnabled(true);
+        userRepository.save(userEntity);
         log.info("New user with id " + userEntity.getId() + " enabled");
-        userRepository.enableUser(username);
+    }
+
+    public void setOrUpdateUserPassword(UserEntity userEntity, String newPassword) {
+        final String encodedPassword = bCryptPasswordEncoder.encode(newPassword);
+        userEntity.setPassword(encodedPassword);
+        userRepository.save(userEntity);
+    }
+
+    public UserEntity getCurrentlyLoggedUser(HttpServletRequest httpServletRequest) {
+        final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
+        final String username = sessionRegistry.getSessionUsername(sessionID);
+        return getUserByUsername(username);
     }
 
     private void validateUserRegistrationData(UserEntity userEntity) {

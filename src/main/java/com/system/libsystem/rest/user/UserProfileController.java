@@ -27,7 +27,7 @@ public class UserProfileController {
     }
 
     @GetMapping("/favourites")
-    public Set<BookEntity> getUserFavouriteBooks(HttpServletRequest httpServletRequest) {
+    public Set<FavouriteBookDTO> getUserFavouriteBooks(HttpServletRequest httpServletRequest) {
         return userProfileService.getUserFavouriteBooks(httpServletRequest);
     }
 

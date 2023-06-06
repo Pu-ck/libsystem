@@ -27,13 +27,9 @@ public class FavouriteBookService {
     private final UserService userService;
 
     public void addBookToFavourites(HttpServletRequest httpServletRequest, FavouriteBookRequest favouriteBookRequest) {
-        final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        final String username = sessionRegistry.getSessionUsername(sessionID);
-        UserEntity userEntity = userService.getUserByUsername(username);
-
+        final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
         final BookEntity bookEntity = bookRepository.findById(favouriteBookRequest.getBookId()).orElseThrow(() ->
                 new BookNotFoundException(favouriteBookRequest.getBookId()));
-
         final Set<BookEntity> updatedFavouriteBooks = userEntity.getFavouriteBooks();
         updatedFavouriteBooks.add(bookEntity);
         updateUserFavouriteBooksAndSaveInRepository(userEntity, updatedFavouriteBooks);
@@ -43,7 +39,6 @@ public class FavouriteBookService {
         final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         final String username = sessionRegistry.getSessionUsername(sessionID);
         UserEntity userEntity = userService.getUserByUsername(username);
-
         final BookEntity bookEntity = bookRepository.findById(bookId).orElseThrow(() -> new BookNotFoundException(bookId));
 
         if (!userEntity.getFavouriteBooks().contains(bookEntity)) {

@@ -8,12 +8,12 @@ import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
+import com.system.libsystem.scheduler.SchedulerDateUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -32,10 +32,8 @@ public class ReturnDateCheckerTask {
     private final BookService bookService;
 
     public void checkBorrowedBooksReturnDates() {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        final Date currentDate = calendar.getTime();
-        List<BorrowedBookEntity> borrowedBookEntities = borrowedBookRepository.findAll();
+        final Date currentDate = SchedulerDateUtil.getCurrentDate();
+        final List<BorrowedBookEntity> borrowedBookEntities = borrowedBookRepository.findAll();
 
         for (BorrowedBookEntity borrowedBookEntity : borrowedBookEntities) {
             if (borrowedBookEntity.isAccepted() && !borrowedBookEntity.isClosed()) {

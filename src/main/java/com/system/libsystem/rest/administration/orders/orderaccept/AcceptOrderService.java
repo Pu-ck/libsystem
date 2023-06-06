@@ -31,12 +31,10 @@ public class AcceptOrderService {
     private final UserService userService;
 
     public void confirmOrder(AcceptOrderRequest acceptOrderRequest) {
-
         final Date borrowDate = new Date(System.currentTimeMillis());
         final LocalDate dateMonthLater = borrowDate.toLocalDate().plusMonths(BORROWED_BOOK_KEEP_TIME);
         final Date returnDate = Date.valueOf(dateMonthLater);
-
-        BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById(acceptOrderRequest
+        final BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById(acceptOrderRequest
                 .getBorrowedBookId());
         final UserEntity userEntity = userService.getUserById(borrowedBookEntity.getUserId());
 
@@ -49,6 +47,7 @@ public class AcceptOrderService {
         if (borrowedBookEntity.isAccepted()) {
             throw new BookAlreadyAcceptedException(borrowedBookEntity.getId());
         }
+
         updateUserOrderedAndBorrowedBooksQuantity(userEntity);
         saveBorrowedBookAsConfirmed(borrowedBookEntity, borrowDate, returnDate);
     }

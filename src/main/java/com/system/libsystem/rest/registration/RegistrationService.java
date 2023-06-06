@@ -42,7 +42,7 @@ public class RegistrationService {
 
     public ResponseEntity<RegistrationResponse> register(RegistrationRequest registrationRequest) {
         if (isCardNumberAlreadyRegistered(registrationRequest)) {
-            UserEntity userEntity = new UserEntity();
+            final UserEntity userEntity = new UserEntity();
             setUserDetails(registrationRequest, userEntity);
 
             final LocalDateTime datetime = LocalDateTime.now();
@@ -55,7 +55,7 @@ public class RegistrationService {
             sendAccountRegistrationMail(registrationRequest);
             log.info("New account created for user with id " + userEntity.getId());
 
-            RegistrationResponse registrationResponse = new RegistrationResponse();
+            final RegistrationResponse registrationResponse = new RegistrationResponse();
             registrationResponse.setToken(token);
 
             return ResponseEntity.ok(registrationResponse);
@@ -68,7 +68,7 @@ public class RegistrationService {
 
     @Transactional
     public void confirmToken(String token) {
-        ConfirmationTokenEntity confirmationTokenEntity = confirmationTokenService.getToken(token).orElseThrow(() ->
+        final ConfirmationTokenEntity confirmationTokenEntity = confirmationTokenService.getToken(token).orElseThrow(() ->
                 new ConfirmationTokenNotFoundException(token));
         userService.enableUser(confirmationTokenEntity.getUserEntity().getUsername());
         sendAccountEnabledMail(confirmationTokenEntity);

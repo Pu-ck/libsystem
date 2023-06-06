@@ -33,10 +33,9 @@ public class ReturnBookService {
 
     @Transactional
     public void returnBook(ReturnBookRequest returnBookRequest) {
-
-        BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById(returnBookRequest
+        final BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById(returnBookRequest
                 .getBorrowedBookId());
-        BookEntity bookEntity = bookService.getBookById(borrowedBookEntity.getBookId());
+        final BookEntity bookEntity = bookService.getBookById(borrowedBookEntity.getBookId());
         final UserEntity userEntity = userService.getUserById(borrowedBookEntity.getUserId());
 
         if (borrowedBookEntity.isClosed()) {

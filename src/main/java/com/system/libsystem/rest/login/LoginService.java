@@ -25,8 +25,8 @@ public class LoginService {
 
         final UserEntity userEntity = userService.loadUserByUsername(loginRequest.getUsername());
         final String sessionID = sessionRegistry.registerSession(loginRequest.getUsername());
+        final LoginSessionResponse loginSessionResponse = new LoginSessionResponse();
 
-        LoginSessionResponse loginSessionResponse = new LoginSessionResponse();
         loginSessionResponse.setSessionID(sessionID);
         log.info("New user with id " + userEntity.getId() + " has logged in");
 

@@ -36,8 +36,8 @@ public class FilterBooksService {
         final String sortType = Optional.ofNullable(requestParameters.get("sortType")).orElse("");
         final String sortDirection = Optional.ofNullable(requestParameters.get("sortDirection")).orElse("");
 
-        List<String> genres = new ArrayList<>();
-        List<String> affiliates = new ArrayList<>();
+        final List<String> genres = new ArrayList<>();
+        final List<String> affiliates = new ArrayList<>();
         setFilterListParameters(requestParameters, genres, affiliates);
 
         final List<String> filterParameters = Arrays.asList(title, author, publisher, yearOfPrint);

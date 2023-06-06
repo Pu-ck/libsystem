@@ -13,6 +13,11 @@ import javax.persistence.*;
 @Entity
 public class ConfirmationTokenEntity {
 
+    public ConfirmationTokenEntity(String token, UserEntity userEntity) {
+        this.token = token;
+        this.userEntity = userEntity;
+    }
+
     @Id
     @SequenceGenerator(name = "confirmation_token_id_seq", sequenceName = "confirmation_token_id_seq")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "confirmation_token_id_seq")
@@ -27,10 +32,5 @@ public class ConfirmationTokenEntity {
             name = "user_id"
     )
     private UserEntity userEntity;
-
-    public ConfirmationTokenEntity(String token, UserEntity userEntity) {
-        this.token = token;
-        this.userEntity = userEntity;
-    }
 
 }

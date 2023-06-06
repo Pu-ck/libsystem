@@ -22,7 +22,6 @@ import com.system.libsystem.rest.util.BookUtil;
 import com.system.libsystem.session.SessionRegistry;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -50,12 +49,8 @@ public class BorrowBookService {
     @Transactional
     public void borrow(BorrowBookRequest borrowBookRequest, HttpServletRequest httpServletRequest) {
         final BigDecimal penalty = new BigDecimal("0.00");
-        final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        final String username = sessionRegistry.getSessionUsername(sessionID);
-
-        final UserEntity userEntity = userService.getUserByUsername(username);
-        BookEntity bookEntity = bookService.getBookById(borrowBookRequest.getBookId());
-
+        final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
+        final BookEntity bookEntity = bookService.getBookById(borrowBookRequest.getBookId());
         final Long userId = userEntity.getId();
         final Long cardNumber = userEntity.getCardNumber();
         final Long bookId = bookEntity.getId();
@@ -109,7 +104,7 @@ public class BorrowBookService {
                 .findFirst()
                 .orElseThrow(() -> new AffiliateNotFoundException(affiliate));
 
-        AffiliateBook affiliateBook = affiliateBookRepository.findByBookIdAndAffiliateId(bookEntity.getId(),
+        final AffiliateBook affiliateBook = affiliateBookRepository.findByBookIdAndAffiliateId(bookEntity.getId(),
                 affiliateEntity.getId()).orElseThrow(() ->
                 new AffiliateNotFoundException(affiliate));
 

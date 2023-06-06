@@ -3,11 +3,10 @@ package com.system.libsystem.rest.passwordreminder;
 import com.system.libsystem.entities.passwordremindertoken.PasswordReminderTokenEntity;
 import com.system.libsystem.entities.passwordremindertoken.PasswordReminderTokenRepository;
 import com.system.libsystem.entities.user.UserEntity;
-import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.entities.user.UserService;
+import com.system.libsystem.exceptions.cardnumber.UnableToAuthenticateCardNumberException;
 import com.system.libsystem.exceptions.passwordreminder.PasswordReminderTokenExpiredException;
 import com.system.libsystem.exceptions.passwordreminder.PasswordReminderTokenNotFoundException;
-import com.system.libsystem.exceptions.cardnumber.UnableToAuthenticateCardNumberException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
 import com.system.libsystem.rest.util.BookUtil;
@@ -15,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
@@ -30,8 +28,6 @@ public class PasswordReminderService {
     private static final int PASSWORD_REMINDER_TOKEN_EXPIRATION_TIME = 8;
 
     private final MailSender mailSender;
-    private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final PasswordReminderTokenRepository passwordReminderTokenRepository;
     private final UserService userService;
     private final BookUtil bookUtil;
@@ -63,10 +59,7 @@ public class PasswordReminderService {
                 .findByToken(resetPasswordRequest.getToken()).orElseThrow(()
                         -> new PasswordReminderTokenNotFoundException(resetPasswordRequest.getToken()));
         final UserEntity userEntity = userService.getUserById(passwordReminderTokenEntity.getUserEntity().getId());
-
-        String encodedPassword = bCryptPasswordEncoder.encode(resetPasswordRequest.getPassword());
-        userEntity.setPassword(encodedPassword);
-        userRepository.save(userEntity);
+        userService.setOrUpdateUserPassword(userEntity, resetPasswordRequest.getPassword());
         sendNewPasswordSetMail(userEntity);
         log.info("New password has been set for user with id " + userEntity.getId());
     }

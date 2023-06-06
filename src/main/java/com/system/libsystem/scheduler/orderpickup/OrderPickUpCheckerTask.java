@@ -10,12 +10,12 @@ import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
 import com.system.libsystem.rest.util.BookUtil;
+import com.system.libsystem.scheduler.SchedulerDateUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -33,10 +33,8 @@ public class OrderPickUpCheckerTask {
 
     @Transactional
     public void checkIfOrderedBooksWerePickedUp() {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        final Date currentDate = calendar.getTime();
-        List<BorrowedBookEntity> borrowedBookEntities = borrowedBookRepository.findAll();
+        final Date currentDate = SchedulerDateUtil.getCurrentDate();
+        final List<BorrowedBookEntity> borrowedBookEntities = borrowedBookRepository.findAll();
 
         for (BorrowedBookEntity borrowedBookEntity : borrowedBookEntities) {
             if (borrowedBookEntity.isReady() && !borrowedBookEntity.isClosed()) {

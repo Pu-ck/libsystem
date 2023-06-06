@@ -1,5 +1,6 @@
 package com.system.libsystem.scheduler;
 
+import com.system.libsystem.scheduler.newbooks.NewBooksAddedCheckerTask;
 import com.system.libsystem.scheduler.orderpickup.OrderPickUpCheckerTask;
 import com.system.libsystem.scheduler.penalty.ReturnDateCheckerTask;
 import lombok.AllArgsConstructor;
@@ -14,9 +15,11 @@ public class ScheduledTasks {
 
     private static final String RETURN_DATES_CHECK_PERIOD = "0 0 0 * * ?";
     private static final String ORDER_PICK_UP_CHECK_PERIOD = "0 0 0 * * ?";
+    private static final String NEW_BOOKS_ADDED_CHECK_PERIOD = "0 0 0 * * ?";
 
     private final ReturnDateCheckerTask returnDateCheckerTask;
     private final OrderPickUpCheckerTask orderPickUpCheckerTask;
+    private final NewBooksAddedCheckerTask newBooksAddedCheckerTask;
 
     @Scheduled(cron = RETURN_DATES_CHECK_PERIOD)
     public void checkBorrowedBooksReturnDatesTask() {
@@ -25,9 +28,15 @@ public class ScheduledTasks {
     }
 
     @Scheduled(cron = ORDER_PICK_UP_CHECK_PERIOD)
-    public void checkIfOrdersWerePickedUp() {
+    public void checkIfOrdersWerePickedUpTask() {
         orderPickUpCheckerTask.checkIfOrderedBooksWerePickedUp();
         log.info("Scheduled task checkIfBorrowedBooksWerePickedUp is running");
+    }
+
+    @Scheduled(cron = NEW_BOOKS_ADDED_CHECK_PERIOD)
+    public void updateNewAddedBooksTask() {
+        newBooksAddedCheckerTask.updateNewAddedBooks();
+        log.info("Scheduled task checkIfNewBooksWereAdded is running");
     }
 
 }

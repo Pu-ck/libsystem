@@ -32,7 +32,7 @@ public class ExtendBookReturnDateService {
 
     public void extendRequestedBookReturnDate(ExtendBookReturnDateRequest extendBookReturnDateRequest) {
 
-        BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById(extendBookReturnDateRequest
+        final BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById(extendBookReturnDateRequest
                 .getBorrowedBookId());
         final UserEntity userEntity = userService.getUserById(borrowedBookEntity.getUserId());
         final BookEntity bookEntity = bookService.getBookById(borrowedBookEntity.getBookId());
