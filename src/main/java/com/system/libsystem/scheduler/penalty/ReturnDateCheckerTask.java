@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Component
 @AllArgsConstructor
@@ -38,9 +37,7 @@ public class ReturnDateCheckerTask {
         for (BorrowedBookEntity borrowedBookEntity : borrowedBookEntities) {
             if (borrowedBookEntity.isAccepted() && !borrowedBookEntity.isClosed()) {
                 final Date borrowedBookReturnDate = borrowedBookEntity.getReturnDate();
-                long daysToReturnDate = TimeUnit.MILLISECONDS
-                        .toDays(borrowedBookReturnDate.getTime() - currentDate.getTime());
-
+                final long daysToReturnDate = SchedulerDateUtil.getDaysBetweenTwoDates(borrowedBookReturnDate, currentDate);
                 final UserEntity userEntity = userService.getUserById(borrowedBookEntity.getUserId());
                 final BookEntity bookEntity = bookService.getBookById(borrowedBookEntity.getBookId());
 

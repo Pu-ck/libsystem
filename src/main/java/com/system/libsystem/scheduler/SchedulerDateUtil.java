@@ -18,8 +18,8 @@ public class SchedulerDateUtil {
         return Date.from(currentDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 
-    public static long getDaysBetweenTwoDates(Date currentDate, Date bookDate) {
-        long timeDifferenceBetweenDays = Math.abs(currentDate.getTime() - bookDate.getTime());
+    public static long getDaysBetweenTwoDates(Date firstDate, Date secondDate) {
+        long timeDifferenceBetweenDays = Math.abs(firstDate.getTime() - secondDate.getTime());
         return TimeUnit.DAYS.convert(timeDifferenceBetweenDays, TimeUnit.MILLISECONDS);
     }
 
