@@ -1,5 +1,6 @@
 package com.system.libsystem.entities.cardnumber;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +20,7 @@ public class CardNumberEntity {
     private Long cardNumber;
 
     @Column(nullable = false, unique = true)
+    @JsonIgnore
     private String peselNumber;
 
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
+import { UsertypeService } from '../../services/usertype/usertype.service';
 
 @Component({
   selector: 'app-navigation-menu',
@@ -10,16 +11,19 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class NavigationMenuComponent implements OnInit {
   
   public loggedIn: boolean = false;
+  public loggedAsAdmin: boolean = false;
 
   constructor(
     private http: HttpClient,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private userTypeService: UsertypeService
   ) { }
 
   ngOnInit(): void {
     this.hideNavbarOnLogout();
     this.checkIfUserIsLoggedIn();
+    this.loggedAsAdmin = this.userTypeService.validateIfAdminIsLoggedIn();
   }
 
   public logout(): void {

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthenticationGuard } from './authentication/authentication.guard';
+import { AuthenticationGuard } from './authentication/general/authentication.guard';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisteredComponent } from './components/registered/registered.component';
@@ -15,6 +15,11 @@ import { BookDetailsComponent } from './components/books/book-details/book-detai
 import { BorrowBookComponent } from './components/books/book-details/borrow-book/borrow-book.component';
 import { BorrowedComponent } from './components/books/book-details/borrow-book/borrowed/borrowed.component';
 import { FavouritesComponent } from './components/user-profile/favourites/favourites.component';
+import { AdministrationComponent } from './components/administration/administration.component';
+import { AdministratorGuard } from './authentication/administrator/administrator.guard';
+import { UsersComponent } from './components/administration/users/users.component';
+import { CardNumbersComponent } from './components/administration/card-numbers/card-numbers.component';
+import { AdminBooksComponent } from './components/administration/admin-books/admin-books.component';
 
 const routes: Routes = [
   {path: '', canActivate:[AuthenticationGuard], children: [
@@ -32,6 +37,12 @@ const routes: Routes = [
     { path: 'books/:id/borrow-book/borrowed', component: BorrowedComponent },
     { path: 'password-reminder', component: PasswordReminderComponent },
     { path: 'password-reminder/new-password', component: NewPasswordComponent },
+    { path: '', canActivate:[AdministratorGuard], children: [
+      { path: 'administration', component: AdministrationComponent },
+      { path: 'administration/books', component: AdminBooksComponent },
+      { path: 'administration/users', component: UsersComponent },
+      { path: 'administration/card-numbers', component: CardNumbersComponent }
+    ]}
   ]},
   { path: '**', redirectTo: '' }
 ];

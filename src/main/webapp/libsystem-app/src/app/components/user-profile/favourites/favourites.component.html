@@ -9,7 +9,7 @@ Your favourite books
     <tbody>
       <tr *ngFor="let favouriteBook of favouriteBooks">
         <td>
-            <a [routerLink]="'/books/' + favouriteBook.id">{{ favouriteBook.title }}</a> by
+            <a [routerLink]="'/books/' + favouriteBook.bookId">{{ favouriteBook.title }}</a> by
         </td>
         <td>
             <a>{{ favouriteBook.authors }}</a>

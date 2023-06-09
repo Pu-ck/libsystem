@@ -1,5 +1,6 @@
 package com.system.libsystem.entities.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.system.libsystem.entities.book.BookEntity;
 import com.system.libsystem.util.UserType;
@@ -29,6 +30,7 @@ public class UserEntity implements UserDetails {
     private String username;
 
     @Column(nullable = false, unique = true)
+    @JsonIgnore
     private String password;
 
     @Column(nullable = false)

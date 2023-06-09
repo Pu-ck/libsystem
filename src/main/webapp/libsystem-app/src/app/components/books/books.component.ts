@@ -17,7 +17,8 @@ export class BooksComponent implements OnInit {
   public title: string = '';
   public author: string = '';
   public publisher: string = '';
-  public yearOfPrint: string = '';
+  public startYear: string = '';
+  public endYear: string = '';
   public sortType: string = '';
   public sortDirection: string = '';
 
@@ -40,7 +41,8 @@ export class BooksComponent implements OnInit {
       this.author = params['author'] || '';
       this.genres = params['genres'] || '';
       this.publisher = params['publisher'] || '';
-      this.yearOfPrint = params['yearOfPrint'] || '';
+      this.startYear = params['startYear'] || '';
+      this.endYear = params['endYear'] || '';
       this.affiliates = params['affiliates'] || '';
       this.sortType = params['sortType'] || '';
       this.sortDirection = params['sortDirection'] || '';
@@ -52,7 +54,7 @@ export class BooksComponent implements OnInit {
     this.updateGenres();
     this.updateAffiliates();
     const url = '/api/books';
-    let params = new HttpParams().set('title', this.title).set('author', this.author).set('genres', this.genres.join(',')).set('publisher', this.publisher).set('yearOfPrint', this.yearOfPrint).set('affiliates', this.affiliates.join(',')).set('sortType', this.sortType).set('sortDirection', this.sortDirection);
+    let params = new HttpParams().set('title', this.title).set('author', this.author).set('genres', this.genres.join(',')).set('publisher', this.publisher).set('startYear', this.startYear).set('endYear', this.endYear).set('affiliates', this.affiliates.join(',')).set('sortType', this.sortType).set('sortDirection', this.sortDirection);
 
     this.http.get<any[]>(url, {params}).subscribe(
       response => {
@@ -91,8 +93,11 @@ export class BooksComponent implements OnInit {
     if (this.publisher) {
       queryParams['publisher'] = this.publisher;
     }
-    if (this.yearOfPrint) {
-      queryParams['yearOfPrint'] = this.yearOfPrint;
+    if (this.startYear) {
+      queryParams['startYear'] = this.startYear;
+    }
+    if (this.endYear) {
+      queryParams['endYear'] = this.endYear;
     }
     if (this.affiliates.length !== 0) {
       queryParams['affiliates'] = this.affiliates.join(',');

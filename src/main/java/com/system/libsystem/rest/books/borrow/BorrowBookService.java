@@ -19,7 +19,6 @@ import com.system.libsystem.exceptions.cardnumber.UnableToAuthenticateCardNumber
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
 import com.system.libsystem.rest.util.BookUtil;
-import com.system.libsystem.session.SessionRegistry;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,7 +37,6 @@ public class BorrowBookService {
     private final UserRepository userRepository;
     private final AffiliateRepository affiliateRepository;
     private final BookRepository bookRepository;
-    private final SessionRegistry sessionRegistry;
     private final MailSender mailSender;
     private final UserService userService;
     private final BookService bookService;

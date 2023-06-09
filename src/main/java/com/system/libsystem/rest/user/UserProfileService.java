@@ -117,14 +117,18 @@ public class UserProfileService {
     public Set<FavouriteBookDTO> getUserFavouriteBooks(HttpServletRequest httpServletRequest) {
         final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
         final Set<FavouriteBookDTO> favouriteBookDTOs = new HashSet<>();
+        setFavouriteBookDTOsForUser(favouriteBookDTOs, userEntity);
+        return favouriteBookDTOs;
+    }
+
+    private void setFavouriteBookDTOsForUser(Set<FavouriteBookDTO> favouriteBookDTOs, UserEntity userEntity) {
         for (BookEntity bookEntity : userEntity.getFavouriteBooks()) {
             FavouriteBookDTO favouriteBookDTO = new FavouriteBookDTO();
-            favouriteBookDTO.setId(bookEntity.getId());
+            favouriteBookDTO.setBookId(bookEntity.getId());
             favouriteBookDTO.setTitle(bookEntity.getTitle());
             favouriteBookDTO.setAuthors(bookEntity.getFormattedAuthorsAsString());
             favouriteBookDTOs.add(favouriteBookDTO);
         }
-        return favouriteBookDTOs;
     }
 
     private void setUserBookDetails(UserBook userBook, BorrowedBookEntity borrowedBookEntity, BookEntity bookEntity) {

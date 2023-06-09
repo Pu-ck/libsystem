@@ -30,13 +30,13 @@ public class ScheduledTasks {
     @Scheduled(cron = ORDER_PICK_UP_CHECK_PERIOD)
     public void checkIfOrdersWerePickedUpTask() {
         orderPickUpCheckerTask.checkIfOrderedBooksWerePickedUp();
-        log.info("Scheduled task checkIfBorrowedBooksWerePickedUp is running");
+        log.info("Scheduled task checkIfOrdersWerePickedUp is running");
     }
 
     @Scheduled(cron = NEW_BOOKS_ADDED_CHECK_PERIOD)
     public void updateNewAddedBooksTask() {
         newBooksAddedCheckerTask.updateNewAddedBooks();
-        log.info("Scheduled task checkIfNewBooksWereAdded is running");
+        log.info("Scheduled task updateNewAddedBooks is running");
     }
 
 }

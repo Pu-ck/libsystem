@@ -28,6 +28,7 @@ public class LoginService {
         final LoginSessionResponse loginSessionResponse = new LoginSessionResponse();
 
         loginSessionResponse.setSessionID(sessionID);
+        loginSessionResponse.setUserType(userEntity.getUserType());
         log.info("New user with id " + userEntity.getId() + " has logged in");
 
         return ResponseEntity.ok(loginSessionResponse);

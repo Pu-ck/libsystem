@@ -120,6 +120,17 @@ public class FilterBooksSortUtil {
         return getFilteredBooks(sortedAffiliateBooks).stream().distinct().toList();
     }
 
+    public List<BookEntity> getBooksFilteredByAddDate(String sortDirection, List<BookEntity> bookEntities) {
+        if (Objects.equals(sortDirection, SORT_DESCENDING)) {
+            return bookEntities.stream()
+                    .sorted(Comparator.comparing(BookEntity::getAddDate, Collections.reverseOrder()))
+                    .toList();
+        } else if (Objects.equals(sortDirection, SORT_ASCENDING)) {
+            return bookEntities.stream().sorted(Comparator.comparing(BookEntity::getAddDate)).toList();
+        }
+        return bookEntities;
+    }
+
     private Set<AffiliateBook> getFilteredAffiliateBooks(List<BookEntity> bookEntities) {
         return bookEntities.stream().flatMap(bookEntity -> bookEntity.getAffiliateBooks().stream()).collect(Collectors.toSet());
     }

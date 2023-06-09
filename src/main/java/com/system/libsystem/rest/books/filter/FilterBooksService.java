@@ -19,6 +19,7 @@ public class FilterBooksService {
     private static final String SORT_BY_YEAR_OF_PRINT = "year";
     private static final String SORT_BY_CURRENT_QUANTITY = "currentQuantity";
     private static final String SORT_BY_GENERAL_QUANTITY = "generalQuantity";
+    private static final String SORT_BY_ADD_DATE = "date";
 
     private final BookRepository bookRepository;
     private final FilterBooksSortUtil filterBooksSortUtil;
@@ -32,7 +33,8 @@ public class FilterBooksService {
         final String title = Optional.ofNullable(requestParameters.get("title")).orElse("");
         final String author = Optional.ofNullable(requestParameters.get("author")).orElse("");
         final String publisher = Optional.ofNullable(requestParameters.get("publisher")).orElse("");
-        final String yearOfPrint = Optional.ofNullable(requestParameters.get("yearOfPrint")).orElse("");
+        final String startYear = Optional.ofNullable(requestParameters.get("startYear")).orElse("");
+        final String endYear = Optional.ofNullable(requestParameters.get("endYear")).orElse("");
         final String sortType = Optional.ofNullable(requestParameters.get("sortType")).orElse("");
         final String sortDirection = Optional.ofNullable(requestParameters.get("sortDirection")).orElse("");
 
@@ -40,7 +42,7 @@ public class FilterBooksService {
         final List<String> affiliates = new ArrayList<>();
         setFilterListParameters(requestParameters, genres, affiliates);
 
-        final List<String> filterParameters = Arrays.asList(title, author, publisher, yearOfPrint);
+        final List<String> filterParameters = Arrays.asList(title, author, publisher, startYear, endYear);
         final List<List<String>> filterListParameters = Arrays.asList(genres, affiliates);
         List<BookEntity> bookEntities;
 
@@ -48,7 +50,7 @@ public class FilterBooksService {
             bookEntities = bookRepository.findAll();
         } else {
             bookEntities = bookRepository.findByTitleAuthorPublisherYearGenresAndAffiliates(title, author, publisher,
-                    yearOfPrint, genres, affiliates);
+                    startYear, endYear, genres, affiliates);
         }
 
         return getSortedBooks(sortType, sortDirection, bookEntities.stream().distinct().toList());
@@ -65,6 +67,7 @@ public class FilterBooksService {
                     filterBooksSortUtil.getBooksFilteredByYearOfPrintSorted(sortDirection, bookEntities);
             case SORT_BY_CURRENT_QUANTITY -> filterBooksSortUtil.getBooksFilteredByCurrentQuantity(sortDirection, bookEntities);
             case SORT_BY_GENERAL_QUANTITY -> filterBooksSortUtil.getBooksFilteredByGeneralQuantity(sortDirection, bookEntities);
+            case SORT_BY_ADD_DATE -> filterBooksSortUtil.getBooksFilteredByAddDate(sortDirection, bookEntities);
             default -> bookEntities;
         };
     }
@@ -85,6 +88,7 @@ public class FilterBooksService {
                 && filterParameters.get(1).length() == 0
                 && filterParameters.get(2).length() == 0
                 && filterParameters.get(3).length() == 0
+                && filterParameters.get(4).length() == 0
                 && filterListParameters.get(0).isEmpty()
                 && filterListParameters.get(1).isEmpty();
     }

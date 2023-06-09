@@ -1,6 +1,7 @@
 package com.system.libsystem.entities.book;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.system.libsystem.entities.affiliate.AffiliateEntity;
 import com.system.libsystem.entities.affiliatebook.AffiliateBook;
@@ -79,6 +80,11 @@ public class BookEntity {
 
     @Column(nullable = false)
     private Date addDate;
+
+    @JsonIgnore
+    public String getFormattedGenresAsString() {
+        return this.getGenres().stream().map(GenreEntity::getName).collect(Collectors.joining(", "));
+    }
 
     public String getFormattedAuthorsAsString() {
         return this.getAuthors().stream().map(AuthorEntity::getName).collect(Collectors.joining(", "));

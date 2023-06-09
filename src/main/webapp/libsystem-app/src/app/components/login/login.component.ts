@@ -11,6 +11,7 @@ export class LoginComponent implements OnInit {
 
   public model: any = {};
   public sessionID: any = "";
+  public userType: any = "";
   public loginError: boolean = false;
   public loggedOut: boolean = false;
 
@@ -35,10 +36,9 @@ export class LoginComponent implements OnInit {
       password: this.model.password
     }).subscribe(response => {
         this.sessionID = response.sessionID;  
-        sessionStorage.setItem(
-          'token',
-          this.sessionID
-        );
+        this.userType = response.userType;
+        sessionStorage.setItem('token', this.sessionID);
+        sessionStorage.setItem('userType', this.userType);
         window.location.href = '/'
     }, error => {
       if (error.status === 401) {

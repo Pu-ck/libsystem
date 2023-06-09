@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FavouriteBookDTO {
-    private Long id;
+    private Long bookId;
     private String authors;
     private String title;
 }

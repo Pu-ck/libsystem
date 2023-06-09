@@ -10,7 +10,12 @@
         <input type="text" name="publisher" [(ngModel)]="publisher">
 
         <label for="yearOfPrint">Year of print</label>
-        <input type="text" name="yearOfPrint" [(ngModel)]="yearOfPrint">
+        <div name="yearOfPrint">
+            <label for="startYear">From:</label>
+            <input type="text" name="startYear" [(ngModel)]="startYear">
+            <label for="endYear">To:</label>
+            <input type="text" name="endYear" [(ngModel)]="endYear">
+        </div>
 
         <label for="genres">Genres</label>
         <form name="genres">
@@ -36,6 +41,7 @@
             <option value="year">Year of print</option>
             <option value="currentQuantity">Current quantity</option>
             <option value="generalQuantity">General quantity</option>
+            <option value="date">Date added</option>
         </select>
 
         <label for="sortDirection">Sort direction</label>
@@ -58,6 +64,7 @@
         <th>Affiliates and quantity</th>
         <th>Publisher</th>
         <th>Year of print</th>
+        <th>Date added</th>
         <th></th>
       </tr>
     </thead>
@@ -92,6 +99,9 @@
         </td>
         <td>
             {{book.yearOfPrintEntity.yearOfPrint}}
+        </td>
+        <td>
+            {{book.addDate.split('T')[0]}}
         </td>
         <td>
             <button (click)="redirectToBookDetails(book.id)">Details</button>

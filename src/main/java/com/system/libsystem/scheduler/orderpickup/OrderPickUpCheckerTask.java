@@ -42,7 +42,7 @@ public class OrderPickUpCheckerTask {
                 final UserEntity userEntity = userService.getUserById(borrowedBookEntity.getUserId());
                 final BookEntity bookEntity = bookService.getBookById(borrowedBookEntity.getBookId());
 
-                if (isOrderedBookPickUpOverdue(currentDate, borrowedBookReadyDate)) {
+                if (isOrderedBookPickUpTimeOverdue(currentDate, borrowedBookReadyDate)) {
                     setBorrowedBookOrderAsClosed(bookEntity, borrowedBookEntity, userEntity);
                 }
             }
@@ -55,10 +55,11 @@ public class OrderPickUpCheckerTask {
         bookUtil.setCurrentQuantityInAffiliate(bookEntity, borrowedBookEntity.getAffiliateEntity().getName(), 1);
         bookRepository.save(bookEntity);
         borrowedBookRepository.save(borrowedBookEntity);
+        log.info("Closing borrowed book order with id " + borrowedBookEntity.getId() + " due to pickup time overdue");
         sendBorrowedBookOrderPickUpTimeExpired(userEntity, bookEntity, borrowedBookEntity.getAffiliateEntity().getName());
     }
 
-    private boolean isOrderedBookPickUpOverdue(Date currentDate, Date borrowedBookReadyDate) {
+    private boolean isOrderedBookPickUpTimeOverdue(Date currentDate, Date borrowedBookReadyDate) {
         return currentDate.compareTo(borrowedBookReadyDate) > 0;
     }
 
