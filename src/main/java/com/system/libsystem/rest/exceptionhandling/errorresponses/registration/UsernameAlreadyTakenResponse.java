@@ -1,4 +1,4 @@
-package com.system.libsystem.rest.exceptionhandling.errorresponses.user;
+package com.system.libsystem.rest.exceptionhandling.errorresponses.registration;
 
 import com.system.libsystem.rest.exceptionhandling.errorresponses.ErrorResponse;
 

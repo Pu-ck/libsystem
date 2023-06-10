@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Book not found")
 public class BookNotFoundException extends RuntimeException {
 
-    private final Long id;
+    private final Long bookId;
 
     @Override
     public String getMessage() {
-        return "Unable to find book with id " + id;
+        return "Unable to find book with id " + bookId;
     }
 
 }

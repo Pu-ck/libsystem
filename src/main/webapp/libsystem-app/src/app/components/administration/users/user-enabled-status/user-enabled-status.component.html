@@ -1,0 +1,17 @@
+<p>{{ updateType }} user {{ username }} with id {{ userId }}</p>
+
+<form name="form" (ngSubmit)="updateUserEnabledStatus()" #borrowForm="ngForm">
+
+    <ng-container *ngIf="updateType === 'Disable'">
+        <label for="reason">Reason</label>
+        <input type="text" name="reason" [(ngModel)]="model.reason" #reason="ngModel" maxlength="100" required>
+        <div *ngIf="reason?.invalid && (reason?.dirty || reason?.touched)">
+            <div *ngIf="reason?.errors?.['required']">Reason is required</div>
+        </div>
+    </ng-container>
+   
+    <div>
+        <button type="submit" [disabled]="!borrowForm.valid">{{ updateType }}</button>
+    </div>
+
+</form>

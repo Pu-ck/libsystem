@@ -32,17 +32,17 @@ export class BorrowBookComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    localStorage.setItem('hasBorrowedBook', 'false');
-    this.getCurrentBookId();
+    this.getCurrentBookInformation();
   }
 
-  private getCurrentBookId(): void {
+  private getCurrentBookInformation(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.bookId = params.get('id')!;
     });
 
     const url = `api/books/${this.bookId}`;
-    this.http.get<any>(url, { }).subscribe(response => {
+    this.http.get<any>(url, { }).subscribe(
+      response => {
       this.title = response.title;
       this.bookDetails = response;
       this.redirectIfNoBooksOnStock();

@@ -1,1 +1,70 @@
 <p>Users</p>
+
+<form name="form" (submit)="getUsers()" #searchForm="ngForm">
+    <div>
+        <label for="userId">User ID</label>
+        <input type="text" name="userId" [(ngModel)]="userId">
+        <button type="submit">Search</button>
+    </div>
+</form>
+
+<button [disabled]="showEnabled == true" (click)="setDisplayedStatus('Enabled')">Enabled</button>
+<button [disabled]="showDisabled == true" (click)="setDisplayedStatus('Disabled')">Disabled</button>
+<button [disabled]="showAll == true" (click)="setDisplayedStatus('All')">All</button>
+
+<table>
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Card number</th>
+        <th>Username</th>
+        <th>First name</th>
+        <th>Last name</th>
+        <th>Enabled</th>
+        <th>Ordered books</th>
+        <th>Borrowed books</th>
+        <th>User type</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <ng-container *ngIf="user.enabled == showEnabled || showAll == true">
+            <td>
+                {{ user.id }}
+            </td>
+            <td>
+                {{ user.cardNumber }}
+            </td>
+            <td>
+                {{ user.username }}
+            </td>
+            <td>
+                {{ user.firstName }}
+            </td>
+            <td>
+                {{ user.lastName }}
+            </td>
+            <td>
+                {{ user.enabled ? 'Yes' : 'No' }}
+            </td>
+            <td>
+                {{ user.orderedBooks }}
+            </td>
+            <td>
+                {{ user.borrowedBooks }}
+            </td>
+            <td>
+                {{ user.userType }}
+            </td>
+            <td>
+                <button (click)="redirectToUserUpdateEnabledStatusForm(user.id)">
+                    {{ user.enabled ? 'Disable' : 'Enable' }}
+                </button>
+            </td>
+        </ng-container>
+      </tr>
+    </tbody>
+</table>
+
+<p *ngIf="userNotFound">Unable to find specified user</p>

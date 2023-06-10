@@ -54,7 +54,7 @@ public class UserEntity implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )
-    @JsonManagedReference("user-books-favourites")
+    @JsonIgnore
     private Set<BookEntity> favouriteBooks = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
@@ -62,6 +62,7 @@ public class UserEntity implements UserDetails {
     private UserType userType;
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(this.getUserType().name()));
@@ -69,16 +70,19 @@ public class UserEntity implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() { return true; }
 
     @Override

@@ -19,15 +19,16 @@ export class BorrowedComponent implements OnInit {
     this.borrowedBookValidated = true;
   }
 
+  public redirectToBookCatalogue(): void {
+    this.router.navigateByUrl('/books');
+  }
+
   private checkIfUserHasBorrowedBook(): void {
     const hasBorrowedBook = localStorage.getItem('hasBorrowedBook');
     if (hasBorrowedBook !== 'true') {
       this.router.navigateByUrl('/');
     }
-  }
-
-  public redirectToBookCatalogue(): void {
-    this.router.navigateByUrl('/books');
+    localStorage.setItem('hasBorrowedBook', 'false');
   }
 
 }

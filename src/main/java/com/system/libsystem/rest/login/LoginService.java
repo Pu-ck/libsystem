@@ -5,6 +5,7 @@ import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.session.SessionRegistry;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,12 +21,15 @@ public class LoginService {
     private final UserService userService;
 
     public ResponseEntity<LoginSessionResponse> login(LoginRequest loginRequest) {
+        final UserEntity userEntity = userService.loadUserByUsername(loginRequest.getUsername());
+        final LoginSessionResponse loginSessionResponse = new LoginSessionResponse();
+        if (!userEntity.isEnabled()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(loginSessionResponse);
+        }
+
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                 loginRequest.getPassword()));
-
-        final UserEntity userEntity = userService.loadUserByUsername(loginRequest.getUsername());
         final String sessionID = sessionRegistry.registerSession(loginRequest.getUsername());
-        final LoginSessionResponse loginSessionResponse = new LoginSessionResponse();
 
         loginSessionResponse.setSessionID(sessionID);
         loginSessionResponse.setUserType(userEntity.getUserType());

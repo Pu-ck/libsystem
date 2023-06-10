@@ -67,7 +67,7 @@ public class ReadyOrderService {
         bookRepository.save(bookEntity);
         borrowedBookEntity.setClosed(true);
         borrowedBookRepository.save(borrowedBookEntity);
-        sendBorrowedBookOrderRejected(userEntity, bookEntity, borrowedBookEntity.getAffiliateEntity().getName());
+        sendBorrowedBookOrderRejectedMail(userEntity, bookEntity, borrowedBookEntity.getAffiliateEntity().getName());
     }
 
     private void sendBorrowedBookOrderReadyMail(UserEntity userEntity, BookEntity bookEntity, String affiliate) {
@@ -80,7 +80,7 @@ public class ReadyOrderService {
         log.info("New sendBorrowedBookOrderReadyMail message sent to " + userEntity.getUsername());
     }
 
-    private void sendBorrowedBookOrderRejected(UserEntity userEntity, BookEntity bookEntity, String affiliate) {
+    private void sendBorrowedBookOrderRejectedMail(UserEntity userEntity, BookEntity bookEntity, String affiliate) {
         mailSender.send(userEntity.getUsername(), MailBuilder.getBorrowedBookOrderRejectedMailBody
                 (userEntity.getFirstName(),
                         userEntity.getLastName(),

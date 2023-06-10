@@ -56,15 +56,15 @@ public class OrderPickUpCheckerTask {
         bookRepository.save(bookEntity);
         borrowedBookRepository.save(borrowedBookEntity);
         log.info("Closing borrowed book order with id " + borrowedBookEntity.getId() + " due to pickup time overdue");
-        sendBorrowedBookOrderPickUpTimeExpired(userEntity, bookEntity, borrowedBookEntity.getAffiliateEntity().getName());
+        sendBorrowedBookOrderPickUpTimeExpiredMail(userEntity, bookEntity, borrowedBookEntity.getAffiliateEntity().getName());
     }
 
     private boolean isOrderedBookPickUpTimeOverdue(Date currentDate, Date borrowedBookReadyDate) {
         return currentDate.compareTo(borrowedBookReadyDate) > 0;
     }
 
-    private void sendBorrowedBookOrderPickUpTimeExpired(UserEntity userEntity, BookEntity bookEntity, String affiliate) {
-        mailSender.send(userEntity.getUsername(), MailBuilder.getBorrowedBookOrderPickUpTimeExpired
+    private void sendBorrowedBookOrderPickUpTimeExpiredMail(UserEntity userEntity, BookEntity bookEntity, String affiliate) {
+        mailSender.send(userEntity.getUsername(), MailBuilder.getBorrowedBookOrderPickUpTimeExpiredMailBody
                 (userEntity.getFirstName(),
                         userEntity.getLastName(),
                         bookEntity.getTitle(),

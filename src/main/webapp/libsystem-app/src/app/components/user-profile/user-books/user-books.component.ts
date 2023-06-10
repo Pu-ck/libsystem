@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class UserBooksComponent implements OnInit {
 
   public bookExtended: boolean = false;
-  public displayedStatus: string = 'Borrowed';
+  public displayedStatus: string = 'All';
   public books: any[] = [];
 
   constructor(private http: HttpClient) { }
@@ -31,7 +31,7 @@ export class UserBooksComponent implements OnInit {
   }
 
   public bookExtensionConfirmation(borrowedBookId: number): void {
-    if (window.confirm('Are you sure you want to send an return date extension request for this book? You can extend the borrowed book only once.')) {
+    if (window.confirm('Are you sure you want to send a return date extension request for this book? You can extend the borrowed book only once.')) {
       this.requestBookExtension(borrowedBookId);
     }
   }
@@ -41,7 +41,7 @@ export class UserBooksComponent implements OnInit {
     this.http.put<any>(url, {
     }).subscribe(response => {
       this.bookExtended = true;
-        console.log(response);
+      console.log(response);
     }, error => {
       console.log(error);
     }

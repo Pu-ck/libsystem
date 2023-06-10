@@ -16,6 +16,7 @@ import com.system.libsystem.exceptions.peselnumber.InvalidPeselNumberFormatExcep
 import com.system.libsystem.exceptions.peselnumber.PeselNumberAlreadyTakenException;
 import com.system.libsystem.exceptions.peselnumber.UnableToAuthenticatePeselNumberException;
 import com.system.libsystem.exceptions.registration.UsernameAlreadyTakenException;
+import com.system.libsystem.exceptions.user.UserNotFoundException;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.book.BookNotFoundResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.borrow.BookOutOfStockResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.borrow.TooManyBorrowedBooksResponse;
@@ -31,7 +32,8 @@ import com.system.libsystem.rest.exceptionhandling.errorresponses.password.Passw
 import com.system.libsystem.rest.exceptionhandling.errorresponses.peselnumber.InvalidPeselNumberFormatResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.peselnumber.PeselNumberAlreadyTakenResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.peselnumber.UnableToAuthenticatePeselNumberResponse;
-import com.system.libsystem.rest.exceptionhandling.errorresponses.user.UsernameAlreadyTakenResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.registration.UsernameAlreadyTakenResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.user.UserNotFoundResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -140,6 +142,12 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         final BookNotFoundInUserFavouriteBooksResponse bookNotFoundInUserFavouriteBooksResponse
                 = new BookNotFoundInUserFavouriteBooksResponse();
         return new ResponseEntity<>(bookNotFoundInUserFavouriteBooksResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<UserNotFoundResponse> handleUserNotFoundException() {
+        final UserNotFoundResponse userNotFoundResponse = new UserNotFoundResponse();
+        return new ResponseEntity<>(userNotFoundResponse, HttpStatus.NOT_FOUND);
     }
 
 }

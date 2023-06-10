@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public class MailBuilder {
 
     public static String getAccountConfirmationMailBody(String userName, String firstName, String lastName, String cardNumber,
-                                                 String registrationTime, String confirmationAddress) {
+                                                        String registrationTime, String confirmationAddress) {
         return "New account registration request, " +
                 "<p>First name: " + firstName + "</p>" +
                 "<p>Last name: " + lastName + "</p>" +
@@ -23,7 +23,7 @@ public class MailBuilder {
 
     public static String getAccountEnabledMailBody(String firstName, String lastName, String loginPageAddress) {
         return "Hello " + firstName + " " + lastName + "," +
-                "<p>Your account has been verified, accepted and enabled by the administrator, you can now " +
+                "<p>Your account has enabled by the administrator, you can now " +
                 "<a href=\"" + loginPageAddress + "\">login</a> to the library system.</p>";
     }
 
@@ -37,7 +37,7 @@ public class MailBuilder {
     }
 
     public static String getPasswordReminderMailBody(String setNewPasswordAddress, String firstName, String lastName,
-                                              String cardNumber) {
+                                                     String cardNumber) {
         return "Hello " + firstName + " " + lastName + "," +
                 "<p>You have requested a password reminder for an account associated with library card number: "
                 + cardNumber + "</p>" +
@@ -59,7 +59,7 @@ public class MailBuilder {
     }
 
     public static String getBookBorrowMailBody(String firstName, String lastName, String title, String author,
-                                        Long orderNumber, String affiliate) {
+                                               Long orderNumber, String affiliate) {
         return "Hello " + firstName + " " + lastName + "," +
                 "<p>You have ordered a new book from library affiliate: " + affiliate + "<p>" +
                 "<p>Title: " + title + "<p>" +
@@ -71,8 +71,8 @@ public class MailBuilder {
     }
 
     public static String getBookReturnDateExtensionRequestMailBody(Long userId, String cardNumber, Long borrowedBookId,
-                                                            String borrowDate, String returnDate, String affiliate,
-                                                            BigDecimal penalty) {
+                                                                   String borrowDate, String returnDate, String affiliate,
+                                                                   BigDecimal penalty) {
         return "New book return date extension request, " +
                 "<p>User id: " + userId + "</p>" +
                 "<p>Card number: " + cardNumber + "</p>" +
@@ -85,7 +85,7 @@ public class MailBuilder {
     }
 
     public static String getBookReturnDateExtensionConfirmationMailBody(String firstName, String lastName, String title,
-                                                                 String author, String newReturnDate, String affiliate) {
+                                                                        String author, String newReturnDate, String affiliate) {
         return "Hello " + firstName + " " + lastName + "," +
                 "<p>Your book's return date extension request has been accepted. Extended book's details: <p>" +
                 "<p>Title: " + title + "<p>" +
@@ -95,8 +95,8 @@ public class MailBuilder {
     }
 
     public static String getOrderedBookPenaltyInformationMailBody(String firstName, String lastName, String title,
-                                                           String author, String returnDate, String affiliate,
-                                                           BigDecimal penalty) {
+                                                                  String author, String returnDate, String affiliate,
+                                                                  BigDecimal penalty) {
         return "Hello " + firstName + " " + lastName + "," +
                 "<p>The time to return a book you have ordered has expired and a penalty was increased. " +
                 "Book's details: <p>" +
@@ -109,8 +109,8 @@ public class MailBuilder {
     }
 
     public static String getComingUpBorrowedBookReturnDateMailBody(String firstName, String lastName, String title,
-                                                            String author, String returnDate, String affiliate,
-                                                            long daysToReturnDate) {
+                                                                   String author, String returnDate, String affiliate,
+                                                                   long daysToReturnDate) {
         return "Hello " + firstName + " " + lastName + "," +
                 "<p>Your ordered book's return date is coming. Book's details: <p>" +
                 "<p>Title: " + title + "<p>" +
@@ -122,7 +122,7 @@ public class MailBuilder {
     }
 
     public static String getBorrowedBookOrderReadyMailBody(String firstName, String lastName, String title,
-                                                    String author, String affiliate) {
+                                                           String author, String affiliate) {
         return "Hello " + firstName + " " + lastName + "," +
                 "<p>Your ordered book has been prepared for pick up. Book's details: <p>" +
                 "<p>Title: " + title + "<p>" +
@@ -133,7 +133,7 @@ public class MailBuilder {
     }
 
     public static String getBorrowedBookOrderRejectedMailBody(String firstName, String lastName, String title,
-                                                       String author, String affiliate) {
+                                                              String author, String affiliate) {
         return "Hello " + firstName + " " + lastName + "," +
                 "<p>Your ordered book has been rejected. Book's details: <p>" +
                 "<p>Title: " + title + "<p>" +
@@ -142,8 +142,8 @@ public class MailBuilder {
                 "<p>Contact the administration for more information about your order rejection<p>";
     }
 
-    public static String getBorrowedBookOrderPickUpTimeExpired(String firstName, String lastName, String title,
-                                               String author, String affiliate) {
+    public static String getBorrowedBookOrderPickUpTimeExpiredMailBody(String firstName, String lastName, String title,
+                                                                       String author, String affiliate) {
         return "Hello " + firstName + " " + lastName + "," +
                 "<p>Your ordered book pick up time has expired. Book's details: <p>" +
                 "<p>Title: " + title + "<p>" +
@@ -152,6 +152,19 @@ public class MailBuilder {
                 "<p>The ordered book has been returned to the library catalogue.<p>";
     }
 
+    public static String getAccountDisabledMailBody(String firstName, String lastName, String reason) {
+        return "Hello " + firstName + " " + lastName + "," +
+                "<p>Your account have been temporary disabled by the administrator, reason: <p>" +
+                "<p>" + reason + "<p>" +
+                "<p>If you need more information on locking your account, contact the administration.<p>";
+    }
 
+    public static String getAccountEnabledBackMailBody(String firstName, String lastName, String reason) {
+        return "Hello " + firstName + " " + lastName + "," +
+                "<p>Your account have been enabled back by the administrator, reason: <p>" +
+                "<p>" + reason + "<p>" +
+                "<p>You can now again use the library system application.<p>";
+
+    }
 
 }

@@ -12,7 +12,8 @@ export class LoginComponent implements OnInit {
   public model: any = {};
   public sessionID: any = "";
   public userType: any = "";
-  public loginError: boolean = false;
+  public unauthorized: boolean = false;
+  public notEnabled: boolean = false;
   public loggedOut: boolean = false;
 
   constructor(
@@ -41,9 +42,15 @@ export class LoginComponent implements OnInit {
         sessionStorage.setItem('userType', this.userType);
         window.location.href = '/'
     }, error => {
-      if (error.status === 401) {
-        this.loginError = true;
+      if (error.status === 403) {
+        this.notEnabled = true;
+        this.unauthorized = false;
       }
+      if (error.status === 401) {
+        this.unauthorized = true;
+        this.notEnabled = false;
+      }
+    
     }
     );
   }

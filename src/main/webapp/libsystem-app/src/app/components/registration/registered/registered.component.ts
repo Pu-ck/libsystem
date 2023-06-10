@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router} from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { CommonRedirectsService } from '../../services/redirects/common-redirects.service';
+import { CommonRedirectsService } from '../../../services/redirects/common-redirects.service';
 
 @Component({
   selector: 'app-registered',

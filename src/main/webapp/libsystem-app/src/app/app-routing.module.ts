@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthenticationGuard } from './authentication/general/authentication.guard';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
-import { RegisteredComponent } from './components/registered/registered.component';
+import { RegisteredComponent } from './components/registration/registered/registered.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { UserBooksComponent } from './components/user-profile/user-books/user-books.component';
@@ -20,6 +20,8 @@ import { AdministratorGuard } from './authentication/administrator/administrator
 import { UsersComponent } from './components/administration/users/users.component';
 import { CardNumbersComponent } from './components/administration/card-numbers/card-numbers.component';
 import { AdminBooksComponent } from './components/administration/admin-books/admin-books.component';
+import { UserEnabledStatusComponent } from './components/administration/users/user-enabled-status/user-enabled-status.component';
+import { UserEnabledStatusUpdatedComponent } from './components/administration/users/user-enabled-status/user-enabled-status-updated/user-enabled-status-updated.component';
 
 const routes: Routes = [
   {path: '', canActivate:[AuthenticationGuard], children: [
@@ -41,6 +43,8 @@ const routes: Routes = [
       { path: 'administration', component: AdministrationComponent },
       { path: 'administration/books', component: AdminBooksComponent },
       { path: 'administration/users', component: UsersComponent },
+      { path: 'administration/users/:id/user-enabled-status', component: UserEnabledStatusComponent },
+      { path: 'administration/users/:id/user-enabled-status/user-enabled-status-updated', component: UserEnabledStatusUpdatedComponent },
       { path: 'administration/card-numbers', component: CardNumbersComponent }
     ]}
   ]},

@@ -15,7 +15,8 @@
     </div>
     <div>
         <button [disabled]="!model.username || !model.password">Login</button>
-        <div *ngIf="loginError">Incorrect username or password</div>
+        <div *ngIf="unauthorized">Incorrect username or password</div>
+        <div *ngIf="notEnabled">This account is currently disabled</div>
     </div>
 </form>
 

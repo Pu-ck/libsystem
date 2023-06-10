@@ -10,7 +10,7 @@ import { LoginComponent } from './components/login/login.component';
 import { RequestInterceptor } from './request/request.interceptor';
 import { RouterModule } from '@angular/router';
 import { RegistrationComponent } from './components/registration/registration.component';
-import { RegisteredComponent } from './components/registered/registered.component';
+import { RegisteredComponent } from './components/registration/registered/registered.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { UserBooksComponent } from './components/user-profile/user-books/user-books.component';
 import { ChangePasswordComponent } from './components/user-profile/change-password/change-password.component';
@@ -26,6 +26,8 @@ import { AdministrationComponent } from './components/administration/administrat
 import { UsersComponent } from './components/administration/users/users.component';
 import { CardNumbersComponent } from './components/administration/card-numbers/card-numbers.component';
 import { AdminBooksComponent } from './components/administration/admin-books/admin-books.component';
+import { UserEnabledStatusComponent } from './components/administration/users/user-enabled-status/user-enabled-status.component';
+import { UserEnabledStatusUpdatedComponent } from './components/administration/users/user-enabled-status/user-enabled-status-updated/user-enabled-status-updated.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,9 @@ import { AdminBooksComponent } from './components/administration/admin-books/adm
     AdministrationComponent,
     UsersComponent,
     CardNumbersComponent,
-    AdminBooksComponent
+    AdminBooksComponent,
+    UserEnabledStatusComponent,
+    UserEnabledStatusUpdatedComponent
   ],
   imports: [
     BrowserModule,

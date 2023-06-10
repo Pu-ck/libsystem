@@ -71,19 +71,19 @@
     <tbody>
       <tr *ngFor="let book of books">
         <td>
-            {{book.title}}
+            {{ book.title }}
         </td>
         <td>
             <ul>
                 <li *ngFor="let author of book.authors">
-                    {{author.name}}
+                    {{ author.name }}
                 </li>
             </ul>
         </td>
         <td>
             <ul>
                 <li *ngFor="let genre of book.genres">
-                    {{genre.name}}
+                    {{ genre.name }}
                 </li>
             </ul>
         </td>
@@ -95,13 +95,13 @@
             </ul>
         </td>
         <td>
-            {{book.publisherEntity.name}}
+            {{ book.publisherEntity.name }}
         </td>
         <td>
-            {{book.yearOfPrintEntity.yearOfPrint}}
+            {{ book.yearOfPrintEntity.yearOfPrint }}
         </td>
         <td>
-            {{book.addDate.split('T')[0]}}
+            {{ book.addDate.split('T')[0] }}
         </td>
         <td>
             <button (click)="redirectToBookDetails(book.id)">Details</button>
