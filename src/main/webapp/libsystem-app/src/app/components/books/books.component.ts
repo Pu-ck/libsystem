@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CommonBookMethodsService } from '../../services/book/common-book-methods.service';
+import { CommonBookMethodsService } from 'src/app/services/book/common-book-methods.service';
+import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 import genres from 'src/config/genres.json';
 import affiliates from 'src/config/affiliates.json';
 
@@ -32,6 +33,7 @@ export class BooksComponent implements OnInit {
     private http: HttpClient, 
     private router: Router,
     private route: ActivatedRoute,
+    private userEnabledService: UserEnabledService,
     public commonBookMethodsService: CommonBookMethodsService
   ) { }
 
@@ -69,9 +71,9 @@ export class BooksComponent implements OnInit {
         this.router.navigate(['/books'], { queryParams });
       },
       error => {
+        this.userEnabledService.validateIfUserIsEnabled(error);
         this.noResultsFound = true;
         this.books = [];
-        console.log(error);
       }
     );
   }

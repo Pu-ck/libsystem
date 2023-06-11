@@ -16,7 +16,10 @@ import com.system.libsystem.exceptions.peselnumber.InvalidPeselNumberFormatExcep
 import com.system.libsystem.exceptions.peselnumber.PeselNumberAlreadyTakenException;
 import com.system.libsystem.exceptions.peselnumber.UnableToAuthenticatePeselNumberException;
 import com.system.libsystem.exceptions.registration.UsernameAlreadyTakenException;
+import com.system.libsystem.exceptions.user.UserNotEnabledException;
 import com.system.libsystem.exceptions.user.UserNotFoundException;
+import com.system.libsystem.rest.administration.administration.AdministratorChangesItsOwnEnabledStatusException;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.administration.AdministratorChangesItsOwnEnabledStatusResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.book.BookNotFoundResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.borrow.BookOutOfStockResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.borrow.TooManyBorrowedBooksResponse;
@@ -33,6 +36,7 @@ import com.system.libsystem.rest.exceptionhandling.errorresponses.peselnumber.In
 import com.system.libsystem.rest.exceptionhandling.errorresponses.peselnumber.PeselNumberAlreadyTakenResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.peselnumber.UnableToAuthenticatePeselNumberResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.registration.UsernameAlreadyTakenResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.user.UserNotEnabledResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.user.UserNotFoundResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -148,6 +152,19 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     public ResponseEntity<UserNotFoundResponse> handleUserNotFoundException() {
         final UserNotFoundResponse userNotFoundResponse = new UserNotFoundResponse();
         return new ResponseEntity<>(userNotFoundResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserNotEnabledException.class)
+    public ResponseEntity<UserNotEnabledResponse> handleUserNotEnabledException() {
+        final UserNotEnabledResponse userNotEnabledResponse = new UserNotEnabledResponse();
+        return new ResponseEntity<>(userNotEnabledResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(AdministratorChangesItsOwnEnabledStatusException.class)
+    public ResponseEntity<AdministratorChangesItsOwnEnabledStatusResponse> handleAdministratorChangesItsOwnEnabledStatusException() {
+        final AdministratorChangesItsOwnEnabledStatusResponse administratorChangesItsOwnEnabledStatusResponse =
+                new AdministratorChangesItsOwnEnabledStatusResponse();
+        return new ResponseEntity<>(administratorChangesItsOwnEnabledStatusResponse, HttpStatus.CONFLICT);
     }
 
 }

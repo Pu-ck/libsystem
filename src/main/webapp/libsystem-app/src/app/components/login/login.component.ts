@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   public unauthorized: boolean = false;
   public notEnabled: boolean = false;
   public loggedOut: boolean = false;
+  public disabled: boolean = false;
 
   constructor(
       private router: Router,
@@ -26,6 +27,9 @@ export class LoginComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       if (params['logout'] === 'true') {
         this.loggedOut = true;
+      }
+      if (params['disabled'] === 'true') {
+        this.disabled = true;
       }
     });
   }
@@ -42,7 +46,7 @@ export class LoginComponent implements OnInit {
         sessionStorage.setItem('userType', this.userType);
         window.location.href = '/'
     }, error => {
-      if (error.status === 403) {
+      if (error.status === 403 && error.error.message === 'User not enabled') {
         this.notEnabled = true;
         this.unauthorized = false;
       }

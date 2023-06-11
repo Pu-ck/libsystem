@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -10,7 +11,10 @@ export class UserProfileComponent implements OnInit {
 
   public userDetails: any;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private userEnabledService: UserEnabledService
+    ) { }
 
   ngOnInit(): void {
     this.getUserDetails();
@@ -23,7 +27,7 @@ export class UserProfileComponent implements OnInit {
         this.userDetails = response;
       },
       error => {
-        console.log(error);
+        this.userEnabledService.validateIfUserIsEnabled(error);
       }
     );
   }

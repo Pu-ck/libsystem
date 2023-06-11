@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { CommonBookMethodsService } from '../../../../services/book/common-book-methods.service';
+import { CommonBookMethodsService } from 'src/app/services/book/common-book-methods.service';
+import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 import affiliates from 'src/config/affiliates.json';
 
 @Component({
@@ -28,32 +29,12 @@ export class BorrowBookComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
+    private userEnabledService: UserEnabledService,
     public commonBookMethods: CommonBookMethodsService
   ) { }
 
   ngOnInit(): void {
     this.getCurrentBookInformation();
-  }
-
-  private getCurrentBookInformation(): void {
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      this.bookId = params.get('id')!;
-    });
-
-    const url = `api/books/${this.bookId}`;
-    this.http.get<any>(url, { }).subscribe(
-      response => {
-      this.title = response.title;
-      this.bookDetails = response;
-      this.redirectIfNoBooksOnStock();
-      this.chooseAffiliateOptionsForBook();
-    }, error => {
-        if (error.status === 404 && error.error.message === 'Book not found') {
-            console.log(error);
-            this.router.navigate(['/']);
-        }
-      }
-    );
   }
 
   public borrow(): void {
@@ -67,6 +48,7 @@ export class BorrowBookComponent implements OnInit {
         localStorage.setItem('hasBorrowedBook', 'true');
         this.router.navigateByUrl(`/books/${this.bookId}/borrow-book/borrowed`);
     }, error => {
+      this.userEnabledService.validateIfUserIsEnabled(error);
       if (error.status === 404 && error.error.message === 'Book out of stock') {
         this.bookOutOfStock = true;
         this.invalidCardNumber = false;
@@ -103,6 +85,27 @@ export class BorrowBookComponent implements OnInit {
         }
       }
     }
+  }
+
+  private getCurrentBookInformation(): void {
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      this.bookId = params.get('id')!;
+    });
+
+    const url = `api/books/${this.bookId}`;
+    this.http.get<any>(url, { }).subscribe(
+      response => {
+      this.title = response.title;
+      this.bookDetails = response;
+      this.redirectIfNoBooksOnStock();
+      this.chooseAffiliateOptionsForBook();
+    }, error => {
+        if (error.status === 404 && error.error.message === 'Book not found') {
+            console.log(error);
+            this.router.navigate(['/']);
+        }
+      }
+    );
   }
 
   private redirectIfNoBooksOnStock(): void {

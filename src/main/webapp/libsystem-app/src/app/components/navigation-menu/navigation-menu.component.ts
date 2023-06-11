@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router, ActivatedRoute } from '@angular/router';
-import { UsertypeService } from '../../services/usertype/usertype.service';
+import { ActivatedRoute } from '@angular/router';
+import { UsertypeService } from 'src/app/services/user/usertype.service';
+import { CommonRedirectsService } from 'src/app/services/redirects/common-redirects.service';
 
 @Component({
   selector: 'app-navigation-menu',
@@ -14,25 +14,15 @@ export class NavigationMenuComponent implements OnInit {
   public loggedAsAdmin: boolean = false;
 
   constructor(
-    private http: HttpClient,
-    private router: Router,
     private route: ActivatedRoute,
-    private userTypeService: UsertypeService
+    private userTypeService: UsertypeService,
+    public commonRedirectsService: CommonRedirectsService
   ) { }
 
   ngOnInit(): void {
     this.hideNavbarOnLogout();
     this.checkIfUserIsLoggedIn();
     this.loggedAsAdmin = this.userTypeService.validateIfAdminIsLoggedIn();
-  }
-
-  public logout(): void {
-    const url = '/api/logout';
-    this.http.post(url, {}).subscribe(() => {
-      console.log('Logout successful');
-      this.router.navigate(['/login'], { queryParams: { logout: true } });  
-      sessionStorage.clear();
-    });
   }
 
   private checkIfUserIsLoggedIn(): void {
@@ -46,7 +36,7 @@ export class NavigationMenuComponent implements OnInit {
 
   private hideNavbarOnLogout(): void {
     this.route.queryParams.subscribe(params => {
-      if (params['logout'] === 'true') {
+      if (params['logout'] === 'true' || params['disabled'] === 'true') {
         this.loggedIn = false;
       }
     });

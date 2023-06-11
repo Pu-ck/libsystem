@@ -5,7 +5,7 @@
             <li><a href="/books">Book catalogue</a></li>
             <li><a href="/user-profile">User profile</a></li>
             <li *ngIf="loggedAsAdmin"><a href="/administration">Administration</a></li>
-            <li><a class="button" (click)="logout()">Logout</a></li>
+            <li><a class="button" (click)="commonRedirectsService.logout('normal')">Logout</a></li>
         </ul>
     </nav>
 </ng-container>

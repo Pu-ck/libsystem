@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 
 @Component({
   selector: 'app-users',
@@ -11,6 +12,11 @@ export class UsersComponent implements OnInit {
 
   public users: any[] = [];
   public userId: string = '';
+  public adminId: string = '';
+
+  public searchType: string = '';
+  public searchValue: string = '';
+
   public userNotFound: boolean = false;
   public showEnabled: boolean = false;
   public showDisabled = false;
@@ -18,20 +24,20 @@ export class UsersComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private userEnabledService: UserEnabledService
   ) { }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      this.userId = params['userId'] || '';
-      this.getUsers();
-    });
+    this.adminId = localStorage.getItem('adminId') ?? '';
+    this.getUsers();
   }
 
   public getUsers(): void {
     const url = '/api/administration/users';
-    let params = new HttpParams().set('userId', this.userId);
+
+    let params = this.getSearchType();
+
     this.http.get<any[]>(url, {params}).subscribe(
       response => {
         this.users = response;
@@ -50,16 +56,6 @@ export class UsersComponent implements OnInit {
     );
   }
 
-  public redirectToUserUpdateEnabledStatusForm(id: number): void {
-    this.router.navigate([`administration/users/${id}/user-enabled-status`]);
-  }
-
-  private setQueryParams(queryParams: {[key: string]: string}): void {
-    if (this.userId) {
-      queryParams['userId'] = this.userId;
-    }
-  }
-
   public setDisplayedStatus(status: string): void {
     if (status === 'Enabled') {
       this.showEnabled = true;
@@ -74,6 +70,39 @@ export class UsersComponent implements OnInit {
       this.showEnabled = false;
       this.showDisabled = false;
     } 
+  }
+
+  public redirectToUserUpdateEnabledStatusForm(id: number, status: boolean): void {
+    if (status) {
+      this.router.navigate([`administration/users/${id}/user-enabled-status`]);
+    } else {
+      this.userEnabledService.updateUserEnabledStatus(id, '');
+    }
+  }
+
+  private getSearchType(): HttpParams {
+    if (this.searchType === 'userId') {
+      return new HttpParams().set('userId', this.searchValue);
+    }
+    if (this.searchType === 'username') {
+      return new HttpParams().set('username', this.searchValue);
+    }
+    if (this.searchType === 'cardNumber') {
+      return new HttpParams().set('cardNumber', this.searchValue);
+    }
+    return new HttpParams().set('', '');
+  }
+
+  private setQueryParams(queryParams: {[key: string]: string}): void {
+    if (this.searchType === 'userId') {
+      queryParams['userId'] = this.searchValue;
+    }
+    if (this.searchType === 'username') {
+      queryParams['username'] = this.searchValue;
+    }
+    if (this.searchType === 'cardNumber') {
+      queryParams['cardNumber'] = this.searchValue;
+    }
   }
 
 }

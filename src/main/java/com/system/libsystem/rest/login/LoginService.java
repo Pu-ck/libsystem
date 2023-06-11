@@ -2,6 +2,7 @@ package com.system.libsystem.rest.login;
 
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserService;
+import com.system.libsystem.exceptions.user.UserNotEnabledException;
 import com.system.libsystem.session.SessionRegistry;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +24,7 @@ public class LoginService {
     public ResponseEntity<LoginSessionResponse> login(LoginRequest loginRequest) {
         final UserEntity userEntity = userService.loadUserByUsername(loginRequest.getUsername());
         final LoginSessionResponse loginSessionResponse = new LoginSessionResponse();
-        if (!userEntity.isEnabled()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(loginSessionResponse);
-        }
-
+        userService.validateIfUserIsEnabled(userEntity);
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                 loginRequest.getPassword()));
         final String sessionID = sessionRegistry.registerSession(loginRequest.getUsername());

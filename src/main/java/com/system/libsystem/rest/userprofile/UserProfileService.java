@@ -1,4 +1,4 @@
-package com.system.libsystem.rest.user;
+package com.system.libsystem.rest.userprofile;
 
 import com.system.libsystem.entities.book.BookEntity;
 import com.system.libsystem.entities.book.BookService;
@@ -14,7 +14,6 @@ import com.system.libsystem.exceptions.passwordreset.OldPasswordNotMatchingExcep
 import com.system.libsystem.helpermodels.UserBook;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
-import com.system.libsystem.session.SessionRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +33,6 @@ public class UserProfileService {
 
     private final BorrowedBookRepository borrowedBookRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final SessionRegistry sessionRegistry;
     private final MailSender mailSender;
     private final BorrowedBookService borrowedBookService;
     private final UserService userService;
@@ -45,6 +43,7 @@ public class UserProfileService {
 
     public List<String> getUserProfileInformation(HttpServletRequest httpServletRequest) {
         final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
+        userService.validateIfUserIsEnabled(userEntity);
         return List.of(userEntity.getUsername(), userEntity.getFirstName(), userEntity.getLastName(),
                 userEntity.getCardNumber().toString(), Integer.toString(userEntity.getBorrowedBooks()),
                 Integer.toString(userEntity.getOrderedBooks()));
@@ -52,6 +51,7 @@ public class UserProfileService {
 
     public List<UserBook> getUserBooks(HttpServletRequest httpServletRequest) {
         final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
+        userService.validateIfUserIsEnabled(userEntity);
         final Long userId = userEntity.getId();
         final List<UserBook> userBooks = new ArrayList<>();
 
@@ -77,6 +77,7 @@ public class UserProfileService {
 
     public void changeUserPassword(ChangePasswordRequest changePasswordRequest, HttpServletRequest httpServletRequest) {
         final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
+        userService.validateIfUserIsEnabled(userEntity);
         final String oldPassword = userEntity.getPassword();
         final String newPassword = changePasswordRequest.getNewPassword();
         final String requestOldPassword = changePasswordRequest.getOldPassword();
@@ -97,6 +98,7 @@ public class UserProfileService {
 
     public void extendBookReturnDate(ExtendBookRequest extendBookRequest, HttpServletRequest httpServletRequest) {
         final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
+        userService.validateIfUserIsEnabled(userEntity);
         final BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById(extendBookRequest
                 .getBorrowedBookId());
 
@@ -116,6 +118,7 @@ public class UserProfileService {
 
     public Set<FavouriteBookDTO> getUserFavouriteBooks(HttpServletRequest httpServletRequest) {
         final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
+        userService.validateIfUserIsEnabled(userEntity);
         final Set<FavouriteBookDTO> favouriteBookDTOs = new HashSet<>();
         setFavouriteBookDTOsForUser(favouriteBookDTOs, userEntity);
         return favouriteBookDTOs;

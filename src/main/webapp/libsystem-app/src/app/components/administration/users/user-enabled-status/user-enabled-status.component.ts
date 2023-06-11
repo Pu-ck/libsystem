@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-
+import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
+import { CommonRedirectsService } from 'src/app/services/redirects/common-redirects.service';
 @Component({
   selector: 'app-user-enabled-status',
   templateUrl: './user-enabled-status.component.html',
@@ -10,7 +11,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 export class UserEnabledStatusComponent implements OnInit {
 
   public model: any = {};
-  public userId: string = '';
+  public userId: number = 0;
   public users: any = [];
   public updateType: string = '';
   public username: string = '';
@@ -19,6 +20,8 @@ export class UserEnabledStatusComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
+    public userEnabledService: UserEnabledService,
+    public commonRedirectsService: CommonRedirectsService
   ) { }
 
   ngOnInit(): void {
@@ -40,12 +43,11 @@ export class UserEnabledStatusComponent implements OnInit {
 
   private getCurrentUserInformation(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
-      this.userId = params.get('id')!;
+      this.userId = Number(params.get('id')!);
     });
     const url = `api/administration/users?userId=${this.userId}`;
     this.http.get<any>(url, { }).subscribe(response => {
       this.users = response;
-      this.updateType = this.users[0].enabled ? 'Disable' : 'Enable';
       this.username = this.users[0].username;
       console.log(response);
     }, error => {

@@ -5,6 +5,7 @@ import com.system.libsystem.entities.book.BookEntity;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -16,8 +17,9 @@ public class FilterBooksController {
     private final FilterBooksService filterBooksService;
 
     @GetMapping
-    public List<BookEntity> filterByBooksProperties(@RequestParam Map<String, String> requestParameters) {
-        return filterBooksService.filterByBookProperties(requestParameters);
+    public List<BookEntity> filterByBooksProperties(HttpServletRequest httpServletRequest,
+                                                    @RequestParam Map<String, String> requestParameters) {
+        return filterBooksService.filterByBookProperties(httpServletRequest, requestParameters);
     }
 
     @GetMapping("/{book_id}")

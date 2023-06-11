@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +12,8 @@ export class HomeComponent implements OnInit {
   public newBooks: any;
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private userEnabledService: UserEnabledService
   ) { }
 
   ngOnInit(): void {
@@ -23,7 +25,7 @@ export class HomeComponent implements OnInit {
     this.http.get<any>(url, { }).subscribe(response => {
       this.newBooks = response;
     }, error => {
-        console.log(error);
+        this.userEnabledService.validateIfUserIsEnabled(error);
       }
     );
   }

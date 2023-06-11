@@ -1,6 +1,5 @@
-package com.system.libsystem.rest.user;
+package com.system.libsystem.rest.userprofile;
 
-import com.system.libsystem.entities.book.BookEntity;
 import com.system.libsystem.helpermodels.UserBook;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

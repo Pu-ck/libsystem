@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class PasswordReminderTokenExpiredException extends RuntimeException {
 
     private final String token;
-    private final Long id;
+    private final Long tokenId;
 
     @Override
     public String getMessage() {
-        return "The password reminder token " + token + " with id " + id + " has expired";
+        return "The password reminder token " + token + " with id " + tokenId + " has expired";
     }
 
 }

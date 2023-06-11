@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 
 @Component({
   selector: 'app-favourites',
@@ -8,10 +9,11 @@ import { HttpClient } from '@angular/common/http';
 })
 export class FavouritesComponent implements OnInit {
 
-  public favouriteBooks: any;
+  public favouriteBooks: any = [];
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private userEnabledService: UserEnabledService
   ) { }
 
   ngOnInit(): void {
@@ -23,7 +25,7 @@ export class FavouritesComponent implements OnInit {
     this.http.get<any>(url, { }).subscribe(response => {
       this.favouriteBooks = response;
     }, error => {
-        console.log(error);
+        this.userEnabledService.validateIfUserIsEnabled(error);
       }
     );
   }

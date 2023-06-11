@@ -1,8 +1,8 @@
 <p>{{ updateType }} user {{ username }} with id {{ userId }}</p>
 
-<form name="form" (ngSubmit)="updateUserEnabledStatus()" #borrowForm="ngForm">
+<form name="form" (ngSubmit)="userEnabledService.updateUserEnabledStatus(userId, model.reason)" #borrowForm="ngForm">
 
-    <ng-container *ngIf="updateType === 'Disable'">
+    <ng-container>
         <label for="reason">Reason</label>
         <input type="text" name="reason" [(ngModel)]="model.reason" #reason="ngModel" maxlength="100" required>
         <div *ngIf="reason?.invalid && (reason?.dirty || reason?.touched)">
@@ -11,7 +11,9 @@
     </ng-container>
    
     <div>
-        <button type="submit" [disabled]="!borrowForm.valid">{{ updateType }}</button>
+        <button type="submit" [disabled]="!borrowForm.valid">Disable</button>
     </div>
 
 </form>
+
+<button (click)="commonRedirectsService.redirectToUsersList()">Back to users list</button>

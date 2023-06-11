@@ -7,6 +7,7 @@ import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.exceptions.book.BookNotFoundException;
 import com.system.libsystem.exceptions.favourite.BookNotFoundInUserFavouriteBooksException;
+import com.system.libsystem.exceptions.user.UserNotEnabledException;
 import com.system.libsystem.session.SessionRegistry;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class FavouriteBookService {
         final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
         final BookEntity bookEntity = bookRepository.findById(favouriteBookRequest.getBookId()).orElseThrow(() ->
                 new BookNotFoundException(favouriteBookRequest.getBookId()));
+        userService.validateIfUserIsEnabled(userEntity);
         final Set<BookEntity> updatedFavouriteBooks = userEntity.getFavouriteBooks();
         updatedFavouriteBooks.add(bookEntity);
         updateUserFavouriteBooksAndSaveInRepository(userEntity, updatedFavouriteBooks);
@@ -38,7 +40,8 @@ public class FavouriteBookService {
     public void removeBookFromFavourites(HttpServletRequest httpServletRequest, Long bookId) {
         final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         final String username = sessionRegistry.getSessionUsername(sessionID);
-        UserEntity userEntity = userService.getUserByUsername(username);
+        final UserEntity userEntity = userService.getUserByUsername(username);
+        userService.validateIfUserIsEnabled(userEntity);
         final BookEntity bookEntity = bookRepository.findById(bookId).orElseThrow(() -> new BookNotFoundException(bookId));
 
         if (!userEntity.getFavouriteBooks().contains(bookEntity)) {

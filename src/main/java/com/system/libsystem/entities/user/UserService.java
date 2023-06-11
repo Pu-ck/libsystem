@@ -7,6 +7,7 @@ import com.system.libsystem.exceptions.cardnumber.InvalidCardNumberFormatExcepti
 import com.system.libsystem.exceptions.registration.InvalidEmailAddressFormat;
 import com.system.libsystem.exceptions.registration.InvalidPasswordLengthException;
 import com.system.libsystem.exceptions.registration.UsernameAlreadyTakenException;
+import com.system.libsystem.exceptions.user.UserNotEnabledException;
 import com.system.libsystem.session.SessionRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,6 +80,12 @@ public class UserService implements UserDetailsService {
         final String encodedPassword = bCryptPasswordEncoder.encode(newPassword);
         userEntity.setPassword(encodedPassword);
         userRepository.save(userEntity);
+    }
+
+    public void validateIfUserIsEnabled(UserEntity userEntity) {
+        if (!userEntity.isEnabled()) {
+            throw new UserNotEnabledException(userEntity.getId());
+        }
     }
 
     public UserEntity getCurrentlyLoggedUser(HttpServletRequest httpServletRequest) {

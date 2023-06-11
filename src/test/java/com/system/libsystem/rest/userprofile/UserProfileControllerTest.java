@@ -1,4 +1,4 @@
-package com.system.libsystem.rest.user;
+package com.system.libsystem.rest.userprofile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

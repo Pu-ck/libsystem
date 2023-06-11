@@ -8,11 +8,11 @@ import lombok.Getter;
 
 public class UnableToExtendNotAcceptedBookException extends RuntimeException {
 
-    private final Long id;
+    private final Long bookId;
 
     @Override
     public String getMessage() {
-        return "Unable to extended return date of the requested borrowed book with id " + id + " because the book is " +
+        return "Unable to extended return date of the requested borrowed book with id " + bookId + " because the book is " +
                 "not accepted";
     }
 

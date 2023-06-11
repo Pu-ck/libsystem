@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 
 @Component({
   selector: 'app-change-password',
@@ -13,7 +14,10 @@ export class ChangePasswordComponent implements OnInit {
   public oldPasswordNotMatching: boolean = false;
   public newPasswordSet = false;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private userEnabledService: UserEnabledService
+    ) { }
 
   ngOnInit(): void {
   }
@@ -29,6 +33,7 @@ export class ChangePasswordComponent implements OnInit {
         this.passwordDuplicated = false;
         this.oldPasswordNotMatching = false;
     }, error => {
+      this.userEnabledService.validateIfUserIsEnabled(error);
       if (error.status === 409) {
         if (error.error.message === 'New password same as old one') {
           this.passwordDuplicated = true;

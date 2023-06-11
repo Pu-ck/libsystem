@@ -1,4 +1,4 @@
-package com.system.libsystem.rest.user;
+package com.system.libsystem.rest.userprofile;
 
 import com.system.libsystem.entities.affiliate.AffiliateEntity;
 import com.system.libsystem.entities.affiliatebook.AffiliateBook;

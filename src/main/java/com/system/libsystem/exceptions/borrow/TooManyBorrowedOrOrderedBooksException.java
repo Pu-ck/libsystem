@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Too many books borrowed or ordered")
 public class TooManyBorrowedOrOrderedBooksException extends RuntimeException {
 
-    private final Long id;
+    private final Long bookId;
 
     @Override
     public String getMessage() {
-        return "The order is exceeding borrowed or ordered books of user with id " + id;
+        return "The order is exceeding borrowed or ordered books of user with id " + bookId;
     }
 
 }

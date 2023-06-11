@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { CommonRedirectsService } from '../../services/redirects/common-redirects.service';
+import { CommonRedirectsService } from 'src/app/services/redirects/common-redirects.service';
 
 @Component({
   selector: 'app-password-reminder',

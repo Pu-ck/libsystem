@@ -11,10 +11,20 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class UserNotFoundException extends RuntimeException {
 
     private final Long userId;
+    private final Long cardNumber;
+    private final String username;
 
     @Override
     public String getMessage() {
-        return "Unable to find book with id " + userId;
+        if (userId != null) {
+            return "Unable to find user with ID: " + userId;
+        } else if (cardNumber != null) {
+            return "Unable to find user with card number: " + cardNumber;
+        } else if (username != null) {
+            return "Unable to find user with username: " + username;
+        } else {
+            return "User not found";
+        }
     }
 
 }

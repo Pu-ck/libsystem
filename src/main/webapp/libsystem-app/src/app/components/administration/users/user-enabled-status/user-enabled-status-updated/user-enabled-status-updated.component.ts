@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonRedirectsService } from 'src/app/services/redirects/common-redirects.service';
 
 @Component({
   selector: 'app-user-enabled-status-updated',
@@ -11,7 +12,8 @@ export class UserEnabledStatusUpdatedComponent implements OnInit {
   public userEnabledStatusUpdated: boolean = false;
 
   constructor(
-    private router: Router
+    private router: Router,
+    public commonRedirectsService: CommonRedirectsService
   ) { }
 
   ngOnInit(): void {

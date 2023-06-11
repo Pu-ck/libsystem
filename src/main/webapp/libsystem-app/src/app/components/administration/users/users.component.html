@@ -1,9 +1,16 @@
 <p>Users</p>
 
 <form name="form" (submit)="getUsers()" #searchForm="ngForm">
+
+    <label for="searchType">Search with</label>
+    <select name="searchType" [(ngModel)]="searchType">
+        <option value="userId">User ID</option>
+        <option value="username">Username</option>
+        <option value="cardNumber">Card number</option>
+    </select>
+
     <div>
-        <label for="userId">User ID</label>
-        <input type="text" name="userId" [(ngModel)]="userId">
+        <input type="text" name="searchValue" [(ngModel)]="searchValue">
         <button type="submit">Search</button>
     </div>
 </form>
@@ -58,7 +65,7 @@
                 {{ user.userType }}
             </td>
             <td>
-                <button (click)="redirectToUserUpdateEnabledStatusForm(user.id)">
+                <button [disabled]="user.id.toString() === adminId" (click)="redirectToUserUpdateEnabledStatusForm(user.id, user.enabled)">
                     {{ user.enabled ? 'Disable' : 'Enable' }}
                 </button>
             </td>
