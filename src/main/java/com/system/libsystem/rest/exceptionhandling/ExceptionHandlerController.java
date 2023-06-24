@@ -18,7 +18,7 @@ import com.system.libsystem.exceptions.peselnumber.UnableToAuthenticatePeselNumb
 import com.system.libsystem.exceptions.registration.UsernameAlreadyTakenException;
 import com.system.libsystem.exceptions.user.UserNotEnabledException;
 import com.system.libsystem.exceptions.user.UserNotFoundException;
-import com.system.libsystem.rest.administration.administration.AdministratorChangesItsOwnEnabledStatusException;
+import com.system.libsystem.exceptions.administration.AdministratorChangesItsOwnEnabledStatusException;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.administration.AdministratorChangesItsOwnEnabledStatusResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.book.BookNotFoundResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.borrow.BookOutOfStockResponse;

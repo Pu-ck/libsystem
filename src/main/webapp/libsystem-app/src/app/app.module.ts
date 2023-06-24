@@ -28,6 +28,7 @@ import { CardNumbersComponent } from './components/administration/card-numbers/c
 import { AdminBooksComponent } from './components/administration/admin-books/admin-books.component';
 import { UserEnabledStatusComponent } from './components/administration/users/user-enabled-status/user-enabled-status.component';
 import { UserEnabledStatusUpdatedComponent } from './components/administration/users/user-enabled-status/user-enabled-status-updated/user-enabled-status-updated.component';
+import { RegisterCardNumberComponent } from './components/administration/card-numbers/register-card-number/register-card-number.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { UserEnabledStatusUpdatedComponent } from './components/administration/u
     CardNumbersComponent,
     AdminBooksComponent,
     UserEnabledStatusComponent,
-    UserEnabledStatusUpdatedComponent
+    UserEnabledStatusUpdatedComponent,
+    RegisterCardNumberComponent
   ],
   imports: [
     BrowserModule,

@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.sql.Date;
 
@@ -35,7 +36,8 @@ public class ReadyOrderService {
     private final MailSender mailSender;
 
     @Transactional
-    public void setOrderStatus(ReadyOrderRequest readyOrderRequest) {
+    public void setOrderStatus(ReadyOrderRequest readyOrderRequest, HttpServletRequest httpServletRequest) {
+        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         final Date currentDate = new Date(System.currentTimeMillis());
         final Date readyDate = Date.valueOf(currentDate.toLocalDate().plusDays(DAYS_TO_PICK_UP_ORDERED_BOOK));
         final BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById

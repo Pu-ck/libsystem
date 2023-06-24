@@ -12,6 +12,7 @@ import com.system.libsystem.mail.MailSender;
 import com.system.libsystem.rest.util.BookUtil;
 import com.system.libsystem.scheduler.SchedulerDateUtil;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class OrderPickUpCheckerTask {
 

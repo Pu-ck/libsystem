@@ -3,7 +3,7 @@ package com.system.libsystem.rest.administration.users;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.entities.user.UserService;
-import com.system.libsystem.rest.administration.administration.AdministratorChangesItsOwnEnabledStatusException;
+import com.system.libsystem.exceptions.administration.AdministratorChangesItsOwnEnabledStatusException;
 import com.system.libsystem.exceptions.user.UserNotFoundException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,13 +30,15 @@ public class UsersService {
     @Value("${application.login.address}")
     private String loginPageAddress;
 
-    public List<UserEntity> getUsers() {
+    public List<UserEntity> getUsers(HttpServletRequest httpServletRequest) {
+        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         return userRepository.findAll();
     }
 
-    public List<UserEntity> getUserById(Long userId) {
+    public List<UserEntity> getUserById(Long userId, HttpServletRequest httpServletRequest) {
+        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         if (userId == null) {
-            return getUsers();
+            return getUsers(httpServletRequest);
         }
         final List<UserEntity> userEntities = new ArrayList<>();
         final UserEntity userEntity = userRepository.findById(userId).orElseThrow(() ->
@@ -44,9 +47,10 @@ public class UsersService {
         return userEntities;
     }
 
-    public List<UserEntity> getUserByUsername(String username) {
+    public List<UserEntity> getUserByUsername(String username, HttpServletRequest httpServletRequest) {
+        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         if (username == null || username.isEmpty()) {
-            return getUsers();
+            return getUsers(httpServletRequest);
         }
         final List<UserEntity> userEntities = new ArrayList<>();
         final UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() ->
@@ -55,9 +59,10 @@ public class UsersService {
         return userEntities;
     }
 
-    public List<UserEntity> getUserByCardNumber(Long cardNumber) {
+    public List<UserEntity> getUserByCardNumber(Long cardNumber, HttpServletRequest httpServletRequest) {
+        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         if (cardNumber == null) {
-            return getUsers();
+            return getUsers(httpServletRequest);
         }
         final List<UserEntity> userEntities = new ArrayList<>();
         final UserEntity userEntity = userRepository.findByCardNumber(cardNumber).orElseThrow(() ->
@@ -66,8 +71,10 @@ public class UsersService {
         return userEntities;
     }
 
+    @Transactional
     public void updateUserEnabledStatus(UpdateUserEnabledStatusRequest updateUserEnabledStatusRequest,
                                         HttpServletRequest httpServletRequest) {
+        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         final UserEntity userEntity = userRepository.findById(updateUserEnabledStatusRequest.getUserId())
                 .orElseThrow(() -> new UserNotFoundException(updateUserEnabledStatusRequest.getUserId(), null, null));
         final UserEntity admin = userService.getCurrentlyLoggedUser(httpServletRequest);
@@ -83,6 +90,7 @@ public class UsersService {
     }
 
     public Long getAdminId(HttpServletRequest httpServletRequest) {
+        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         return userService.getCurrentlyLoggedUser(httpServletRequest).getId();
     }
 

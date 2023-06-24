@@ -7,18 +7,19 @@ import com.system.libsystem.entities.user.UserRepository;
 import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.exceptions.book.BookNotFoundException;
 import com.system.libsystem.exceptions.favourite.BookNotFoundInUserFavouriteBooksException;
-import com.system.libsystem.exceptions.user.UserNotEnabledException;
 import com.system.libsystem.session.SessionRegistry;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.Set;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class FavouriteBookService {
 
@@ -27,21 +28,23 @@ public class FavouriteBookService {
     private final SessionRegistry sessionRegistry;
     private final UserService userService;
 
+    @Transactional
     public void addBookToFavourites(HttpServletRequest httpServletRequest, FavouriteBookRequest favouriteBookRequest) {
         final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
         final BookEntity bookEntity = bookRepository.findById(favouriteBookRequest.getBookId()).orElseThrow(() ->
                 new BookNotFoundException(favouriteBookRequest.getBookId()));
-        userService.validateIfUserIsEnabled(userEntity);
+        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         final Set<BookEntity> updatedFavouriteBooks = userEntity.getFavouriteBooks();
         updatedFavouriteBooks.add(bookEntity);
         updateUserFavouriteBooksAndSaveInRepository(userEntity, updatedFavouriteBooks);
     }
 
+    @Transactional
     public void removeBookFromFavourites(HttpServletRequest httpServletRequest, Long bookId) {
         final String sessionID = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
         final String username = sessionRegistry.getSessionUsername(sessionID);
         final UserEntity userEntity = userService.getUserByUsername(username);
-        userService.validateIfUserIsEnabled(userEntity);
+        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         final BookEntity bookEntity = bookRepository.findById(bookId).orElseThrow(() -> new BookNotFoundException(bookId));
 
         if (!userEntity.getFavouriteBooks().contains(bookEntity)) {

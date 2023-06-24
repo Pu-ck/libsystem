@@ -1,4 +1,4 @@
-package com.system.libsystem.rest.administration.administration;
+package com.system.libsystem.exceptions.administration;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

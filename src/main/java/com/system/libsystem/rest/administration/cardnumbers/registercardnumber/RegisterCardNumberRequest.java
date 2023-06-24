@@ -1,4 +1,4 @@
-package com.system.libsystem.rest.administration.cardnumber;
+package com.system.libsystem.rest.administration.cardnumbers.registercardnumber;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterNewCardNumberRequest {
+public class RegisterCardNumberRequest {
     private Long cardNumber;
     private String peselNumber;
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 
 @Component({
@@ -25,19 +25,24 @@ export class UsersComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private userEnabledService: UserEnabledService
+    private userEnabledService: UserEnabledService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.adminId = localStorage.getItem('adminId') ?? '';
-    this.getUsers();
+    this.adminId = sessionStorage.getItem('adminId') || '';
+    this.route.queryParams.subscribe(params => {
+      if (!params['userId']) {
+        this.getUsers();
+      } else {
+        this.getUser(params['userId']);
+      }
+    });
   }
 
   public getUsers(): void {
     const url = '/api/administration/users';
-
     let params = this.getSearchType();
-
     this.http.get<any[]>(url, {params}).subscribe(
       response => {
         this.users = response;
@@ -47,6 +52,7 @@ export class UsersComponent implements OnInit {
         this.router.navigate(['/administration/users'], { queryParams });
       },
       error => {
+        this.userEnabledService.validateIfUserIsEnabled(error);
         if (error.status === 404 && error.error.message === 'User not found') {
           this.userNotFound = true;
           this.users = [];
@@ -78,6 +84,25 @@ export class UsersComponent implements OnInit {
     } else {
       this.userEnabledService.updateUserEnabledStatus(id, '');
     }
+  }
+
+  private getUser(userId: string): void {
+    const url = '/api/administration/users';
+    let params = new HttpParams().set('userId', userId);
+    this.http.get<any[]>(url, {params}).subscribe(
+      response => {
+        this.users = response;
+        this.userNotFound = false;
+      },
+      error => {
+        this.userEnabledService.validateIfUserIsEnabled(error);
+        if (error.status === 404 && error.error.message === 'User not found') {
+          this.userNotFound = true;
+          this.users = [];
+          console.log(error);
+        }
+      }
+    );
   }
 
   private getSearchType(): HttpParams {

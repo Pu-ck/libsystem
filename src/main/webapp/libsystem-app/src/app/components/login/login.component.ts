@@ -24,14 +24,7 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      if (params['logout'] === 'true') {
-        this.loggedOut = true;
-      }
-      if (params['disabled'] === 'true') {
-        this.disabled = true;
-      }
-    });
+    this.validateIfUserISLoggedOutOrDisabled();
   }
 
   public login(): void {
@@ -44,7 +37,7 @@ export class LoginComponent implements OnInit {
         this.userType = response.userType;
         sessionStorage.setItem('token', this.sessionID);
         sessionStorage.setItem('userType', this.userType);
-        window.location.href = '/'
+        window.location.href = '/';
     }, error => {
       if (error.status === 403 && error.error.message === 'User not enabled') {
         this.notEnabled = true;
@@ -54,7 +47,6 @@ export class LoginComponent implements OnInit {
         this.unauthorized = true;
         this.notEnabled = false;
       }
-    
     }
     );
   }
@@ -66,5 +58,16 @@ export class LoginComponent implements OnInit {
   public redirectToPasswordReminderForm(): void {
     this.router.navigate(['/password-reminder']);
   }
-  
+ 
+  private validateIfUserISLoggedOutOrDisabled(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['logout'] === 'true') {
+        this.loggedOut = true;
+      }
+      if (params['disabled'] === 'true') {
+        this.disabled = true;
+      }
+    });
+  }
+
 }

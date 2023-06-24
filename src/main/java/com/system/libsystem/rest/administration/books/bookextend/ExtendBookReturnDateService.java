@@ -16,6 +16,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.sql.Date;
 import java.time.LocalDate;
 
@@ -30,8 +32,10 @@ public class ExtendBookReturnDateService {
     private final BorrowedBookService borrowedBookService;
     private final MailSender mailSender;
 
-    public void extendRequestedBookReturnDate(ExtendBookReturnDateRequest extendBookReturnDateRequest) {
-
+    @Transactional
+    public void extendRequestedBookReturnDate(ExtendBookReturnDateRequest extendBookReturnDateRequest,
+                                              HttpServletRequest httpServletRequest) {
+        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         final BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById(extendBookReturnDateRequest
                 .getBorrowedBookId());
         final UserEntity userEntity = userService.getUserById(borrowedBookEntity.getUserId());

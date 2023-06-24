@@ -24,11 +24,11 @@ export class BorrowedComponent implements OnInit {
   }
 
   private checkIfUserHasBorrowedBook(): void {
-    const hasBorrowedBook = localStorage.getItem('hasBorrowedBook');
+    const hasBorrowedBook = sessionStorage.getItem('hasBorrowedBook');
     if (hasBorrowedBook !== 'true') {
       this.router.navigateByUrl('/');
     }
-    localStorage.setItem('hasBorrowedBook', 'false');
+    sessionStorage.setItem('hasBorrowedBook', 'false');
   }
 
 }

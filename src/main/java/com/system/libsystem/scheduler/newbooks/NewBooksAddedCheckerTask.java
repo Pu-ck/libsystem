@@ -7,13 +7,14 @@ import com.system.libsystem.entities.newbook.NewBookRepository;
 import com.system.libsystem.exceptions.newbook.NewBookNotFoundException;
 import com.system.libsystem.scheduler.SchedulerDateUtil;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class NewBooksAddedCheckerTask {
 

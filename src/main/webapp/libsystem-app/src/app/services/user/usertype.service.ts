@@ -6,33 +6,28 @@ import { HttpClient } from '@angular/common/http';
 })
 export class UsertypeService {
 
-  private adminId: string = '';
-
   constructor(
     private http: HttpClient
   ) { }
 
-  public validateIfAdminIsLoggedIn(): boolean {
+  public validateIfAdminIsLoggedIn(): void {
     const userType = sessionStorage.getItem('userType');
-    if (userType === 'ADMIN') {
+    const adminId = sessionStorage.getItem('adminId');
+    if (userType === 'ADMIN' && adminId == null) {
       this.setAdminId();
-      return true;
     }
-    return false;
   }
 
   private setAdminId(): void {
     const url = '/api/administration/users/admin-id';
-
     this.http.get<any[]>(url, {}).subscribe(
       response => {
-        localStorage.setItem('adminId', response.toString());
+        sessionStorage.setItem('adminId', response.toString());
       },
       error => {
         console.log(error);
       }
     );
-
   }
 
 }

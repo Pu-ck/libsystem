@@ -16,11 +16,11 @@ import com.system.libsystem.exceptions.affiliate.AffiliateNotFoundException;
 import com.system.libsystem.exceptions.borrow.BookOutOfStockException;
 import com.system.libsystem.exceptions.borrow.TooManyBorrowedOrOrderedBooksException;
 import com.system.libsystem.exceptions.cardnumber.UnableToAuthenticateCardNumberException;
-import com.system.libsystem.exceptions.user.UserNotEnabledException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
 import com.system.libsystem.rest.util.BookUtil;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,7 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class BorrowBookService {
 
@@ -59,7 +59,7 @@ public class BorrowBookService {
         final AffiliateEntity affiliateEntity = affiliateRepository.findByName(affiliate).orElseThrow(() ->
                 new AffiliateNotFoundException(affiliate));
 
-        userService.validateIfUserIsEnabled(userEntity);
+        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         if (!bookUtil.isCardNumberValid(borrowBookRequest.getCardNumber(), cardNumber)) {
             throw new UnableToAuthenticateCardNumberException();
         }

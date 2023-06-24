@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -38,6 +39,7 @@ public class PasswordReminderService {
     @Value("${application.password-reset.address}")
     private String passwordReminderAddress;
 
+    @Transactional
     public void remindPassword(PasswordReminderRequest passwordReminderRequest) {
         final UserEntity userEntity = userService.getUserByUsername(passwordReminderRequest.getUsername());
         final String token = UUID.randomUUID().toString();
@@ -54,6 +56,7 @@ public class PasswordReminderService {
         }
     }
 
+    @Transactional
     public void resetPassword(ResetPasswordRequest resetPasswordRequest) {
         final PasswordReminderTokenEntity passwordReminderTokenEntity = passwordReminderTokenRepository
                 .findByToken(resetPasswordRequest.getToken()).orElseThrow(()

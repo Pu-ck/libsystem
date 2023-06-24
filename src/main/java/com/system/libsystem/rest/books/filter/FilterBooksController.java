@@ -23,8 +23,9 @@ public class FilterBooksController {
     }
 
     @GetMapping("/{book_id}")
-    public BookEntity getBookDetails(@PathVariable("book_id") Long bookId) {
-        return filterBooksService.getBookDetails(bookId);
+    public BookEntity getBookDetails(@PathVariable("book_id") Long bookId,
+                                     HttpServletRequest httpServletRequest) {
+        return filterBooksService.getBookDetails(bookId, httpServletRequest);
     }
 
 }

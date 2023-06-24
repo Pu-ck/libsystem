@@ -3,7 +3,6 @@ package com.system.libsystem.rest.books.filter;
 import com.system.libsystem.entities.book.BookEntity;
 import com.system.libsystem.entities.book.BookRepository;
 import com.system.libsystem.entities.book.BookService;
-import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,14 +28,14 @@ public class FilterBooksService {
     private final BookService bookService;
     private final UserService userService;
 
-    public BookEntity getBookDetails(Long bookId) {
+    public BookEntity getBookDetails(Long bookId, HttpServletRequest httpServletRequest) {
+        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         return bookService.getBookById(bookId);
     }
 
     public List<BookEntity> filterByBookProperties(HttpServletRequest httpServletRequest,
                                                    Map<String, String> requestParameters) {
-        final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
-        userService.validateIfUserIsEnabled(userEntity);
+        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         final String title = Optional.ofNullable(requestParameters.get("title")).orElse("");
         final String author = Optional.ofNullable(requestParameters.get("author")).orElse("");
         final String publisher = Optional.ofNullable(requestParameters.get("publisher")).orElse("");

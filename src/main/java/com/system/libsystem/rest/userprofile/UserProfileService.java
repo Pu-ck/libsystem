@@ -21,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -43,7 +44,7 @@ public class UserProfileService {
 
     public List<String> getUserProfileInformation(HttpServletRequest httpServletRequest) {
         final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
-        userService.validateIfUserIsEnabled(userEntity);
+        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         return List.of(userEntity.getUsername(), userEntity.getFirstName(), userEntity.getLastName(),
                 userEntity.getCardNumber().toString(), Integer.toString(userEntity.getBorrowedBooks()),
                 Integer.toString(userEntity.getOrderedBooks()));
@@ -51,7 +52,7 @@ public class UserProfileService {
 
     public List<UserBook> getUserBooks(HttpServletRequest httpServletRequest) {
         final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
-        userService.validateIfUserIsEnabled(userEntity);
+        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         final Long userId = userEntity.getId();
         final List<UserBook> userBooks = new ArrayList<>();
 
@@ -75,9 +76,10 @@ public class UserProfileService {
         return userBooks;
     }
 
+    @Transactional
     public void changeUserPassword(ChangePasswordRequest changePasswordRequest, HttpServletRequest httpServletRequest) {
         final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
-        userService.validateIfUserIsEnabled(userEntity);
+        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         final String oldPassword = userEntity.getPassword();
         final String newPassword = changePasswordRequest.getNewPassword();
         final String requestOldPassword = changePasswordRequest.getOldPassword();
@@ -96,9 +98,10 @@ public class UserProfileService {
         sendNewPasswordSetInApplicationMail(userEntity);
     }
 
+    @Transactional
     public void extendBookReturnDate(ExtendBookRequest extendBookRequest, HttpServletRequest httpServletRequest) {
         final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
-        userService.validateIfUserIsEnabled(userEntity);
+        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         final BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById(extendBookRequest
                 .getBorrowedBookId());
 
@@ -118,7 +121,7 @@ public class UserProfileService {
 
     public Set<FavouriteBookDTO> getUserFavouriteBooks(HttpServletRequest httpServletRequest) {
         final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
-        userService.validateIfUserIsEnabled(userEntity);
+        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         final Set<FavouriteBookDTO> favouriteBookDTOs = new HashSet<>();
         setFavouriteBookDTOsForUser(favouriteBookDTOs, userEntity);
         return favouriteBookDTOs;

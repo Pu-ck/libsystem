@@ -159,12 +159,4 @@ public class MailBuilder {
                 "<p>If you need more information on locking your account, contact the administration.<p>";
     }
 
-    public static String getAccountEnabledBackMailBody(String firstName, String lastName, String reason) {
-        return "Hello " + firstName + " " + lastName + "," +
-                "<p>Your account have been enabled back by the administrator, reason: <p>" +
-                "<p>" + reason + "<p>" +
-                "<p>You can now again use the library system application.<p>";
-
-    }
-
 }

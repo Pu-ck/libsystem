@@ -1,1 +1,42 @@
 <p>Card numbers</p>
+
+<button (click)="redirectToRegisterNewCardNumberForm()">Register new card number</button>
+
+<form name="form" (submit)="getCardNumbers()" #searchForm="ngForm">
+
+    <label for="searchType">Search with</label>
+    <select name="searchType" [(ngModel)]="searchType">
+        <option value="cardNumberId">Card number ID</option>
+        <option value="cardNumber">Card number</option>
+    </select>
+
+    <div>
+        <input type="text" name="searchValue" [(ngModel)]="searchValue">
+        <button type="submit">Search</button>
+    </div>
+</form>
+
+<table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>User ID</th>
+        <th>Card number</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cardNumber of cardNumbers">
+        <td>
+            {{ cardNumber.id }}
+        </td>
+        <td>
+          <a [routerLink]="['/administration/users']" [queryParams]="{ userId: cardNumber.userId }">{{ cardNumber.userId }}</a>
+        </td>
+        <td>
+            {{ cardNumber.cardNumber }}
+        </td>
+      </tr>
+    </tbody>
+</table>
+
+<p *ngIf="cardNumberNotFound">Unable to find specified card number</p>

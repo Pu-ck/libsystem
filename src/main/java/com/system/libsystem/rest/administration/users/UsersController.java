@@ -15,26 +15,29 @@ public class UsersController {
     private final UsersService usersService;
 
     @GetMapping
-    public List<UserEntity> getUsers() {
-        return usersService.getUsers();
+    public List<UserEntity> getUsers(HttpServletRequest httpServletRequest) {
+        return usersService.getUsers(httpServletRequest);
     }
 
     @GetMapping
     @RequestMapping(params = "userId")
-    public List<UserEntity> getUserById(@RequestParam(required = false) Long userId) {
-        return usersService.getUserById(userId);
+    public List<UserEntity> getUserById(@RequestParam(required = false) Long userId,
+                                        HttpServletRequest httpServletRequest) {
+        return usersService.getUserById(userId, httpServletRequest);
     }
 
     @GetMapping
     @RequestMapping(params = "username")
-    public List<UserEntity> getUserByUsername(@RequestParam(required = false) String username) {
-        return usersService.getUserByUsername(username);
+    public List<UserEntity> getUserByUsername(@RequestParam(required = false) String username,
+                                              HttpServletRequest httpServletRequest) {
+        return usersService.getUserByUsername(username, httpServletRequest);
     }
 
     @GetMapping
     @RequestMapping(params = "cardNumber")
-    public List<UserEntity> getUserByCardNumber(@RequestParam(required = false) Long cardNumber) {
-        return usersService.getUserByCardNumber(cardNumber);
+    public List<UserEntity> getUserByCardNumber(@RequestParam(required = false) Long cardNumber,
+                                                HttpServletRequest httpServletRequest) {
+        return usersService.getUserByCardNumber(cardNumber, httpServletRequest);
     }
 
     @GetMapping("/admin-id")

@@ -45,7 +45,7 @@ export class BorrowBookComponent implements OnInit {
       affiliate: this.model.affiliate
     }).subscribe(response => {
         console.log(response);
-        localStorage.setItem('hasBorrowedBook', 'true');
+        sessionStorage.setItem('hasBorrowedBook', 'true');
         this.router.navigateByUrl(`/books/${this.bookId}/borrow-book/borrowed`);
     }, error => {
       this.userEnabledService.validateIfUserIsEnabled(error);

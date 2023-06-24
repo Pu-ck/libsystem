@@ -40,6 +40,7 @@ public class RegistrationService {
     @Value("${mail.sender.admin}")
     private String adminMail;
 
+    @Transactional
     public ResponseEntity<RegistrationResponse> register(RegistrationRequest registrationRequest) {
         if (isCardNumberAlreadyRegistered(registrationRequest)) {
             final UserEntity userEntity = new UserEntity();

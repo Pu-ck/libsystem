@@ -82,6 +82,11 @@ public class UserService implements UserDetailsService {
         userRepository.save(userEntity);
     }
 
+    public void validateIfUserIsEnabledByServletRequest(HttpServletRequest httpServletRequest) {
+        final UserEntity userEntity = getCurrentlyLoggedUser(httpServletRequest);
+        validateIfUserIsEnabled(userEntity);
+    }
+
     public void validateIfUserIsEnabled(UserEntity userEntity) {
         if (!userEntity.isEnabled()) {
             throw new UserNotEnabledException(userEntity.getId());

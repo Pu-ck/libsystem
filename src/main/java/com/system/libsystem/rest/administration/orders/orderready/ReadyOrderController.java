@@ -3,6 +3,8 @@ package com.system.libsystem.rest.administration.orders.orderready;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/administration/books/{book_id}/ready-order")
@@ -12,9 +14,10 @@ public class ReadyOrderController {
 
     @PutMapping
     public void setOrderStatus(@RequestBody ReadyOrderRequest readyOrderRequest,
-                               @PathVariable("book_id") Long bookId) {
+                               @PathVariable("book_id") Long bookId,
+                               HttpServletRequest httpServletRequest) {
         readyOrderRequest.setBorrowedBookId(bookId);
-        readyOrderService.setOrderStatus(readyOrderRequest);
+        readyOrderService.setOrderStatus(readyOrderRequest, httpServletRequest);
     }
 
 }

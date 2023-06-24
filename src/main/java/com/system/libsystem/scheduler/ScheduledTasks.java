@@ -3,14 +3,14 @@ package com.system.libsystem.scheduler;
 import com.system.libsystem.scheduler.newbooks.NewBooksAddedCheckerTask;
 import com.system.libsystem.scheduler.orderpickup.OrderPickUpCheckerTask;
 import com.system.libsystem.scheduler.penalty.ReturnDateCheckerTask;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ScheduledTasks {
 
     private static final String RETURN_DATES_CHECK_PERIOD = "0 0 0 * * ?";

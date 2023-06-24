@@ -7,12 +7,13 @@ import com.system.libsystem.entities.book.BookEntity;
 import com.system.libsystem.exceptions.affiliate.AffiliateBookNotFoundException;
 import com.system.libsystem.exceptions.affiliate.AffiliateNotFoundException;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Component
 @Slf4j
 public final class BookUtil {

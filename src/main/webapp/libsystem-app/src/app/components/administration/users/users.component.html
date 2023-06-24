@@ -22,7 +22,7 @@
 <table>
     <thead>
       <tr>
-        <th>Id</th>
+        <th>ID</th>
         <th>Card number</th>
         <th>Username</th>
         <th>First name</th>
@@ -41,7 +41,7 @@
                 {{ user.id }}
             </td>
             <td>
-                {{ user.cardNumber }}
+                <a [routerLink]="['/administration/card-numbers']" [queryParams]="{ cardNumber: user.cardNumber }">{{ user.cardNumber }}</a>
             </td>
             <td>
                 {{ user.username }}

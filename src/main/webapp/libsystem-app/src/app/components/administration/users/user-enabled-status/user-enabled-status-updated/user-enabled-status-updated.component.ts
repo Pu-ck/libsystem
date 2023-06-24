@@ -26,11 +26,11 @@ export class UserEnabledStatusUpdatedComponent implements OnInit {
   }
 
   private checkIfUserEnabledStatusHasBeenUpdated(): void {
-    const hasUpdatedUserEnableStatus = localStorage.getItem('hasUpdatedUserEnableStatus');
+    const hasUpdatedUserEnableStatus = sessionStorage.getItem('hasUpdatedUserEnableStatus');
     if (hasUpdatedUserEnableStatus !== 'true') {
       this.router.navigateByUrl('/');
     }
-    localStorage.setItem('hasUpdatedUserEnableStatus', 'false');
+    sessionStorage.setItem('hasUpdatedUserEnableStatus', 'false');
   } 
 
 }

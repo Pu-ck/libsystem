@@ -33,10 +33,10 @@ export class UserEnabledStatusComponent implements OnInit {
     this.http.put<any>(url, { reason: this.model.reason,
     }).subscribe(response => {
       console.log(response);
-      localStorage.setItem('hasUpdatedUserEnableStatus', 'true');
+      sessionStorage.setItem('hasUpdatedUserEnableStatus', 'true');
       this.router.navigateByUrl(`/administration/users/${this.userId}/user-enabled-status/user-enabled-status-updated`);
     }, error => {
-      console.log(error);
+      this.userEnabledService.validateIfUserIsEnabled(error);
     }
     );
   }
@@ -51,6 +51,7 @@ export class UserEnabledStatusComponent implements OnInit {
       this.username = this.users[0].username;
       console.log(response);
     }, error => {
+        this.userEnabledService.validateIfUserIsEnabled(error);
         if (error.status === 404 && error.error.message === 'User not found') {
             console.log(error);
             this.router.navigate(['/']);

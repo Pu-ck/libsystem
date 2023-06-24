@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.sql.Date;
 import java.time.LocalDate;
 
@@ -30,7 +32,9 @@ public class AcceptOrderService {
     private final BorrowedBookService borrowedBookService;
     private final UserService userService;
 
-    public void confirmOrder(AcceptOrderRequest acceptOrderRequest) {
+    @Transactional
+    public void confirmOrder(AcceptOrderRequest acceptOrderRequest, HttpServletRequest httpServletRequest) {
+        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         final Date borrowDate = new Date(System.currentTimeMillis());
         final LocalDate dateMonthLater = borrowDate.toLocalDate().plusMonths(BORROWED_BOOK_KEEP_TIME);
         final Date returnDate = Date.valueOf(dateMonthLater);

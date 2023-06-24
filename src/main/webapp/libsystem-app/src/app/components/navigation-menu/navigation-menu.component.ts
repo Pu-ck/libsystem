@@ -11,7 +11,7 @@ import { CommonRedirectsService } from 'src/app/services/redirects/common-redire
 export class NavigationMenuComponent implements OnInit {
   
   public loggedIn: boolean = false;
-  public loggedAsAdmin: boolean = false;
+  public userType: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -22,7 +22,8 @@ export class NavigationMenuComponent implements OnInit {
   ngOnInit(): void {
     this.hideNavbarOnLogout();
     this.checkIfUserIsLoggedIn();
-    this.loggedAsAdmin = this.userTypeService.validateIfAdminIsLoggedIn();
+    this.userTypeService.validateIfAdminIsLoggedIn();
+    this.userType = sessionStorage.getItem('userType') || '';
   }
 
   private checkIfUserIsLoggedIn(): void {
