@@ -13,7 +13,6 @@ export class UserEnabledStatusComponent implements OnInit {
   public model: any = {};
   public userId: number = 0;
   public users: any = [];
-  public updateType: string = '';
   public username: string = '';
 
   constructor(

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { CommonRedirectsService } from 'src/app/services/redirects/common-redirects.service';
 
 @Component({
@@ -10,15 +11,18 @@ import { CommonRedirectsService } from 'src/app/services/redirects/common-redire
 export class UserEnabledStatusUpdatedComponent implements OnInit {
 
   public userEnabledStatusUpdated: boolean = false;
+  public userId: string = '';
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     public commonRedirectsService: CommonRedirectsService
   ) { }
 
   ngOnInit(): void {
     this.checkIfUserEnabledStatusHasBeenUpdated();
     this.userEnabledStatusUpdated = true;
+    this.setUserId();
   }
 
   public redirectToUsersList(): void {
@@ -32,5 +36,11 @@ export class UserEnabledStatusUpdatedComponent implements OnInit {
     }
     sessionStorage.setItem('hasUpdatedUserEnableStatus', 'false');
   } 
+
+  private setUserId(): void {
+    this.route.paramMap.subscribe(params => {
+      this.userId = params.get('id') || '';
+    });
+  }
 
 }

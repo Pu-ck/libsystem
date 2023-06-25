@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -77,8 +78,10 @@ public class CardNumbersService {
     }
 
     private Long getIdOfUserAssociatedWithCardNumber(CardNumberEntity cardNumberEntity) {
-        UserEntity userEntity = userRepository.findByCardNumber(cardNumberEntity.getCardNumber())
-                .orElseThrow(() -> new UserNotFoundException(null, cardNumberEntity.getCardNumber(), null));
+        UserEntity userEntity = userRepository.findByCardNumber(cardNumberEntity.getCardNumber()).orElse(null);
+        if (userEntity == null) {
+            return null;
+        }
         return userEntity.getId();
     }
 }

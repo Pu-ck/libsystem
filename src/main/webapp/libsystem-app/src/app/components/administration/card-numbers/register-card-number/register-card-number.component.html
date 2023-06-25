@@ -1,1 +1,32 @@
 <p>Register new card number</p>
+
+<form name="form" (ngSubmit)="registerCardNumber()" #registerCardNumberForm="ngForm">
+
+    <ng-container>
+        <label for="cardNumber">Card number</label>
+        <input type="text" name="cardNumber" [(ngModel)]="model.cardNumber" #cardNumber="ngModel" required minlength="10" maxlength="10" pattern="^[0-9]+$">
+        <div *ngIf="cardNumber?.invalid && (cardNumber?.dirty || cardNumber?.touched)">
+            <div *ngIf="cardNumber?.errors?.['required']">Card number is required</div>
+            <div *ngIf="cardNumber?.errors?.['minlength']">Invalid card number length</div>
+            <div *ngIf="cardNumber?.errors?.['maxlength']">Invalid card number length</div>
+            <div *ngIf="cardNumber.errors?.['pattern']">Invalid card number format</div>
+        </div>
+        <label for="peselNumber">PESEL number</label>
+        <input type="text" name="peselNumber" [(ngModel)]="model.peselNumber" #peselNumber="ngModel" required minlength="11" maxlength="11" pattern="^[0-9]+$">
+        <div *ngIf="peselNumber?.invalid && (peselNumber?.dirty || peselNumber?.touched)">
+            <div *ngIf="peselNumber?.errors?.['required']">PESEL is required</div>
+            <div *ngIf="peselNumber?.errors?.['minlength']">Invalid PESEL number length</div>
+            <div *ngIf="peselNumber?.errors?.['maxlength']">Invalid PESEL number length</div>
+            <div *ngIf="peselNumber.errors?.['pattern']">Invalid PESEL number format</div>
+        </div>
+    </ng-container>
+   
+    <div>
+        <button type="submit" [disabled]="!registerCardNumberForm.valid">Register</button>
+        <div *ngIf="cardNumberAlreadyRegistered">Provided card number is already registered</div>
+        <div *ngIf="peselNumberAlreadyRegistered">Provided PESEL number is already registered</div>
+    </div>
+
+</form>
+
+<button (click)="commonRedirectsService.redirectToCardNumbersList()">Back to card numbers list</button>

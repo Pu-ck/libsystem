@@ -20,6 +20,10 @@ export class CommonRedirectsService {
     this.router.navigateByUrl('/administration/users');
   }
 
+  public redirectToCardNumbersList(): void {
+    this.router.navigateByUrl('/administration/card-numbers');
+  }
+
   public logout(logoutType: string): void {
     const url = '/api/logout';
     this.http.post(url, {}).subscribe(() => {

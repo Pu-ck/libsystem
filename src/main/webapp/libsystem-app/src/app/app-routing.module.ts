@@ -23,6 +23,7 @@ import { AdminBooksComponent } from './components/administration/admin-books/adm
 import { UserEnabledStatusComponent } from './components/administration/users/user-enabled-status/user-enabled-status.component';
 import { UserEnabledStatusUpdatedComponent } from './components/administration/users/user-enabled-status/user-enabled-status-updated/user-enabled-status-updated.component';
 import { RegisterCardNumberComponent } from './components/administration/card-numbers/register-card-number/register-card-number.component';
+import { CardNumberRegisteredComponent } from './components/administration/card-numbers/register-card-number/card-number-registered/card-number-registered.component';
 
 const routes: Routes = [
   {path: '', canActivate:[AuthenticationGuard], children: [
@@ -47,7 +48,8 @@ const routes: Routes = [
       { path: 'administration/users/:id/user-enabled-status', component: UserEnabledStatusComponent },
       { path: 'administration/users/:id/user-enabled-status/user-enabled-status-updated', component: UserEnabledStatusUpdatedComponent },
       { path: 'administration/card-numbers', component: CardNumbersComponent },
-      { path: 'administration/card-numbers/register-card-number', component: RegisterCardNumberComponent }
+      { path: 'administration/card-numbers/register-card-number', component: RegisterCardNumberComponent },
+      { path: 'administration/card-numbers/register-card-number/:cardNumber/card-number-registered', component: CardNumberRegisteredComponent }
     ]}
   ]},
   { path: '**', redirectTo: '' }

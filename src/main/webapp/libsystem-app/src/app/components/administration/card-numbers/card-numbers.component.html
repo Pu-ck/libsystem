@@ -30,7 +30,12 @@
             {{ cardNumber.id }}
         </td>
         <td>
-          <a [routerLink]="['/administration/users']" [queryParams]="{ userId: cardNumber.userId }">{{ cardNumber.userId }}</a>
+          <ng-container *ngIf="cardNumber.userId">
+            <a [routerLink]="['/administration/users']" [queryParams]="{ userId: cardNumber.userId }">
+              {{ cardNumber.userId }}
+            </a>
+          </ng-container>
+          <span *ngIf="!cardNumber.userId">None</span>
         </td>
         <td>
             {{ cardNumber.cardNumber }}

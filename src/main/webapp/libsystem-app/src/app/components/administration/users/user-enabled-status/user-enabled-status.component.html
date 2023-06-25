@@ -1,6 +1,6 @@
-<p>{{ updateType }} user {{ username }} with id {{ userId }}</p>
+<p>Disable user {{ username }} with id {{ userId }}</p>
 
-<form name="form" (ngSubmit)="userEnabledService.updateUserEnabledStatus(userId, model.reason)" #borrowForm="ngForm">
+<form name="form" (ngSubmit)="userEnabledService.updateUserEnabledStatus(userId, model.reason)" #userEnableForm="ngForm">
 
     <ng-container>
         <label for="reason">Reason</label>
@@ -11,7 +11,7 @@
     </ng-container>
    
     <div>
-        <button type="submit" [disabled]="!borrowForm.valid">Disable</button>
+        <button type="submit" [disabled]="!userEnableForm.valid">Disable</button>
     </div>
 
 </form>
