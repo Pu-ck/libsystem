@@ -14,7 +14,7 @@ public class BorrowedBookService {
 
     public BorrowedBookEntity getBorrowedBookById(Long borrowedBookId) throws BorrowedBookNotFoundException {
         return borrowedBookRepository.findById(borrowedBookId)
-                .orElseThrow(() -> new BorrowedBookNotFoundException(borrowedBookId));
+                .orElseThrow(() -> new BorrowedBookNotFoundException(borrowedBookId, null, null));
     }
 
 }

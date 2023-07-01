@@ -17,7 +17,7 @@ public class UserNotFoundException extends RuntimeException {
     @Override
     public String getMessage() {
         if (userId != null) {
-            return "Unable to find user with ID: " + userId;
+            return "Unable to find user with id: " + userId;
         } else if (cardNumber != null) {
             return "Unable to find user with card number: " + cardNumber;
         } else if (username != null) {

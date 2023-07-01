@@ -1,4 +1,4 @@
-package com.system.libsystem.rest.administration.orders.orderaccept;
+package com.system.libsystem.rest.administration.books.orders.orderaccept;
 
 import com.system.libsystem.entities.borrowedbook.BorrowedBookEntity;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookRepository;

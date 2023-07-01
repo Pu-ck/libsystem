@@ -1,4 +1,4 @@
-package com.system.libsystem.rest.administration.orders.orderaccept;
+package com.system.libsystem.rest.administration.books.orders.orderaccept;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

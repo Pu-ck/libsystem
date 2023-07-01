@@ -1,4 +1,4 @@
-package com.system.libsystem.rest.administration.orders.orderaccept;
+package com.system.libsystem.rest.administration.books.orders.orderready;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AcceptOrderRequest {
+public class ReadyOrderRequest {
     private Long borrowedBookId;
-    private Long cardNumber;
+    private boolean accepted;
 }

@@ -7,7 +7,7 @@ import com.system.libsystem.exceptions.administration.AdministratorChangesItsOwn
 import com.system.libsystem.exceptions.user.UserNotFoundException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
-import lombok.RequiredArgsConstructor;
+import com.system.libsystem.rest.administration.CommonAdminPanelEntitySearch;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,38 +19,34 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
-public class UsersService {
+public class UsersService extends CommonAdminPanelEntitySearch<UserRepository, UserEntity> {
 
     private final UserRepository userRepository;
     private final MailSender mailSender;
     private final UserService userService;
-
     @Value("${application.login.address}")
     private String loginPageAddress;
 
+    UsersService(UserRepository userRepository, MailSender mailSender, UserService userService) {
+        super(userService, userRepository);
+        this.userRepository = userRepository;
+        this.mailSender = mailSender;
+        this.userService = userService;
+    }
+
     public List<UserEntity> getUsers(HttpServletRequest httpServletRequest) {
-        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
-        return userRepository.findAll();
+        return getAdminPanelEntities(httpServletRequest);
     }
 
     public List<UserEntity> getUserById(Long userId, HttpServletRequest httpServletRequest) {
-        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
-        if (userId == null) {
-            return getUsers(httpServletRequest);
-        }
-        final List<UserEntity> userEntities = new ArrayList<>();
-        final UserEntity userEntity = userRepository.findById(userId).orElseThrow(() ->
-                new UserNotFoundException(userId, null, null));
-        userEntities.add(userEntity);
-        return userEntities;
+        return getAdminPanelEntityById(userId, httpServletRequest, new UserNotFoundException(userId, null, null));
     }
 
     public List<UserEntity> getUserByUsername(String username, HttpServletRequest httpServletRequest) {
         userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         if (username == null || username.isEmpty()) {
-            return getUsers(httpServletRequest);
+            return getAdminPanelEntities(httpServletRequest);
         }
         final List<UserEntity> userEntities = new ArrayList<>();
         final UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() ->
@@ -62,7 +58,7 @@ public class UsersService {
     public List<UserEntity> getUserByCardNumber(Long cardNumber, HttpServletRequest httpServletRequest) {
         userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         if (cardNumber == null) {
-            return getUsers(httpServletRequest);
+            return getAdminPanelEntities(httpServletRequest);
         }
         final List<UserEntity> userEntities = new ArrayList<>();
         final UserEntity userEntity = userRepository.findByCardNumber(cardNumber).orElseThrow(() ->

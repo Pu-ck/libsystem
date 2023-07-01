@@ -36,7 +36,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let user of users">
-        <ng-container *ngIf="user.enabled == showEnabled || showAll == true">
+        <ng-container *ngIf="user.enabled === showEnabled || showAll === true">
             <td>
                 {{ user.id }}
             </td>

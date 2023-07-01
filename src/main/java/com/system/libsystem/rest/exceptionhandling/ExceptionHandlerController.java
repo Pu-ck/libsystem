@@ -1,6 +1,8 @@
 package com.system.libsystem.rest.exceptionhandling;
 
+import com.system.libsystem.exceptions.administration.AdministratorChangesItsOwnEnabledStatusException;
 import com.system.libsystem.exceptions.book.BookNotFoundException;
+import com.system.libsystem.exceptions.book.BorrowedBookNotFoundException;
 import com.system.libsystem.exceptions.borrow.BookOutOfStockException;
 import com.system.libsystem.exceptions.borrow.TooManyBorrowedOrOrderedBooksException;
 import com.system.libsystem.exceptions.cardnumber.CardNumberAlreadyTakenException;
@@ -18,9 +20,9 @@ import com.system.libsystem.exceptions.peselnumber.UnableToAuthenticatePeselNumb
 import com.system.libsystem.exceptions.registration.UsernameAlreadyTakenException;
 import com.system.libsystem.exceptions.user.UserNotEnabledException;
 import com.system.libsystem.exceptions.user.UserNotFoundException;
-import com.system.libsystem.exceptions.administration.AdministratorChangesItsOwnEnabledStatusException;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.administration.AdministratorChangesItsOwnEnabledStatusResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.book.BookNotFoundResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.book.BorrowedBookNotFoundResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.borrow.BookOutOfStockResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.borrow.TooManyBorrowedBooksResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.cardnumber.CardNumberAlreadyTakenResponse;
@@ -165,6 +167,12 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
         final AdministratorChangesItsOwnEnabledStatusResponse administratorChangesItsOwnEnabledStatusResponse =
                 new AdministratorChangesItsOwnEnabledStatusResponse();
         return new ResponseEntity<>(administratorChangesItsOwnEnabledStatusResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(BorrowedBookNotFoundException.class)
+    public ResponseEntity<BorrowedBookNotFoundResponse> handleBorrowedBookNotFoundException() {
+        final BorrowedBookNotFoundResponse borrowedBookNotFoundResponse = new BorrowedBookNotFoundResponse();
+        return new ResponseEntity<>(borrowedBookNotFoundResponse, HttpStatus.NOT_FOUND);
     }
 
 }

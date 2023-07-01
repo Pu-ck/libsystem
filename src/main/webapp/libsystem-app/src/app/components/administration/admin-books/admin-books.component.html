@@ -1,1 +1,94 @@
-<p>Books</p>
+<p>Ordered and borrowed books</p>
+
+<form name="form" (submit)="getBorrowedBooks()" #searchForm="ngForm">
+    <label for="searchType">Search with</label>
+    <select name="searchType" [(ngModel)]="searchType">
+        <option value="borrowedBookId">Borrowed book ID</option>
+        <option value="userId">User ID</option>
+        <option value="bookId">Book ID</option>
+        <option value="cardNumber">Card number</option>
+    </select>
+
+    <div>
+        <input type="text" name="searchValue" [(ngModel)]="searchValue">
+        <button type="submit">Search</button>
+    </div>
+</form>
+
+<button [disabled]="showAccepted == true" (click)="setDisplayedStatus('Accepted')">Accepted</button>
+<button [disabled]="showExtended == true" (click)="setDisplayedStatus('Extended')">Extended</button>
+<button [disabled]="showClosed == true" (click)="setDisplayedStatus('Closed')">Closed</button>
+<button [disabled]="showReady == true" (click)="setDisplayedStatus('Ready')">Ready</button>
+<button [disabled]="showAll == true" (click)="setDisplayedStatus('All')">All</button>
+<table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Book ID</th>
+        <th>User ID</th>
+        <th>Card number</th>
+        <th>Borrow date</th>
+        <th>Return date</th>
+        <th>Ready date</th>
+        <th>Penalty</th>
+        <th>Affiliate</th>
+        <th>Accepted</th>
+        <th>Extended</th>
+        <th>Closed</th>
+        <th>Ready</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let borrowedBook of borrowedBooks">
+        <ng-container *ngIf="(borrowedBook.accepted === true && showAccepted) || 
+                      (borrowedBook.closed === true && showClosed) ||
+                      (borrowedBook.extended === true && showExtended) ||
+                      (borrowedBook.ready === true && showReady) || showAll === true">
+          <td>
+            {{ borrowedBook.id }}
+          </td>
+          <td>
+            <a [routerLink]="['/books/' + borrowedBook.bookId]">{{ borrowedBook.bookId }}</a>
+          </td>
+          <td>
+            <a [routerLink]="['/administration/users']" [queryParams]="{ userId: borrowedBook.userId }">
+                {{ borrowedBook.userId }}
+              </a>
+          </td>
+          <td>
+            <a [routerLink]="['/administration/card-numbers']" [queryParams]="{ cardNumber: borrowedBook.cardNumber }">{{ borrowedBook.cardNumber }}</a>
+          </td>
+          <td>
+            {{ borrowedBook.borrowDate }}
+          </td>
+          <td>
+            {{ borrowedBook.returnDate }}
+          </td>
+          <td>
+            {{ borrowedBook.readyDate }}
+          </td>
+          <td>
+            {{ borrowedBook.penalty }}
+          </td>
+          <td>
+            {{ borrowedBook.affiliateEntity.name }}
+          </td>
+          <td>
+            {{ borrowedBook.accepted ? 'Yes' : 'No' }}
+          </td>
+          <td>
+            {{ borrowedBook.extended ? 'Yes' : 'No' }}
+          </td>
+          <td>
+            {{ borrowedBook.closed ? 'Yes' : 'No' }}
+          </td>
+          <td>
+            {{ borrowedBook.ready ? 'Yes' : 'No' }}
+          </td>
+        </ng-container>
+      </tr>
+    </tbody>
+</table>
+
+<p *ngIf="borrowedBookNotFound">Unable to find specified order or borrowed book</p>
