@@ -12,9 +12,9 @@
         <label for="yearOfPrint">Year of print</label>
         <div name="yearOfPrint">
             <label for="startYear">From:</label>
-            <input type="text" name="startYear" [(ngModel)]="startYear">
+            <input appNumericOnly type="text" name="startYear" [(ngModel)]="startYear">
             <label for="endYear">To:</label>
-            <input type="text" name="endYear" [(ngModel)]="endYear">
+            <input appNumericOnly type="text" name="endYear" [(ngModel)]="endYear">
         </div>
 
         <label for="genres">Genres</label>

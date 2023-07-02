@@ -10,7 +10,7 @@
     </select>
 
     <div>
-        <input type="text" name="searchValue" [(ngModel)]="searchValue">
+        <input appNumericOnly type="text" name="searchValue" [(ngModel)]="searchValue">
         <button type="submit">Search</button>
     </div>
 </form>
@@ -32,10 +32,14 @@
         <th>Ready date</th>
         <th>Penalty</th>
         <th>Affiliate</th>
+        <th>Ready</th>
         <th>Accepted</th>
         <th>Extended</th>
         <th>Closed</th>
-        <th>Ready</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
         <th></th>
       </tr>
     </thead>
@@ -75,6 +79,9 @@
             {{ borrowedBook.affiliateEntity.name }}
           </td>
           <td>
+            {{ borrowedBook.ready ? 'Yes' : 'No' }}
+          </td>
+          <td>
             {{ borrowedBook.accepted ? 'Yes' : 'No' }}
           </td>
           <td>
@@ -84,7 +91,19 @@
             {{ borrowedBook.closed ? 'Yes' : 'No' }}
           </td>
           <td>
-            {{ borrowedBook.ready ? 'Yes' : 'No' }}
+            <button [disabled]="borrowedBook.ready || borrowedBook.closed" (click)="updateOrderReadyStatus(borrowedBook.id, true)">Ready order</button>
+          </td>
+          <td>
+            <button [disabled]="borrowedBook.ready || borrowedBook.closed" (click)="updateOrderReadyStatus(borrowedBook.id, false)">Reject order</button>
+          </td>
+          <td>
+            <button [disabled]="borrowedBook.accepted || borrowedBook.closed || !borrowedBook.ready" (click)="acceptOrder(borrowedBook.id, borrowedBook.cardNumber)">Accept order</button>
+          </td>
+          <td>
+            <button [disabled]="borrowedBook.extended || borrowedBook.closed || !borrowedBook.accepted" (click)="redirectToExtendBorrowedBookForm(borrowedBook.id)">Extend book</button>
+          </td>
+          <td>
+            <button [disabled]="borrowedBook.closed || !borrowedBook.accepted || !borrowedBook.ready" (click)="returnBook(borrowedBook.id, borrowedBook.cardNumber)">Return book</button>
           </td>
         </ng-container>
       </tr>

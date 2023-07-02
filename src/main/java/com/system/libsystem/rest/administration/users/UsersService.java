@@ -29,24 +29,23 @@ public class UsersService extends CommonAdminPanelEntitySearch<UserRepository, U
     private String loginPageAddress;
 
     UsersService(UserRepository userRepository, MailSender mailSender, UserService userService) {
-        super(userService, userRepository);
+        super(userRepository);
         this.userRepository = userRepository;
         this.mailSender = mailSender;
         this.userService = userService;
     }
 
-    public List<UserEntity> getUsers(HttpServletRequest httpServletRequest) {
-        return getAdminPanelEntities(httpServletRequest);
+    public List<UserEntity> getUsers() {
+        return getAdminPanelEntities();
     }
 
-    public List<UserEntity> getUserById(Long userId, HttpServletRequest httpServletRequest) {
-        return getAdminPanelEntityById(userId, httpServletRequest, new UserNotFoundException(userId, null, null));
+    public List<UserEntity> getUserById(Long userId) {
+        return getAdminPanelEntityById(userId, new UserNotFoundException(userId, null, null));
     }
 
-    public List<UserEntity> getUserByUsername(String username, HttpServletRequest httpServletRequest) {
-        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
+    public List<UserEntity> getUserByUsername(String username) {
         if (username == null || username.isEmpty()) {
-            return getAdminPanelEntities(httpServletRequest);
+            return getAdminPanelEntities();
         }
         final List<UserEntity> userEntities = new ArrayList<>();
         final UserEntity userEntity = userRepository.findByUsername(username).orElseThrow(() ->
@@ -55,10 +54,9 @@ public class UsersService extends CommonAdminPanelEntitySearch<UserRepository, U
         return userEntities;
     }
 
-    public List<UserEntity> getUserByCardNumber(Long cardNumber, HttpServletRequest httpServletRequest) {
-        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
+    public List<UserEntity> getUserByCardNumber(Long cardNumber) {
         if (cardNumber == null) {
-            return getAdminPanelEntities(httpServletRequest);
+            return getAdminPanelEntities();
         }
         final List<UserEntity> userEntities = new ArrayList<>();
         final UserEntity userEntity = userRepository.findByCardNumber(cardNumber).orElseThrow(() ->
@@ -70,7 +68,6 @@ public class UsersService extends CommonAdminPanelEntitySearch<UserRepository, U
     @Transactional
     public void updateUserEnabledStatus(UpdateUserEnabledStatusRequest updateUserEnabledStatusRequest,
                                         HttpServletRequest httpServletRequest) {
-        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         final UserEntity userEntity = userRepository.findById(updateUserEnabledStatusRequest.getUserId())
                 .orElseThrow(() -> new UserNotFoundException(updateUserEnabledStatusRequest.getUserId(), null, null));
         final UserEntity admin = userService.getCurrentlyLoggedUser(httpServletRequest);
@@ -86,7 +83,6 @@ public class UsersService extends CommonAdminPanelEntitySearch<UserRepository, U
     }
 
     public Long getAdminId(HttpServletRequest httpServletRequest) {
-        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
         return userService.getCurrentlyLoggedUser(httpServletRequest).getId();
     }
 

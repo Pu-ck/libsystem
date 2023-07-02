@@ -16,7 +16,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 @Service
@@ -33,8 +32,7 @@ public class ReturnBookService {
     private final UserService userService;
 
     @Transactional
-    public void returnBook(ReturnBookRequest returnBookRequest, HttpServletRequest httpServletRequest) {
-        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
+    public void returnBook(ReturnBookRequest returnBookRequest) {
         final BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById(returnBookRequest
                 .getBorrowedBookId());
         final BookEntity bookEntity = bookService.getBookById(borrowedBookEntity.getBookId());
@@ -43,7 +41,7 @@ public class ReturnBookService {
         if (borrowedBookEntity.isClosed()) {
             throw new BookAlreadyReturnedException(borrowedBookEntity.getId());
         }
-        if (!bookUtil.isCardNumberValid(userEntity.getCardNumber(), returnBookRequest.getCardNumber())) {
+        if (!BookUtil.isCardNumberValid(userEntity.getCardNumber(), returnBookRequest.getCardNumber())) {
             throw new InvalidCardNumberFormatException();
         }
         returnBorrowedBook(borrowedBookEntity, bookEntity);

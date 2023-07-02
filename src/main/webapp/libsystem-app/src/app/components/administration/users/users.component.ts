@@ -78,7 +78,7 @@ export class UsersComponent implements OnInit {
     } 
   }
 
-  public redirectToUserUpdateEnabledStatusForm(id: number, status: boolean): void {
+  public redirectToUserUpdateEnabledStatusForm(id: string, status: boolean): void {
     if (status) {
       this.router.navigate([`administration/users/${id}/user-enabled-status`]);
     } else {

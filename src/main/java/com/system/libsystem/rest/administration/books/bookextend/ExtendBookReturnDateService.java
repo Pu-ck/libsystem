@@ -16,7 +16,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -33,9 +32,7 @@ public class ExtendBookReturnDateService {
     private final MailSender mailSender;
 
     @Transactional
-    public void extendRequestedBookReturnDate(ExtendBookReturnDateRequest extendBookReturnDateRequest,
-                                              HttpServletRequest httpServletRequest) {
-        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
+    public void extendRequestedBookReturnDate(ExtendBookReturnDateRequest extendBookReturnDateRequest) {
         final BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById(extendBookReturnDateRequest
                 .getBorrowedBookId());
         final UserEntity userEntity = userService.getUserById(borrowedBookEntity.getUserId());
@@ -59,6 +56,7 @@ public class ExtendBookReturnDateService {
 
     private void saveBorrowedBookNewReturnDate(BorrowedBookEntity borrowedBookEntity, Date newReturnDate,
                                                UserEntity userEntity, BookEntity bookEntity) {
+        borrowedBookEntity.setExtended(true);
         borrowedBookEntity.setReturnDate(newReturnDate);
         borrowedBookRepository.save(borrowedBookEntity);
         sendBookReturnDateExtensionConfirmationMail(userEntity, borrowedBookEntity, bookEntity);

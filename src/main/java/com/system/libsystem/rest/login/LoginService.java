@@ -3,7 +3,6 @@ package com.system.libsystem.rest.login;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.session.SessionRegistry;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,7 @@ public class LoginService {
     public ResponseEntity<LoginSessionResponse> login(LoginRequest loginRequest) {
         final UserEntity userEntity = userService.loadUserByUsername(loginRequest.getUsername());
         final LoginSessionResponse loginSessionResponse = new LoginSessionResponse();
-        userService.validateIfUserIsEnabled(userEntity);
+        UserService.validateIfUserIsEnabled(userEntity);
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                 loginRequest.getPassword()));
         final String sessionID = sessionRegistry.registerSession(loginRequest.getUsername());

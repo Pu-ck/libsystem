@@ -29,6 +29,8 @@ export class BooksComponent implements OnInit {
   public affiliates: string[] = [];
   public selectedAffiliates: any[] = affiliates;
 
+  private isFavourite: boolean = false;
+
   constructor(
     private http: HttpClient, 
     private router: Router,
@@ -82,6 +84,47 @@ export class BooksComponent implements OnInit {
     this.router.navigate([`books/${id}`]);
   }
 
+  public updateGenres(): void {
+    let genres = [];
+    if (this.selectedGenres[0].value) {
+      genres.push(this.selectedGenres[0].label);
+    }
+    if (this.selectedGenres[1].value) {
+      genres.push(this.selectedGenres[1].label);
+    }
+    if (this.selectedGenres[2].value) {
+      genres.push(this.selectedGenres[2].label);
+    }
+    this.genres = genres;
+  }
+
+  public updateAffiliates(): void {
+    let affiliates = [];
+    if (this.selectedAffiliates[0].value) {
+      affiliates.push(this.selectedAffiliates[0].label);
+    }
+    if (this.selectedAffiliates[1].value) {
+      affiliates.push(this.selectedAffiliates[1].label);
+    }
+    this.affiliates = affiliates;
+  }
+
+  public checkIfBookIsInUsersFavourites(bookId: string): boolean {
+    const url = 'api/userprofile/favourites';
+    this.http.get<any>(url, { }).subscribe(response => {
+      for (let favouriteBook of response) {
+        if (favouriteBook.bookId.toString() === bookId) {
+          this.isFavourite = true;
+        }
+      }
+    }, error => {
+        console.log(error);
+      }
+    );
+    console.log(this.isFavourite);
+    return this.isFavourite;
+  }
+
   private setQueryParams(queryParams: {[key: string]: string}): void {
     if (this.title) {
       queryParams['title'] = this.title;
@@ -111,31 +154,5 @@ export class BooksComponent implements OnInit {
       queryParams['sortDirection'] = this.sortDirection;
     }
   }
-
-  public updateGenres(): void {
-    let genres = [];
-    if (this.selectedGenres[0].value) {
-      genres.push(this.selectedGenres[0].label);
-    }
-    if (this.selectedGenres[1].value) {
-      genres.push(this.selectedGenres[1].label);
-    }
-    if (this.selectedGenres[2].value) {
-      genres.push(this.selectedGenres[2].label);
-    }
-    this.genres = genres;
-  }
-
-  public updateAffiliates(): void {
-    let affiliates = [];
-    if (this.selectedAffiliates[0].value) {
-      affiliates.push(this.selectedAffiliates[0].label);
-    }
-    if (this.selectedAffiliates[1].value) {
-      affiliates.push(this.selectedAffiliates[1].label);
-    }
-    this.affiliates = affiliates;
-  }
-  
 
 }

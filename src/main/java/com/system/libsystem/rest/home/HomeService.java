@@ -4,12 +4,10 @@ import com.system.libsystem.entities.book.BookEntity;
 import com.system.libsystem.entities.book.BookRepository;
 import com.system.libsystem.entities.newbook.NewBookEntity;
 import com.system.libsystem.entities.newbook.NewBookRepository;
-import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.exceptions.book.BookNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,10 +17,8 @@ public class HomeService {
 
     private final BookRepository bookRepository;
     private final NewBookRepository newBookRepository;
-    private final UserService userService;
 
-    public Set<NewBookDTO> getNewBooks(HttpServletRequest httpServletRequest) {
-        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
+    public Set<NewBookDTO> getNewBooks() {
         return getNewBookDTOs();
     }
 

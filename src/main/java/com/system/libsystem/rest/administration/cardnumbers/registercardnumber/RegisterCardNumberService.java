@@ -2,7 +2,6 @@ package com.system.libsystem.rest.administration.cardnumbers.registercardnumber;
 
 import com.system.libsystem.entities.cardnumber.CardNumberEntity;
 import com.system.libsystem.entities.cardnumber.CardNumberRepository;
-import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.exceptions.cardnumber.CardNumberAlreadyTakenException;
 import com.system.libsystem.exceptions.cardnumber.InvalidCardNumberFormatException;
 import com.system.libsystem.exceptions.hashing.HashingException;
@@ -13,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -27,12 +25,9 @@ public class RegisterCardNumberService {
     private static final int CARD_NUMBER_LENGTH = 10;
 
     private final CardNumberRepository cardNumberRepository;
-    private final UserService userService;
 
     @Transactional
-    public void registerNewCardNumber(RegisterCardNumberRequest registerCardNumberRequest,
-                                      HttpServletRequest httpServletRequest) {
-        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
+    public void registerNewCardNumber(RegisterCardNumberRequest registerCardNumberRequest) {
         validateCardNumberAndPeselNumberFormats(registerCardNumberRequest);
         checkIfCardNumberIsAlreadyRegistered(registerCardNumberRequest);
 

@@ -14,7 +14,7 @@ public class UserNotEnabledException extends RuntimeException {
 
     @Override
     public String getMessage() {
-        return "User with " + userId + " is not enabled";
+        return "User with id " + userId + " is not enabled";
     }
 
 }

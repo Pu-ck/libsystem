@@ -1,12 +1,11 @@
 package com.system.libsystem.rest.util;
 
+import com.system.libsystem.entities.affiliate.AffiliateEntity;
 import com.system.libsystem.entities.affiliatebook.AffiliateBook;
 import com.system.libsystem.entities.affiliatebook.AffiliateBookRepository;
-import com.system.libsystem.entities.affiliate.AffiliateEntity;
 import com.system.libsystem.entities.book.BookEntity;
 import com.system.libsystem.exceptions.affiliate.AffiliateBookNotFoundException;
 import com.system.libsystem.exceptions.affiliate.AffiliateNotFoundException;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,6 +18,10 @@ import java.util.Objects;
 public final class BookUtil {
 
     private final AffiliateBookRepository affiliateBookRepository;
+
+    public static boolean isCardNumberValid(long userCardNumber, long confirmOrderRequestCardNumber) {
+        return Objects.equals(userCardNumber, confirmOrderRequestCardNumber);
+    }
 
     public void setCurrentQuantityInAffiliate(BookEntity bookEntity, String affiliate, int changeQuantityValue) {
         final AffiliateEntity affiliateEntity = bookEntity.getAffiliates().stream()
@@ -34,10 +37,6 @@ public final class BookUtil {
 
         log.info("The current quantity in " + affiliate + " for book with id " + bookEntity.getId() +
                 " has been changed by " + changeQuantityValue);
-    }
-
-    public boolean isCardNumberValid(long userCardNumber, long confirmOrderRequestCardNumber) {
-        return Objects.equals(userCardNumber, confirmOrderRequestCardNumber);
     }
 
 }

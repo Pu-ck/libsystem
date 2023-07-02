@@ -30,6 +30,7 @@ import { UserEnabledStatusComponent } from './components/administration/users/us
 import { UserEnabledStatusUpdatedComponent } from './components/administration/users/user-enabled-status/user-enabled-status-updated/user-enabled-status-updated.component';
 import { RegisterCardNumberComponent } from './components/administration/card-numbers/register-card-number/register-card-number.component';
 import { CardNumberRegisteredComponent } from './components/administration/card-numbers/register-card-number/card-number-registered/card-number-registered.component';
+import { NumericOnlyDirective } from './directives/numeric-only/numeric-only.directive';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { CardNumberRegisteredComponent } from './components/administration/card-
     UserEnabledStatusComponent,
     UserEnabledStatusUpdatedComponent,
     RegisterCardNumberComponent,
-    CardNumberRegisteredComponent
+    CardNumberRegisteredComponent,
+    NumericOnlyDirective
   ],
   imports: [
     BrowserModule,

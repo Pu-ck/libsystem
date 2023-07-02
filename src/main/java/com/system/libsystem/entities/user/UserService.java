@@ -87,7 +87,7 @@ public class UserService implements UserDetailsService {
         validateIfUserIsEnabled(userEntity);
     }
 
-    public void validateIfUserIsEnabled(UserEntity userEntity) {
+    public static void validateIfUserIsEnabled(UserEntity userEntity) {
         if (!userEntity.isEnabled()) {
             throw new UserNotEnabledException(userEntity.getId());
         }

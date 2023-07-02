@@ -11,7 +11,10 @@ import { CommonRedirectsService } from 'src/app/services/redirects/common-redire
 export class UserEnabledStatusComponent implements OnInit {
 
   public model: any = {};
-  public userId: number = 0;
+
+  public userId: string = '';
+  private adminId: string = '';
+
   public users: any = [];
   public username: string = '';
 
@@ -25,6 +28,7 @@ export class UserEnabledStatusComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCurrentUserInformation();
+    this.redirectIfAdminIdIsMatchingUserId();
   }
 
   public updateUserEnabledStatus(): void {
@@ -42,7 +46,7 @@ export class UserEnabledStatusComponent implements OnInit {
 
   private getCurrentUserInformation(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
-      this.userId = Number(params.get('id')!);
+      this.userId = String(params.get('id')!);
     });
     const url = `api/administration/users?userId=${this.userId}`;
     this.http.get<any>(url, { }).subscribe(response => {
@@ -57,6 +61,13 @@ export class UserEnabledStatusComponent implements OnInit {
         }
       }
     );
+  }
+
+  private redirectIfAdminIdIsMatchingUserId(): void {
+    this.adminId = sessionStorage.getItem('adminId') || '';
+    if (this.adminId === this.userId) {
+      this.router.navigateByUrl('/');
+    }
   }
 
 }

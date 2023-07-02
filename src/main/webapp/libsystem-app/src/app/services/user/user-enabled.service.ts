@@ -14,7 +14,7 @@ export class UserEnabledService {
     private commonRedirectsService: CommonRedirectsService
   ) { }
 
-  public updateUserEnabledStatus(userId: number, reason: string): void {
+  public updateUserEnabledStatus(userId: string, reason: string): void {
     const url = `/api/administration/users/${userId}/update-user-enabled-status`
     this.http.put<any>(url, { reason: reason,
     }).subscribe(response => {
@@ -28,7 +28,7 @@ export class UserEnabledService {
   }
 
   public validateIfUserIsEnabled(error: any): void {
-    if (error.status === 403 && error.error.message) {
+    if (error.status === 403 && error.error.message === 'User not enabled') {
       this.commonRedirectsService.logout('accountDisabled');
     }
   }

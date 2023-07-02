@@ -29,17 +29,17 @@ public class SessionRegistry {
             throw new UsernameSessionNotProvidedException("Username must be provided");
         }
 
-        final String sessionID = getSessionID();
+        final String sessionId = getSessionId();
 
         try {
-            redisSessionStorage.set(sessionID, username);
+            redisSessionStorage.set(sessionId, username);
         } catch (final Exception exception) {
             throw new UnableToRegisterSessionException(exception.getMessage());
         }
 
-        log.info("New session with id " + sessionID + " set and saved in Redis repository");
+        log.info("New session with id " + sessionId + " set and saved in Redis repository");
 
-        return sessionID;
+        return sessionId;
     }
 
     public String getSessionUsername(String sessionID) {
@@ -50,7 +50,7 @@ public class SessionRegistry {
         }
     }
 
-    private String getSessionID() {
+    private String getSessionId() {
         return new String(
                 Base64.getEncoder().encode(UUID.randomUUID().toString().getBytes(StandardCharsets.UTF_8))
         );

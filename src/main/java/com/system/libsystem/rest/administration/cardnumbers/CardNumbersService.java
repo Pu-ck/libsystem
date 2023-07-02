@@ -4,12 +4,10 @@ import com.system.libsystem.entities.cardnumber.CardNumberEntity;
 import com.system.libsystem.entities.cardnumber.CardNumberRepository;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
-import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.exceptions.cardnumber.CardNumberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,26 +16,22 @@ import java.util.List;
 public class CardNumbersService {
 
     private final CardNumberRepository cardNumberRepository;
-    private final UserService userService;
     private final UserRepository userRepository;
 
-    public List<CardNumberDTO> getCardNumbers(HttpServletRequest httpServletRequest) {
-        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
+    public List<CardNumberDTO> getCardNumbers() {
         return getCardNumberDTOs();
     }
 
-    public List<CardNumberDTO> getCardNumberById(Long cardNumberId, HttpServletRequest httpServletRequest) {
-        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
+    public List<CardNumberDTO> getCardNumberById(Long cardNumberId) {
         if (cardNumberId == null) {
-            return getCardNumbers(httpServletRequest);
+            return getCardNumbers();
         }
         return getCardNumberDTOById(cardNumberId);
     }
 
-    public List<CardNumberDTO> getCardNumberByCardNumber(Long cardNumber, HttpServletRequest httpServletRequest) {
-        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
+    public List<CardNumberDTO> getCardNumberByCardNumber(Long cardNumber) {
         if (cardNumber == null) {
-            return getCardNumbers(httpServletRequest);
+            return getCardNumbers();
         }
         return getCardNumberDTOByCardNumber(cardNumber);
     }

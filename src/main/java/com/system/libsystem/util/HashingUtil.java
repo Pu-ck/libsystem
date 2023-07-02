@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class HashingUtil {
+public final class HashingUtil {
 
     private static final String SHA_256_ALGORITHM = "SHA-256";
     private static final String HEX_FORMAT = "%02x";

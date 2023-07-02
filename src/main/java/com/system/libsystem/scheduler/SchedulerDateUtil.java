@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Component
-public class SchedulerDateUtil {
+public final class SchedulerDateUtil {
 
     public static Date getCurrentDate() {
         final LocalDateTime currentDateTime = LocalDateTime.now();

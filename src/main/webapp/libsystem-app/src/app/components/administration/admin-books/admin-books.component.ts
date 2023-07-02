@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 
 @Component({
@@ -22,6 +22,8 @@ export class AdminBooksComponent implements OnInit {
 
   public searchType: string = '';
   public searchValue: string = '';
+
+  public model: any = {};
 
   constructor(
     private http: HttpClient,
@@ -56,6 +58,49 @@ export class AdminBooksComponent implements OnInit {
         }
       }
     );
+  }
+
+  public updateOrderReadyStatus(borrowedBookId: string, accepted: boolean): void {
+    const url = `/api/administration/books/${borrowedBookId}/ready-order`
+    this.http.put<any>(url, { accepted: accepted
+    }).subscribe(response => {
+      console.log(response);
+      sessionStorage.setItem('hasUpdatedOrderReadyStatus', 'true');
+      window.location.reload();
+    }, error => {
+      console.log(error);
+    }
+    );
+  }
+
+  public acceptOrder(borrowedBookId: string, cardNumber: string): void {
+    const url = `/api/administration/books/${borrowedBookId}/accept-order`
+    this.http.put<any>(url, { cardNumber: cardNumber
+    }).subscribe(response => {
+      console.log(response);
+      sessionStorage.setItem('hasAcceptedOrder', 'true');
+      window.location.reload();
+    }, error => {
+      console.log(error);
+    }
+    );
+  }
+
+  public returnBook(borrowedBookId: string, cardNumber: string): void {
+    const url = `/api/administration/books/${borrowedBookId}/return-book`
+    this.http.put<any>(url, { cardNumber: cardNumber
+    }).subscribe(response => {
+      console.log(response);
+      sessionStorage.setItem('hasReturnedBook', 'true');
+      window.location.reload();
+    }, error => {
+      console.log(error);
+    }
+    );
+  }
+
+  public redirectToExtendBorrowedBookForm(id: number): void {
+    this.router.navigate([`administration/books/${id}/extend-book`]);
   }
 
   public setDisplayedStatus(status: string): void {

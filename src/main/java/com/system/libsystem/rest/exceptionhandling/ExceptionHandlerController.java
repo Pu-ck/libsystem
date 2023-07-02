@@ -1,8 +1,7 @@
 package com.system.libsystem.rest.exceptionhandling;
 
 import com.system.libsystem.exceptions.administration.AdministratorChangesItsOwnEnabledStatusException;
-import com.system.libsystem.exceptions.book.BookNotFoundException;
-import com.system.libsystem.exceptions.book.BorrowedBookNotFoundException;
+import com.system.libsystem.exceptions.book.*;
 import com.system.libsystem.exceptions.borrow.BookOutOfStockException;
 import com.system.libsystem.exceptions.borrow.TooManyBorrowedOrOrderedBooksException;
 import com.system.libsystem.exceptions.cardnumber.CardNumberAlreadyTakenException;
@@ -21,8 +20,7 @@ import com.system.libsystem.exceptions.registration.UsernameAlreadyTakenExceptio
 import com.system.libsystem.exceptions.user.UserNotEnabledException;
 import com.system.libsystem.exceptions.user.UserNotFoundException;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.administration.AdministratorChangesItsOwnEnabledStatusResponse;
-import com.system.libsystem.rest.exceptionhandling.errorresponses.book.BookNotFoundResponse;
-import com.system.libsystem.rest.exceptionhandling.errorresponses.book.BorrowedBookNotFoundResponse;
+import com.system.libsystem.rest.exceptionhandling.errorresponses.book.*;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.borrow.BookOutOfStockResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.borrow.TooManyBorrowedBooksResponse;
 import com.system.libsystem.rest.exceptionhandling.errorresponses.cardnumber.CardNumberAlreadyTakenResponse;
@@ -173,6 +171,33 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     public ResponseEntity<BorrowedBookNotFoundResponse> handleBorrowedBookNotFoundException() {
         final BorrowedBookNotFoundResponse borrowedBookNotFoundResponse = new BorrowedBookNotFoundResponse();
         return new ResponseEntity<>(borrowedBookNotFoundResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(BookAlreadyReturnedException.class)
+    public ResponseEntity<BookAlreadyReturnedResponse> handleBookAlreadyReturnedException() {
+        final BookAlreadyReturnedResponse bookAlreadyReturnedResponse = new BookAlreadyReturnedResponse();
+        return new ResponseEntity<>(bookAlreadyReturnedResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(UnableToExtendNotAcceptedBookException.class)
+    public ResponseEntity<UnableToExtendNotAcceptedBookResponse> handleUnableToExtendNotAcceptedBookException() {
+        final UnableToExtendNotAcceptedBookResponse unableToExtendNotAcceptedBookResponse =
+                new UnableToExtendNotAcceptedBookResponse();
+        return new ResponseEntity<>(unableToExtendNotAcceptedBookResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(BookAlreadyExtendedException.class)
+    public ResponseEntity<BookAlreadyExtendedResponse> handleBookAlreadyExtendedException() {
+        final BookAlreadyExtendedResponse bookAlreadyExtendedResponse =
+                new BookAlreadyExtendedResponse();
+        return new ResponseEntity<>(bookAlreadyExtendedResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(BookAlreadyAcceptedException.class)
+    public ResponseEntity<BookAlreadyAcceptedResponse> handleBookAlreadyAcceptedException() {
+        final BookAlreadyAcceptedResponse bookAlreadyAcceptedResponse =
+                new BookAlreadyAcceptedResponse();
+        return new ResponseEntity<>(bookAlreadyAcceptedResponse, HttpStatus.CONFLICT);
     }
 
 }

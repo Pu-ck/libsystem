@@ -3,8 +3,6 @@ package com.system.libsystem.rest.administration.books.bookreturn;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/administration/books/{book_id}/return-book")
@@ -14,10 +12,9 @@ public class ReturnBookController {
 
     @PutMapping
     public void returnBook(@RequestBody ReturnBookRequest returnBookRequest,
-                           @PathVariable("book_id") Long bookId,
-                           HttpServletRequest httpServletRequest) {
+                           @PathVariable("book_id") Long bookId) {
         returnBookRequest.setBorrowedBookId(bookId);
-        returnBookService.returnBook(returnBookRequest, httpServletRequest);
+        returnBookService.returnBook(returnBookRequest);
     }
 
 }

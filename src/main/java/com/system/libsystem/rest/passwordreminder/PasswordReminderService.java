@@ -31,7 +31,6 @@ public class PasswordReminderService {
     private final MailSender mailSender;
     private final PasswordReminderTokenRepository passwordReminderTokenRepository;
     private final UserService userService;
-    private final BookUtil bookUtil;
 
     @Value("${application.login.address}")
     private String loginPageAddress;
@@ -46,7 +45,7 @@ public class PasswordReminderService {
 
         saveNewPasswordReminderToken(userEntity, token);
 
-        if (bookUtil.isCardNumberValid(passwordReminderRequest.getCardNumber(), userEntity.getCardNumber())) {
+        if (BookUtil.isCardNumberValid(passwordReminderRequest.getCardNumber(), userEntity.getCardNumber())) {
             sendPasswordReminderMail(userEntity, passwordReminderRequest, token);
         } else {
             log.error("Unable to authenticate and associate the provided card number "

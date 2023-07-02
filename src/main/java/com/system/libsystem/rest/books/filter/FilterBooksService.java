@@ -3,11 +3,9 @@ package com.system.libsystem.rest.books.filter;
 import com.system.libsystem.entities.book.BookEntity;
 import com.system.libsystem.entities.book.BookRepository;
 import com.system.libsystem.entities.book.BookService;
-import com.system.libsystem.entities.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service
@@ -26,16 +24,12 @@ public class FilterBooksService {
     private final BookRepository bookRepository;
     private final FilterBooksSortUtil filterBooksSortUtil;
     private final BookService bookService;
-    private final UserService userService;
 
-    public BookEntity getBookDetails(Long bookId, HttpServletRequest httpServletRequest) {
-        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
+    public BookEntity getBookDetails(Long bookId) {
         return bookService.getBookById(bookId);
     }
 
-    public List<BookEntity> filterByBookProperties(HttpServletRequest httpServletRequest,
-                                                   Map<String, String> requestParameters) {
-        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
+    public List<BookEntity> filterByBookProperties(Map<String, String> requestParameters) {
         final String title = Optional.ofNullable(requestParameters.get("title")).orElse("");
         final String author = Optional.ofNullable(requestParameters.get("author")).orElse("");
         final String publisher = Optional.ofNullable(requestParameters.get("publisher")).orElse("");
@@ -71,8 +65,10 @@ public class FilterBooksService {
                     filterBooksSortUtil.getBooksFilteredByPublisherSorted(sortDirection, bookEntities);
             case SORT_BY_YEAR_OF_PRINT ->
                     filterBooksSortUtil.getBooksFilteredByYearOfPrintSorted(sortDirection, bookEntities);
-            case SORT_BY_CURRENT_QUANTITY -> filterBooksSortUtil.getBooksFilteredByCurrentQuantity(sortDirection, bookEntities);
-            case SORT_BY_GENERAL_QUANTITY -> filterBooksSortUtil.getBooksFilteredByGeneralQuantity(sortDirection, bookEntities);
+            case SORT_BY_CURRENT_QUANTITY ->
+                    filterBooksSortUtil.getBooksFilteredByCurrentQuantity(sortDirection, bookEntities);
+            case SORT_BY_GENERAL_QUANTITY ->
+                    filterBooksSortUtil.getBooksFilteredByGeneralQuantity(sortDirection, bookEntities);
             case SORT_BY_ADD_DATE -> filterBooksSortUtil.getBooksFilteredByAddDate(sortDirection, bookEntities);
             default -> bookEntities;
         };

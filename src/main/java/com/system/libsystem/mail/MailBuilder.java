@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Component
-public class MailBuilder {
+public final class MailBuilder {
 
     public static String getAccountConfirmationMailBody(String userName, String firstName, String lastName, String cardNumber,
                                                         String registrationTime, String confirmationAddress) {

@@ -10,7 +10,8 @@
     </select>
 
     <div>
-        <input type="text" name="searchValue" [(ngModel)]="searchValue">
+        <input *ngIf="searchType !== 'username'" appNumericOnly type="text" name="searchValue" [(ngModel)]="searchValue">
+        <input *ngIf="searchType === 'username'" type="text" name="searchValue" [(ngModel)]="searchValue">
         <button type="submit">Search</button>
     </div>
 </form>

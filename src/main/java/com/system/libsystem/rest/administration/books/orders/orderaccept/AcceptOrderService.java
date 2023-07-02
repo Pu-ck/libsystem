@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -28,13 +27,11 @@ public class AcceptOrderService {
 
     private final BorrowedBookRepository borrowedBookRepository;
     private final UserRepository userRepository;
-    private final BookUtil bookUtil;
     private final BorrowedBookService borrowedBookService;
     private final UserService userService;
 
     @Transactional
-    public void confirmOrder(AcceptOrderRequest acceptOrderRequest, HttpServletRequest httpServletRequest) {
-        userService.validateIfUserIsEnabledByServletRequest(httpServletRequest);
+    public void confirmOrder(AcceptOrderRequest acceptOrderRequest) {
         final Date borrowDate = new Date(System.currentTimeMillis());
         final LocalDate dateMonthLater = borrowDate.toLocalDate().plusMonths(BORROWED_BOOK_KEEP_TIME);
         final Date returnDate = Date.valueOf(dateMonthLater);
@@ -42,7 +39,7 @@ public class AcceptOrderService {
                 .getBorrowedBookId());
         final UserEntity userEntity = userService.getUserById(borrowedBookEntity.getUserId());
 
-        if (!bookUtil.isCardNumberValid(userEntity.getCardNumber(), acceptOrderRequest.getCardNumber())) {
+        if (!BookUtil.isCardNumberValid(userEntity.getCardNumber(), acceptOrderRequest.getCardNumber())) {
             throw new InvalidCardNumberFormatException();
         }
         if (borrowedBookEntity.isClosed()) {

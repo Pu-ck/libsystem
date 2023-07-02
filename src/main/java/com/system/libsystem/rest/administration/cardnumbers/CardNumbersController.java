@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -17,22 +16,20 @@ public class CardNumbersController {
     private final CardNumbersService cardNumbersService;
 
     @GetMapping
-    public List<CardNumberDTO> getCardNumbers(HttpServletRequest httpServletRequest) {
-        return cardNumbersService.getCardNumbers(httpServletRequest);
+    public List<CardNumberDTO> getCardNumbers() {
+        return cardNumbersService.getCardNumbers();
     }
 
     @GetMapping
     @RequestMapping(params = "cardNumberId")
-    public List<CardNumberDTO> getCardNumberById(@RequestParam(required = false) Long cardNumberId,
-                                                    HttpServletRequest httpServletRequest) {
-        return cardNumbersService.getCardNumberById(cardNumberId, httpServletRequest);
+    public List<CardNumberDTO> getCardNumberById(@RequestParam(required = false) Long cardNumberId) {
+        return cardNumbersService.getCardNumberById(cardNumberId);
     }
 
     @GetMapping
     @RequestMapping(params = "cardNumber")
-    public List<CardNumberDTO> getCardNumberByCardNumber(@RequestParam(required = false) Long cardNumber,
-                                                            HttpServletRequest httpServletRequest) {
-        return cardNumbersService.getCardNumberByCardNumber(cardNumber, httpServletRequest);
+    public List<CardNumberDTO> getCardNumberByCardNumber(@RequestParam(required = false) Long cardNumber) {
+        return cardNumbersService.getCardNumberByCardNumber(cardNumber);
     }
 
 }
