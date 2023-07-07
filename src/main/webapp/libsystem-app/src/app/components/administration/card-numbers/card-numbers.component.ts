@@ -16,7 +16,7 @@ export class CardNumbersComponent implements OnInit {
   public searchValue: string = '';
 
   public cardNumberNotFound: boolean = false;
-  
+
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -37,11 +37,11 @@ export class CardNumbersComponent implements OnInit {
   public getCardNumbers(): void {
     const url = '/api/administration/card-numbers';
     let params = this.getSearchType();
-    this.http.get<any[]>(url, {params}).subscribe(
+    this.http.get<any[]>(url, { params }).subscribe(
       response => {
         this.cardNumbers = response;
         this.cardNumberNotFound = false;
-        let queryParams: {[key: string]: string} = {};
+        let queryParams: { [key: string]: string } = {};
         this.setQueryParams(queryParams);
         this.router.navigate(['/administration/card-numbers'], { queryParams });
       },
@@ -63,7 +63,7 @@ export class CardNumbersComponent implements OnInit {
   private getCardNumber(cardNumber: string): void {
     const url = '/api/administration/card-numbers';
     let params = new HttpParams().set('cardNumber', cardNumber);
-    this.http.get<any[]>(url, {params}).subscribe(
+    this.http.get<any[]>(url, { params }).subscribe(
       response => {
         this.cardNumbers = response;
         this.cardNumberNotFound = false;
@@ -89,7 +89,7 @@ export class CardNumbersComponent implements OnInit {
     return new HttpParams().set('', '');
   }
 
-  private setQueryParams(queryParams: {[key: string]: string}): void {
+  private setQueryParams(queryParams: { [key: string]: string }): void {
     if (this.searchType === 'cardNumberId') {
       queryParams['cardNumberId'] = this.searchValue;
     }

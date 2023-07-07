@@ -33,7 +33,8 @@ export class UserEnabledStatusComponent implements OnInit {
 
   public updateUserEnabledStatus(): void {
     const url = `/api/administration/users/${this.userId}/update-user-enabled-status`
-    this.http.put<any>(url, { reason: this.model.reason,
+    this.http.put<any>(url, {
+      reason: this.model.reason,
     }).subscribe(response => {
       console.log(response);
       sessionStorage.setItem('hasUpdatedUserEnableStatus', 'true');
@@ -49,17 +50,15 @@ export class UserEnabledStatusComponent implements OnInit {
       this.userId = String(params.get('id')!);
     });
     const url = `api/administration/users?userId=${this.userId}`;
-    this.http.get<any>(url, { }).subscribe(response => {
+    this.http.get<any>(url, {}).subscribe(response => {
       this.users = response;
       this.username = this.users[0].username;
-      console.log(response);
     }, error => {
-        this.userEnabledService.validateIfUserIsEnabled(error);
-        if (error.status === 404 && error.error.message === 'User not found') {
-            console.log(error);
-            this.router.navigate(['/']);
-        }
+      this.userEnabledService.validateIfUserIsEnabled(error);
+      if (error.status === 404 && error.error.message === 'User not found' || error.status === 400) {
+        this.router.navigate(['/']);
       }
+    }
     );
   }
 

@@ -22,11 +22,11 @@ export class HomeComponent implements OnInit {
 
   private getNewBooks(): void {
     const url = '/api/home';
-    this.http.get<any>(url, { }).subscribe(response => {
+    this.http.get<any>(url, {}).subscribe(response => {
       this.newBooks = response;
     }, error => {
-        this.userEnabledService.validateIfUserIsEnabled(error);
-      }
+      this.userEnabledService.validateIfUserIsEnabled(error);
+    }
     );
   }
 

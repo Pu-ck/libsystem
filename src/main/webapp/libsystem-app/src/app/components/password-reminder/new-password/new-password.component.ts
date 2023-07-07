@@ -31,7 +31,8 @@ export class NewPasswordComponent implements OnInit {
   private verifyToken(): void {
     const url = '/api/password-reminder/new-password';
     let params = new HttpParams().set('token', this.token);
-    this.http.get<any>(url, { params,
+    this.http.get<any>(url, {
+      params,
     }).subscribe(response => {
       console.log(response);
       this.tokenVerified = true;
@@ -54,8 +55,8 @@ export class NewPasswordComponent implements OnInit {
     this.http.put<any>(url, {
       password: this.model.password
     }).subscribe(response => {
-        console.log(response);
-        this.passwordReset = true;
+      console.log(response);
+      this.passwordReset = true;
     }, error => {
       console.log(error);
     }

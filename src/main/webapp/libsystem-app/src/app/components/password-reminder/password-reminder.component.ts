@@ -27,9 +27,9 @@ export class PasswordReminderComponent implements OnInit {
       username: this.model.username,
       cardNumber: this.model.cardNumber
     }).subscribe(response => {
-        console.log(response);
-        this.authenticationError = false;
-        this.authenticatedSuccessfully = true;
+      console.log(response);
+      this.authenticationError = false;
+      this.authenticatedSuccessfully = true;
     }, error => {
       if (error.status === 400 && error.error.message === 'Card number not authenticated') {
         this.authenticationError = true;

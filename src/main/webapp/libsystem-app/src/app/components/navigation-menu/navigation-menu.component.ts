@@ -9,7 +9,7 @@ import { CommonRedirectsService } from 'src/app/services/redirects/common-redire
   styleUrls: ['./navigation-menu.component.css']
 })
 export class NavigationMenuComponent implements OnInit {
-  
+
   public loggedIn: boolean = false;
   public userType: string = '';
 

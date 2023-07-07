@@ -8,9 +8,9 @@ describe('BorrowedComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BorrowedComponent ]
+      declarations: [BorrowedComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(BorrowedComponent);
     component = fixture.componentInstance;

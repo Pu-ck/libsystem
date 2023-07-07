@@ -31,6 +31,8 @@ import { UserEnabledStatusUpdatedComponent } from './components/administration/u
 import { RegisterCardNumberComponent } from './components/administration/card-numbers/register-card-number/register-card-number.component';
 import { CardNumberRegisteredComponent } from './components/administration/card-numbers/register-card-number/card-number-registered/card-number-registered.component';
 import { NumericOnlyDirective } from './directives/numeric-only/numeric-only.directive';
+import { ExtendBookComponent } from './components/administration/admin-books/extend-book/extend-book.component';
+import { ExtendedBookComponent } from './components/administration/admin-books/extend-book/extended-book/extended-book.component';
 
 @NgModule({
   declarations: [
@@ -58,16 +60,18 @@ import { NumericOnlyDirective } from './directives/numeric-only/numeric-only.dir
     UserEnabledStatusUpdatedComponent,
     RegisterCardNumberComponent,
     CardNumberRegisteredComponent,
-    NumericOnlyDirective
+    NumericOnlyDirective,
+    ExtendBookComponent,
+    ExtendedBookComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    RouterModule, 
+    RouterModule,
     FormsModule
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true}],
+  providers: [{ provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

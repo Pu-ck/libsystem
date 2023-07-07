@@ -27,7 +27,8 @@ export class RegisterCardNumberComponent implements OnInit {
 
   public registerCardNumber(): void {
     const url = `/api/administration/card-numbers/register-card-number`
-    this.http.post<any>(url, { cardNumber: this.model.cardNumber, peselNumber: this.model.peselNumber
+    this.http.post<any>(url, {
+      cardNumber: this.model.cardNumber, peselNumber: this.model.peselNumber
     }).subscribe(response => {
       console.log(response);
       sessionStorage.setItem('hasRegisteredCardNumber', 'true');
@@ -47,5 +48,5 @@ export class RegisterCardNumberComponent implements OnInit {
     }
     );
   }
- 
+
 }

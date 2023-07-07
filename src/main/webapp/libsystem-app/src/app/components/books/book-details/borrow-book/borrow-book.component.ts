@@ -44,9 +44,9 @@ export class BorrowBookComponent implements OnInit {
       quantity: this.model.quantity,
       affiliate: this.model.affiliate
     }).subscribe(response => {
-        console.log(response);
-        sessionStorage.setItem('hasBorrowedBook', 'true');
-        this.router.navigateByUrl(`/books/${this.bookId}/borrow-book/borrowed`);
+      console.log(response);
+      sessionStorage.setItem('hasBorrowedBook', 'true');
+      this.router.navigateByUrl(`/books/${this.bookId}/borrow-book/borrowed`);
     }, error => {
       this.userEnabledService.validateIfUserIsEnabled(error);
       if (error.status === 404 && error.error.message === 'Book out of stock') {
@@ -93,23 +93,22 @@ export class BorrowBookComponent implements OnInit {
     });
 
     const url = `api/books/${this.bookId}`;
-    this.http.get<any>(url, { }).subscribe(
+    this.http.get<any>(url, {}).subscribe(
       response => {
-      this.title = response.title;
-      this.bookDetails = response;
-      this.redirectIfNoBooksOnStock();
-      this.chooseAffiliateOptionsForBook();
-    }, error => {
-        if (error.status === 404 && error.error.message === 'Book not found') {
-            console.log(error);
-            this.router.navigate(['/']);
+        this.title = response.title;
+        this.bookDetails = response;
+        this.redirectIfNoBooksOnStock();
+        this.chooseAffiliateOptionsForBook();
+      }, error => {
+        if (error.status === 404 && error.error.message === 'Book not found' || error.status === 400) {
+          this.router.navigate(['/']);
         }
       }
     );
   }
 
   private redirectIfNoBooksOnStock(): void {
-    if(!this.commonBookMethods.areBooksOnStock(this.bookDetails)) {
+    if (!this.commonBookMethods.areBooksOnStock(this.bookDetails)) {
       this.router.navigate(['/']);
     }
   }
@@ -121,7 +120,7 @@ export class BorrowBookComponent implements OnInit {
           for (let affiliateBook of this.bookDetails.affiliateBooks) {
             if (affiliateBook.affiliateId === affiliate.id && affiliateBook.currentQuantity > 0) {
               this.affiliateOptionsForBook.push(affiliateOption);
-            } 
+            }
           }
         }
       }

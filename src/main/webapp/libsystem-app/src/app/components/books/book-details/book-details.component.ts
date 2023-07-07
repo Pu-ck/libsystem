@@ -18,7 +18,7 @@ export class BookDetailsComponent implements OnInit {
   public isFavourite: boolean = false;
 
   constructor(
-    private http: HttpClient, 
+    private http: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
     private userEnabledService: UserEnabledService,
@@ -38,8 +38,8 @@ export class BookDetailsComponent implements OnInit {
     const url = `/api/books/${this.bookId}/add-to-favourites`;
     this.http.post<any>(url, {
     }).subscribe(response => {
-        console.log(response);
-        this.isFavourite = true;
+      console.log(response);
+      this.isFavourite = true;
     }, error => {
       this.userEnabledService.validateIfUserIsEnabled(error);
     }
@@ -48,9 +48,9 @@ export class BookDetailsComponent implements OnInit {
 
   public removeFromFavourites(): void {
     const url = `/api/books/${this.bookId}/remove-from-favourites`;
-    this.http.delete<any>(url, { }).subscribe(response => {
-        console.log(response);
-        this.isFavourite = false;
+    this.http.delete<any>(url, {}).subscribe(response => {
+      console.log(response);
+      this.isFavourite = false;
     }, error => {
       this.userEnabledService.validateIfUserIsEnabled(error);
     }
@@ -63,15 +63,15 @@ export class BookDetailsComponent implements OnInit {
     });
 
     const url = `api/books/${this.bookId}`;
-    this.http.get<any>(url, { }).subscribe(response => {
+    this.http.get<any>(url, {}).subscribe(response => {
       this.bookDetails = response;
       this.checkIfBooksOnStock();
     }, error => {
-        if (error.status === 404 && error.error.message === 'Book not found') {
-            console.log(error);
-            this.router.navigate(['/']);
-        }
+      if (error.status === 404 && error.error.message === 'Book not found' || error.status === 400) {
+        console.log(error);
+        this.router.navigate(['/']);
       }
+    }
     );
   }
 
@@ -82,15 +82,15 @@ export class BookDetailsComponent implements OnInit {
 
   private checkIfBookIsInUsersFavourites(): void {
     const url = 'api/userprofile/favourites';
-    this.http.get<any>(url, { }).subscribe(response => {
+    this.http.get<any>(url, {}).subscribe(response => {
       for (let favouriteBook of response) {
         if (favouriteBook.bookId.toString() === this.bookId) {
           this.isFavourite = true;
         }
       }
     }, error => {
-        console.log(error);
-      }
+      console.log(error);
+    }
     );
   }
 

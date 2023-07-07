@@ -20,7 +20,7 @@ export class UserEnabledStatusUpdatedComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.checkIfUserEnabledStatusHasBeenUpdated();
+    this.commonRedirectsService.checkSingleVisitPageSessionStorageCondition('hasUpdatedUserEnableStatus');
     this.userEnabledStatusUpdated = true;
     this.setUserId();
   }
@@ -28,14 +28,6 @@ export class UserEnabledStatusUpdatedComponent implements OnInit {
   public redirectToUsersList(): void {
     this.router.navigateByUrl('/administration/users');
   }
-
-  private checkIfUserEnabledStatusHasBeenUpdated(): void {
-    const hasUpdatedUserEnableStatus = sessionStorage.getItem('hasUpdatedUserEnableStatus');
-    if (hasUpdatedUserEnableStatus !== 'true') {
-      this.router.navigateByUrl('/');
-    }
-    sessionStorage.setItem('hasUpdatedUserEnableStatus', 'false');
-  } 
 
   private setUserId(): void {
     this.route.paramMap.subscribe(params => {

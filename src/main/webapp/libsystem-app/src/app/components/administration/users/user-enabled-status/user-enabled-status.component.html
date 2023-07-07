@@ -1,6 +1,7 @@
 <p>Disable user {{ username }} with id {{ userId }}</p>
 
-<form name="form" (ngSubmit)="userEnabledService.updateUserEnabledStatus(userId, model.reason)" #userEnableForm="ngForm">
+<form name="form" (ngSubmit)="userEnabledService.updateUserEnabledStatus(userId, model.reason)"
+    #userEnableForm="ngForm">
 
     <ng-container>
         <label for="reason">Reason</label>
@@ -9,7 +10,7 @@
             <div *ngIf="reason?.errors?.['required']">Reason is required</div>
         </div>
     </ng-container>
-   
+
     <div>
         <button type="submit" [disabled]="!userEnableForm.valid">Disable</button>
     </div>

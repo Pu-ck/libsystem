@@ -8,9 +8,9 @@ describe('BorrowBookComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ BorrowBookComponent ]
+      declarations: [BorrowBookComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(BorrowBookComponent);
     component = fixture.componentInstance;

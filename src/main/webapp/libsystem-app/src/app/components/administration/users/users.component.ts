@@ -43,11 +43,11 @@ export class UsersComponent implements OnInit {
   public getUsers(): void {
     const url = '/api/administration/users';
     let params = this.getSearchType();
-    this.http.get<any[]>(url, {params}).subscribe(
+    this.http.get<any[]>(url, { params }).subscribe(
       response => {
         this.users = response;
         this.userNotFound = false;
-        let queryParams: {[key: string]: string} = {};
+        let queryParams: { [key: string]: string } = {};
         this.setQueryParams(queryParams);
         this.router.navigate(['/administration/users'], { queryParams });
       },
@@ -75,7 +75,7 @@ export class UsersComponent implements OnInit {
       this.showAll = true;
       this.showEnabled = false;
       this.showDisabled = false;
-    } 
+    }
   }
 
   public redirectToUserUpdateEnabledStatusForm(id: string, status: boolean): void {
@@ -89,7 +89,7 @@ export class UsersComponent implements OnInit {
   private getUser(userId: string): void {
     const url = '/api/administration/users';
     let params = new HttpParams().set('userId', userId);
-    this.http.get<any[]>(url, {params}).subscribe(
+    this.http.get<any[]>(url, { params }).subscribe(
       response => {
         this.users = response;
         this.userNotFound = false;
@@ -118,7 +118,7 @@ export class UsersComponent implements OnInit {
     return new HttpParams().set('', '');
   }
 
-  private setQueryParams(queryParams: {[key: string]: string}): void {
+  private setQueryParams(queryParams: { [key: string]: string }): void {
     if (this.searchType === 'userId') {
       queryParams['userId'] = this.searchValue;
     }

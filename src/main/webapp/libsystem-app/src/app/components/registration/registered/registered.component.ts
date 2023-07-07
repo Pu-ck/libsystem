@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CommonRedirectsService } from 'src/app/services/redirects/common-redirects.service';
 
@@ -30,7 +30,8 @@ export class RegisteredComponent implements OnInit {
   private verifyToken(): void {
     const url = '/api/registered';
     let params = new HttpParams().set('token', this.token).set('username', this.username);
-    this.http.get<any>(url, { params,
+    this.http.get<any>(url, {
+      params,
     }).subscribe(response => {
       console.log(response);
       this.tokenVerified = true;

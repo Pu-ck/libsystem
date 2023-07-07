@@ -17,7 +17,7 @@ export class ChangePasswordComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private userEnabledService: UserEnabledService
-    ) { }
+  ) { }
 
   ngOnInit(): void {
   }
@@ -28,10 +28,10 @@ export class ChangePasswordComponent implements OnInit {
       oldPassword: this.model.oldPassword,
       newPassword: this.model.newPassword
     }).subscribe(response => {
-        console.log(response);
-        this.newPasswordSet = true;
-        this.passwordDuplicated = false;
-        this.oldPasswordNotMatching = false;
+      console.log(response);
+      this.newPasswordSet = true;
+      this.passwordDuplicated = false;
+      this.oldPasswordNotMatching = false;
     }, error => {
       this.userEnabledService.validateIfUserIsEnabled(error);
       if (error.status === 409) {

@@ -8,9 +8,9 @@ describe('UserEnabledStatusUpdatedComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UserEnabledStatusUpdatedComponent ]
+      declarations: [UserEnabledStatusUpdatedComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(UserEnabledStatusUpdatedComponent);
     component = fixture.componentInstance;

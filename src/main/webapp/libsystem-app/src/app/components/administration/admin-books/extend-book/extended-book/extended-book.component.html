@@ -1,0 +1,5 @@
+<p *ngIf="borrowedBookExtended">The return date of borrowed book with id {{ borrowedBookId }} has been successfully
+    extended.</p>
+
+<button *ngIf="borrowedBookExtended" (click)="commonRedirectsService.redirectToBorrowedAndOrderedBooks()">Back to
+    borrwoed and ordered books</button>

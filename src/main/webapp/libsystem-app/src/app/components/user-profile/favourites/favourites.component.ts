@@ -22,11 +22,11 @@ export class FavouritesComponent implements OnInit {
 
   private getUserFavouriteBooks(): void {
     const url = 'api/userprofile/favourites';
-    this.http.get<any>(url, { }).subscribe(response => {
+    this.http.get<any>(url, {}).subscribe(response => {
       this.favouriteBooks = response;
     }, error => {
-        this.userEnabledService.validateIfUserIsEnabled(error);
-      }
+      this.userEnabledService.validateIfUserIsEnabled(error);
+    }
     );
   }
 

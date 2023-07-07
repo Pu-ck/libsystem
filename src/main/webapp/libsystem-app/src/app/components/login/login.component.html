@@ -1,27 +1,58 @@
-<form name="form" (ngSubmit)="login()" #loginForm="ngForm">
-    <div>
-        <label for="username">Username</label>
-        <input type="text" name="username" [(ngModel)]="model.username" #username="ngModel" required>
-        <div *ngIf="username?.invalid && (username?.dirty || username?.touched)">
-            <div *ngIf="username?.errors?.['required']">Username is required</div>
-        </div>
-    </div>
-    <div>
-        <label for="password">Password</label>
-        <input type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required>
-        <div *ngIf="password?.invalid && (password?.dirty || password?.touched)">
-            <div *ngIf="password?.errors?.['required']">Password is required</div>
-        </div>
-    </div>
-    <div>
-        <button [disabled]="!model.username || !model.password">Login</button>
-        <div *ngIf="unauthorized">Incorrect username or password</div>
-        <div *ngIf="notEnabled">This account is currently disabled</div>
-    </div>
-</form>
+<div class="login-form">
 
-<button (click)="redirectToRegistrationForm()">Register new account</button>
-<button (click)="redirectToPasswordReminderForm()">I forgot password</button>
+    <h1>Libsystem</h1>
 
-<div *ngIf="loggedOut">Logged out successfully</div>
-<div *ngIf="disabled">Your account has been disabled - check your email for more information</div>
+    <div class="login-form-box">
+        <div class="message-container">
+            <div *ngIf="loggedOut" class="text-success">Logged out successfully</div>
+            <div *ngIf="disabled" class="text-danger">Your account has been disabled - check your email for more
+                information</div>
+        </div>
+
+        <form name="form" (ngSubmit)="login()" #loginForm="ngForm" class="form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" [(ngModel)]="model.username" #username="ngModel" required
+                    class="form-control text-input">
+                <div *ngIf="username?.invalid && (username?.dirty || username?.touched)">
+                    <div class="text-danger" *ngIf="username?.errors?.['required']">Username is required</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required
+                    class="form-control text-input">
+                <div *ngIf="password?.invalid && (password?.dirty || password?.touched)">
+                    <div class="text-danger" *ngIf="password?.errors?.['required']">Password is required</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button [disabled]="!model.username || !model.password" class="btn button">Log in</button>
+            </div>
+
+            <div class="form-group">
+                <div *ngIf="unauthorized" class="text-danger">Incorrect username or password</div>
+                <div *ngIf="notEnabled" class="text-danger">This account is currently disabled</div>
+            </div>
+        </form>
+
+        <div class="divider">
+            <hr class="my-3">
+        </div>
+
+        <div class="redirect-buttons">
+            <div class="form-group">
+                <button (click)="redirectToRegistrationForm()" class="btn button">Register new account</button>
+            </div>
+        </div>
+
+        <div class="redirect-buttons">
+            <div class="form-group">
+                <button (click)="redirectToPasswordReminderForm()" class="btn button">I forgot password</button>
+            </div>
+        </div>
+
+    </div>
+</div>

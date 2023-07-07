@@ -19,16 +19,17 @@
 
         <label for="genres">Genres</label>
         <form name="genres">
-        <ng-container *ngFor="let selectedGenre of selectedGenres">
-            <input type="checkbox" name="myCheckbox" [(ngModel)]="selectedGenre.value">{{ selectedGenre.label }}
-        </ng-container>
+            <ng-container *ngFor="let selectedGenre of selectedGenres">
+                <input type="checkbox" name="myCheckbox" [(ngModel)]="selectedGenre.value">{{ selectedGenre.label }}
+            </ng-container>
         </form>
-        
+
         <label for="affiliates">Affiliates</label>
         <form name="affiliates">
-        <ng-container *ngFor="let selectedAffiliate of selectedAffiliates">
-            <input type="checkbox" name="myCheckbox" [(ngModel)]="selectedAffiliate.value">{{ selectedAffiliate.label }}
-        </ng-container>
+            <ng-container *ngFor="let selectedAffiliate of selectedAffiliates">
+                <input type="checkbox" name="myCheckbox" [(ngModel)]="selectedAffiliate.value">{{
+                selectedAffiliate.label }}
+            </ng-container>
         </form>
 
         <label for="sortBy">Sort by</label>
@@ -57,56 +58,56 @@
 
 <table>
     <thead>
-      <tr>
-        <th>Title</th>
-        <th>Authors</th>
-        <th>Genres</th>
-        <th>Affiliates and quantity</th>
-        <th>Publisher</th>
-        <th>Year of print</th>
-        <th>Date added</th>
-        <th></th>
-      </tr>
+        <tr>
+            <th>Title</th>
+            <th>Authors</th>
+            <th>Genres</th>
+            <th>Affiliates and quantity</th>
+            <th>Publisher</th>
+            <th>Year of print</th>
+            <th>Date added</th>
+            <th></th>
+        </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let book of books">
-        <td>
-            {{ book.title }}
-        </td>
-        <td>
-            <ul>
-                <li *ngFor="let author of book.authors">
-                    {{ author.name }}
-                </li>
-            </ul>
-        </td>
-        <td>
-            <ul>
-                <li *ngFor="let genre of book.genres">
-                    {{ genre.name }}
-                </li>
-            </ul>
-        </td>
-        <td>
-            <ul>
-                <li *ngFor="let affiliate of book.affiliates">
-                    {{ affiliate.name }} {{ commonBookMethodsService.getAffiliateBookQuantity(book, affiliate.id) }}
-                </li>
-            </ul>
-        </td>
-        <td>
-            {{ book.publisherEntity.name }}
-        </td>
-        <td>
-            {{ book.yearOfPrintEntity.yearOfPrint }}
-        </td>
-        <td>
-            {{ book.addDate.split('T')[0] }}
-        </td>
-        <td>
-            <button (click)="redirectToBookDetails(book.id)">Details</button>
-        </td>
-      </tr>
+        <tr *ngFor="let book of books">
+            <td>
+                {{ book.title }}
+            </td>
+            <td>
+                <ul>
+                    <li *ngFor="let author of book.authors">
+                        {{ author.name }}
+                    </li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li *ngFor="let genre of book.genres">
+                        {{ genre.name }}
+                    </li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li *ngFor="let affiliate of book.affiliates">
+                        {{ affiliate.name }} {{ commonBookMethodsService.getAffiliateBookQuantity(book, affiliate.id) }}
+                    </li>
+                </ul>
+            </td>
+            <td>
+                {{ book.publisherEntity.name }}
+            </td>
+            <td>
+                {{ book.yearOfPrintEntity.yearOfPrint }}
+            </td>
+            <td>
+                {{ book.addDate.split('T')[0] }}
+            </td>
+            <td>
+                <button (click)="redirectToBookDetails(book.id)">Details</button>
+            </td>
+        </tr>
     </tbody>
 </table>
 

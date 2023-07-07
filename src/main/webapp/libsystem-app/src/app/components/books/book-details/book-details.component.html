@@ -2,30 +2,30 @@
 
 <div *ngIf="bookDetails">
     <p>Title: {{bookDetails.title}}</p>
-    <p>Authors: 
+    <p>Authors:
         <li *ngFor="let author of bookDetails.authors">
             {{author.name}}
         </li>
     </p>
     <p>Publisher: {{bookDetails.publisherEntity.name}}</p>
     <p>Year of print: {{bookDetails.yearOfPrintEntity.yearOfPrint}}</p>
-    <p>Genres: 
+    <p>Genres:
         <li *ngFor="let genre of bookDetails.genres">
             {{genre.name}}
         </li>
     </p>
-    <p>Affiliates: 
+    <p>Affiliates:
         <li *ngFor="let affiliate of bookDetails.affiliates">
             {{affiliate.name}}
             <ul>
                 <li>Address: {{affiliate.address}}</li>
-                <li>Phone number:  {{affiliate.phoneNumber}}</li>
+                <li>Phone number: {{affiliate.phoneNumber}}</li>
             </ul>
         </li>
     </p>
     <p>Descripton: {{bookDetails.description}}</p>
-    <p>Quantity: 
-        <li *ngFor="let affiliate of bookDetails.affiliates"> 
+    <p>Quantity:
+        <li *ngFor="let affiliate of bookDetails.affiliates">
             {{ affiliate.name }} {{ commonBookMethodsService.getAffiliateBookQuantity(bookDetails, affiliate.id) }}
         </li>
     </p>

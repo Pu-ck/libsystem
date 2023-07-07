@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CommonRedirectsService } from 'src/app/services/redirects/common-redirects.service';
 
 @Component({
   selector: 'app-borrowed',
@@ -11,24 +12,17 @@ export class BorrowedComponent implements OnInit {
   public borrowedBookValidated: boolean = false;
 
   constructor(
-    private router: Router
+    private router: Router,
+    private commonRedirectsService: CommonRedirectsService
   ) { }
 
   ngOnInit(): void {
-    this.checkIfUserHasBorrowedBook();
+    this.commonRedirectsService.checkSingleVisitPageSessionStorageCondition('hasBorrowedBook');
     this.borrowedBookValidated = true;
   }
 
   public redirectToBookCatalogue(): void {
     this.router.navigateByUrl('/books');
-  }
-
-  private checkIfUserHasBorrowedBook(): void {
-    const hasBorrowedBook = sessionStorage.getItem('hasBorrowedBook');
-    if (hasBorrowedBook !== 'true') {
-      this.router.navigateByUrl('/');
-    }
-    sessionStorage.setItem('hasBorrowedBook', 'false');
   }
 
 }

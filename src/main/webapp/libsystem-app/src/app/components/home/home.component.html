@@ -3,29 +3,29 @@
 <p>Recently added books</p>
 
 <table>
-    <thead>
-      <tr>
-        <th></th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let newBook of newBooks">
-        <td>
-            <a [routerLink]="'/books/' + newBook.bookId">{{ newBook.title }}</a>
-        </td>
-        <td>
-            <a>Authors: {{ newBook.authors }}</a>
-        </td>
-        <td>
-            <a>Genres: {{ newBook.genres }}</a>
-        </td>
-        <td>
-            <a>Publisher: {{ newBook.publisher }}</a>
-        </td>
-        <td>
-            <a>Year of print: {{ newBook.yearOfPrint }}</a>
-        </td>
-      </tr>
-    </tbody>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let newBook of newBooks">
+      <td>
+        <a [routerLink]="'/books/' + newBook.bookId">{{ newBook.title }}</a>
+      </td>
+      <td>
+        <a>Authors: {{ newBook.authors }}</a>
+      </td>
+      <td>
+        <a>Genres: {{ newBook.genres }}</a>
+      </td>
+      <td>
+        <a>Publisher: {{ newBook.publisher }}</a>
+      </td>
+      <td>
+        <a>Year of print: {{ newBook.yearOfPrint }}</a>
+      </td>
+    </tr>
+  </tbody>
 </table>

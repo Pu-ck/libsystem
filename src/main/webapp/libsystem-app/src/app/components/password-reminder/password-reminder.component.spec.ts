@@ -8,9 +8,9 @@ describe('PasswordReminderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PasswordReminderComponent ]
+      declarations: [PasswordReminderComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(PasswordReminderComponent);
     component = fixture.componentInstance;

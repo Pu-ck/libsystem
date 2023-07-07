@@ -19,7 +19,7 @@ export class CommonBookMethodsService {
     }
     if (currentQuantityInAllAffiliates === 0) {
       return false;
-    } 
+    }
     else {
       return true;
     }

@@ -16,7 +16,8 @@ export class UserEnabledService {
 
   public updateUserEnabledStatus(userId: string, reason: string): void {
     const url = `/api/administration/users/${userId}/update-user-enabled-status`
-    this.http.put<any>(url, { reason: reason,
+    this.http.put<any>(url, {
+      reason: reason,
     }).subscribe(response => {
       console.log(response);
       sessionStorage.setItem('hasUpdatedUserEnableStatus', 'true');

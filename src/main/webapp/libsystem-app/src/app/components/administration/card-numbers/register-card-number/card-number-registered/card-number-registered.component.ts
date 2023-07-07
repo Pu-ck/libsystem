@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { CommonRedirectsService } from 'src/app/services/redirects/common-redirects.service';
 
@@ -15,23 +14,14 @@ export class CardNumberRegisteredComponent implements OnInit {
 
   constructor(
     public commonRedirectsService: CommonRedirectsService,
-    private router: Router,
     private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.checkIfCardNumberHasBeenRegistered();
+    this.commonRedirectsService.checkSingleVisitPageSessionStorageCondition('hasRegisteredCardNumber');
     this.cardNumberRegistered = true;
     this.setCardNumber();
   }
-
-  private checkIfCardNumberHasBeenRegistered(): void {
-    const hasRegisteredCardNumber = sessionStorage.getItem('hasRegisteredCardNumber');
-    if (hasRegisteredCardNumber !== 'true') {
-      this.router.navigateByUrl('/');
-    }
-    sessionStorage.setItem('hasRegisteredCardNumber', 'false');
-  } 
 
   private setCardNumber(): void {
     this.route.paramMap.subscribe(params => {

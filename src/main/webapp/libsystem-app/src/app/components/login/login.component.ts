@@ -18,9 +18,9 @@ export class LoginComponent implements OnInit {
   public disabled: boolean = false;
 
   constructor(
-      private router: Router,
-      private http: HttpClient,
-      private route: ActivatedRoute
+    private router: Router,
+    private http: HttpClient,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -33,11 +33,11 @@ export class LoginComponent implements OnInit {
       username: this.model.username,
       password: this.model.password
     }).subscribe(response => {
-        this.sessionID = response.sessionID;  
-        this.userType = response.userType;
-        sessionStorage.setItem('token', this.sessionID);
-        sessionStorage.setItem('userType', this.userType);
-        window.location.href = '/';
+      this.sessionID = response.sessionID;
+      this.userType = response.userType;
+      sessionStorage.setItem('token', this.sessionID);
+      sessionStorage.setItem('userType', this.userType);
+      window.location.href = '/';
     }, error => {
       if (error.status === 403 && error.error.message === 'User not enabled') {
         this.notEnabled = true;
@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
   public redirectToPasswordReminderForm(): void {
     this.router.navigate(['/password-reminder']);
   }
- 
+
   private validateIfUserISLoggedOutOrDisabled(): void {
     this.route.queryParams.subscribe(params => {
       if (params['logout'] === 'true') {

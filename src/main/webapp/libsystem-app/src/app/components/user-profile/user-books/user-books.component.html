@@ -6,52 +6,54 @@
 <button [disabled]="displayedStatus == 'All'" (click)="setDisplayedStatus('All')">All</button>
 
 <table>
-    <thead>
-      <tr>
-        <th>Book details</th>
-        <th>Borrow date</th>
-        <th>Return date</th>
-        <th>Ready for pickup date</th>
-        <th>Current penalty</th>
-        <th>Affiliate</th>
-        <th>Status</th>
-        <th>Extended</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let book of books">
-        <ng-container *ngIf="book.status == displayedStatus || displayedStatus == 'All'">
-          <td>
-              <a [routerLink]="book.bookDetailsLink">{{ book.title }}</a>
-          </td>
-          <td>
-              {{ book.borrowDate }}
-          </td>
-          <td>
-              {{ book.returnDate }}
-          </td>
-          <td>
-              {{ book.readyDate }}
-          </td>
-          <td>
-              {{ book.penalty }}
-          </td>
-          <td>
-              {{ book.affiliate }}
-          </td>
-          <td>
-              {{ book.status }}
-          </td>
-          <td>
-              {{ book.extended ? 'Yes' : 'No' }}
-          </td>
-          <td>
-              <button [disabled]="book.extended || book.closed || !book.accepted" (click)="bookExtensionConfirmation(book.borrowedBookId)">Extend</button>
-          </td>
-        </ng-container>
-      </tr>
-    </tbody>
+  <thead>
+    <tr>
+      <th>Book details</th>
+      <th>Borrow date</th>
+      <th>Return date</th>
+      <th>Ready for pickup date</th>
+      <th>Current penalty</th>
+      <th>Affiliate</th>
+      <th>Status</th>
+      <th>Extended</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let book of books">
+      <ng-container *ngIf="book.status == displayedStatus || displayedStatus == 'All'">
+        <td>
+          <a [routerLink]="book.bookDetailsLink">{{ book.title }}</a>
+        </td>
+        <td>
+          {{ book.borrowDate }}
+        </td>
+        <td>
+          {{ book.returnDate }}
+        </td>
+        <td>
+          {{ book.readyDate }}
+        </td>
+        <td>
+          {{ book.penalty }}
+        </td>
+        <td>
+          {{ book.affiliate }}
+        </td>
+        <td>
+          {{ book.status }}
+        </td>
+        <td>
+          {{ book.extended ? 'Yes' : 'No' }}
+        </td>
+        <td>
+          <button [disabled]="book.extended || book.closed || !book.accepted"
+            (click)="bookExtensionConfirmation(book.borrowedBookId)">Extend</button>
+        </td>
+      </ng-container>
+    </tr>
+  </tbody>
 </table>
 
-<p *ngIf="bookExtended">Book extension request sent successfully - wait for an administrator to extended the book's return date</p>
+<p *ngIf="bookExtended">Book extension request sent successfully - wait for an administrator to extended the book's
+  return date</p>

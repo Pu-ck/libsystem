@@ -10,7 +10,8 @@
     </select>
 
     <div>
-        <input *ngIf="searchType !== 'username'" appNumericOnly type="text" name="searchValue" [(ngModel)]="searchValue">
+        <input *ngIf="searchType !== 'username'" appNumericOnly type="text" name="searchValue"
+            [(ngModel)]="searchValue">
         <input *ngIf="searchType === 'username'" type="text" name="searchValue" [(ngModel)]="searchValue">
         <button type="submit">Search</button>
     </div>
@@ -22,56 +23,58 @@
 
 <table>
     <thead>
-      <tr>
-        <th>ID</th>
-        <th>Card number</th>
-        <th>Username</th>
-        <th>First name</th>
-        <th>Last name</th>
-        <th>Enabled</th>
-        <th>Ordered books</th>
-        <th>Borrowed books</th>
-        <th>User type</th>
-        <th></th>
-      </tr>
+        <tr>
+            <th>ID</th>
+            <th>Card number</th>
+            <th>Username</th>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Enabled</th>
+            <th>Ordered books</th>
+            <th>Borrowed books</th>
+            <th>User type</th>
+            <th></th>
+        </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let user of users">
-        <ng-container *ngIf="user.enabled === showEnabled || showAll === true">
-            <td>
-                {{ user.id }}
-            </td>
-            <td>
-                <a [routerLink]="['/administration/card-numbers']" [queryParams]="{ cardNumber: user.cardNumber }">{{ user.cardNumber }}</a>
-            </td>
-            <td>
-                {{ user.username }}
-            </td>
-            <td>
-                {{ user.firstName }}
-            </td>
-            <td>
-                {{ user.lastName }}
-            </td>
-            <td>
-                {{ user.enabled ? 'Yes' : 'No' }}
-            </td>
-            <td>
-                {{ user.orderedBooks }}
-            </td>
-            <td>
-                {{ user.borrowedBooks }}
-            </td>
-            <td>
-                {{ user.userType }}
-            </td>
-            <td>
-                <button [disabled]="user.id.toString() === adminId" (click)="redirectToUserUpdateEnabledStatusForm(user.id, user.enabled)">
-                    {{ user.enabled ? 'Disable' : 'Enable' }}
-                </button>
-            </td>
-        </ng-container>
-      </tr>
+        <tr *ngFor="let user of users">
+            <ng-container *ngIf="user.enabled === showEnabled || showAll === true">
+                <td>
+                    {{ user.id }}
+                </td>
+                <td>
+                    <a [routerLink]="['/administration/card-numbers']"
+                        [queryParams]="{ cardNumber: user.cardNumber }">{{ user.cardNumber }}</a>
+                </td>
+                <td>
+                    {{ user.username }}
+                </td>
+                <td>
+                    {{ user.firstName }}
+                </td>
+                <td>
+                    {{ user.lastName }}
+                </td>
+                <td>
+                    {{ user.enabled ? 'Yes' : 'No' }}
+                </td>
+                <td>
+                    {{ user.orderedBooks }}
+                </td>
+                <td>
+                    {{ user.borrowedBooks }}
+                </td>
+                <td>
+                    {{ user.userType }}
+                </td>
+                <td>
+                    <button [disabled]="user.id.toString() === adminId"
+                        (click)="redirectToUserUpdateEnabledStatusForm(user.id, user.enabled)">
+                        {{ user.enabled ? 'Disable' : 'Enable' }}
+                    </button>
+                </td>
+            </ng-container>
+        </tr>
     </tbody>
 </table>
 

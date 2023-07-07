@@ -17,9 +17,9 @@ export class RegistrationComponent implements OnInit {
   public peselNumberNotAuthenticated: boolean = false;
 
   constructor(
-      private router: Router,
-      private http: HttpClient,
-      public commonRedirectsService: CommonRedirectsService
+    private router: Router,
+    private http: HttpClient,
+    public commonRedirectsService: CommonRedirectsService
   ) { }
 
   ngOnInit(): void {

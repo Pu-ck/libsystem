@@ -24,34 +24,42 @@ import { UserEnabledStatusComponent } from './components/administration/users/us
 import { UserEnabledStatusUpdatedComponent } from './components/administration/users/user-enabled-status/user-enabled-status-updated/user-enabled-status-updated.component';
 import { RegisterCardNumberComponent } from './components/administration/card-numbers/register-card-number/register-card-number.component';
 import { CardNumberRegisteredComponent } from './components/administration/card-numbers/register-card-number/card-number-registered/card-number-registered.component';
+import { ExtendBookComponent } from './components/administration/admin-books/extend-book/extend-book.component';
+import { ExtendedBookComponent } from './components/administration/admin-books/extend-book/extended-book/extended-book.component';
 
 const routes: Routes = [
-  {path: '', canActivate:[AuthenticationGuard], children: [
-    { path: '', component: HomeComponent },
-    { path: 'login', component: LoginComponent},
-    { path: 'registration', component: RegistrationComponent },
-    { path: 'registered', component: RegisteredComponent },
-    { path: 'user-profile', component: UserProfileComponent },
-    { path: 'user-profile/books', component: UserBooksComponent },
-    { path: 'user-profile/change-password', component: ChangePasswordComponent },
-    { path: 'user-profile/favourites', component: FavouritesComponent },
-    { path: 'books', component: BooksComponent },
-    { path: 'books/:id', component: BookDetailsComponent },
-    { path: 'books/:id/borrow-book', component: BorrowBookComponent },
-    { path: 'books/:id/borrow-book/borrowed', component: BorrowedComponent },
-    { path: 'password-reminder', component: PasswordReminderComponent },
-    { path: 'password-reminder/new-password', component: NewPasswordComponent },
-    { path: '', canActivate:[AdministratorGuard], children: [
-      { path: 'administration', component: AdministrationComponent },
-      { path: 'administration/books', component: AdminBooksComponent },
-      { path: 'administration/users', component: UsersComponent },
-      { path: 'administration/users/:id/user-enabled-status', component: UserEnabledStatusComponent },
-      { path: 'administration/users/:id/user-enabled-status/user-enabled-status-updated', component: UserEnabledStatusUpdatedComponent },
-      { path: 'administration/card-numbers', component: CardNumbersComponent },
-      { path: 'administration/card-numbers/register-card-number', component: RegisterCardNumberComponent },
-      { path: 'administration/card-numbers/register-card-number/:cardNumber/card-number-registered', component: CardNumberRegisteredComponent }
-    ]}
-  ]},
+  {
+    path: '', canActivate: [AuthenticationGuard], children: [
+      { path: '', component: HomeComponent },
+      { path: 'login', component: LoginComponent },
+      { path: 'registration', component: RegistrationComponent },
+      { path: 'registered', component: RegisteredComponent },
+      { path: 'user-profile', component: UserProfileComponent },
+      { path: 'user-profile/books', component: UserBooksComponent },
+      { path: 'user-profile/change-password', component: ChangePasswordComponent },
+      { path: 'user-profile/favourites', component: FavouritesComponent },
+      { path: 'books', component: BooksComponent },
+      { path: 'books/:id', component: BookDetailsComponent },
+      { path: 'books/:id/borrow-book', component: BorrowBookComponent },
+      { path: 'books/:id/borrow-book/borrowed', component: BorrowedComponent },
+      { path: 'password-reminder', component: PasswordReminderComponent },
+      { path: 'password-reminder/new-password', component: NewPasswordComponent },
+      {
+        path: '', canActivate: [AdministratorGuard], children: [
+          { path: 'administration', component: AdministrationComponent },
+          { path: 'administration/books', component: AdminBooksComponent },
+          { path: 'administration/users', component: UsersComponent },
+          { path: 'administration/users/:id/user-enabled-status', component: UserEnabledStatusComponent },
+          { path: 'administration/users/:id/user-enabled-status/user-enabled-status-updated', component: UserEnabledStatusUpdatedComponent },
+          { path: 'administration/card-numbers', component: CardNumbersComponent },
+          { path: 'administration/card-numbers/register-card-number', component: RegisterCardNumberComponent },
+          { path: 'administration/card-numbers/register-card-number/:cardNumber/card-number-registered', component: CardNumberRegisteredComponent },
+          { path: 'administration/books/:id/extend-book', component: ExtendBookComponent },
+          { path: 'administration/books/:id/extend-book/extended-book', component: ExtendedBookComponent }
+        ]
+      }
+    ]
+  },
   { path: '**', redirectTo: '' }
 ];
 

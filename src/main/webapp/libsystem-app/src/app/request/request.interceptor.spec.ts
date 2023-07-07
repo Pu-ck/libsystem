@@ -6,7 +6,7 @@ describe('RequestInterceptor', () => {
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
       RequestInterceptor
-      ]
+    ]
   }));
 
   it('should be created', () => {

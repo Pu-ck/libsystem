@@ -8,9 +8,9 @@ describe('AdministrationBooksComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AdminBooksComponent ]
+      declarations: [AdminBooksComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(AdminBooksComponent);
     component = fixture.componentInstance;

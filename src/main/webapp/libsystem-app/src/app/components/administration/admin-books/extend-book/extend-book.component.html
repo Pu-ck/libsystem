@@ -1,0 +1,21 @@
+<p>Extend return date of borrowed book with id {{ borrowedBookId }}</p>
+
+<form name="form" (ngSubmit)="extendBorrowedBook()" #extendBorrowedBookForm="ngForm">
+
+    <ng-container>
+        <label for="days">Days (1-90)</label>
+        <input appNumericOnly type="number" name="days" [(ngModel)]="model.days" #days="ngModel" [min]="1" [max]="90"
+            required>
+        <div *ngIf="days?.invalid && (days?.dirty || days?.touched)">
+            <div *ngIf="days?.errors?.['required']">Number of days is required</div>
+        </div>
+    </ng-container>
+
+    <div>
+        <button type="submit" [disabled]="!extendBorrowedBookForm.valid">Extend</button>
+    </div>
+
+</form>
+
+<button (click)="commonRedirectsService.redirectToBorrowedAndOrderedBooks()">Back to borrowed and ordered books
+    list</button>

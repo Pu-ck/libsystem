@@ -38,11 +38,11 @@ export class AdminBooksComponent implements OnInit {
   public getBorrowedBooks(): void {
     const url = '/api/administration/books';
     let params = this.getSearchType();
-    this.http.get<any[]>(url, {params}).subscribe(
+    this.http.get<any[]>(url, { params }).subscribe(
       response => {
         this.borrowedBooks = response;
         this.borrowedBookNotFound = false;
-        let queryParams: {[key: string]: string} = {};
+        let queryParams: { [key: string]: string } = {};
         this.setQueryParams(queryParams);
         this.router.navigate(['/administration/books'], { queryParams });
         if (this.borrowedBooks.length === 0) {
@@ -62,10 +62,10 @@ export class AdminBooksComponent implements OnInit {
 
   public updateOrderReadyStatus(borrowedBookId: string, accepted: boolean): void {
     const url = `/api/administration/books/${borrowedBookId}/ready-order`
-    this.http.put<any>(url, { accepted: accepted
+    this.http.put<any>(url, {
+      accepted: accepted
     }).subscribe(response => {
       console.log(response);
-      sessionStorage.setItem('hasUpdatedOrderReadyStatus', 'true');
       window.location.reload();
     }, error => {
       console.log(error);
@@ -75,10 +75,10 @@ export class AdminBooksComponent implements OnInit {
 
   public acceptOrder(borrowedBookId: string, cardNumber: string): void {
     const url = `/api/administration/books/${borrowedBookId}/accept-order`
-    this.http.put<any>(url, { cardNumber: cardNumber
+    this.http.put<any>(url, {
+      cardNumber: cardNumber
     }).subscribe(response => {
       console.log(response);
-      sessionStorage.setItem('hasAcceptedOrder', 'true');
       window.location.reload();
     }, error => {
       console.log(error);
@@ -88,10 +88,10 @@ export class AdminBooksComponent implements OnInit {
 
   public returnBook(borrowedBookId: string, cardNumber: string): void {
     const url = `/api/administration/books/${borrowedBookId}/return-book`
-    this.http.put<any>(url, { cardNumber: cardNumber
+    this.http.put<any>(url, {
+      cardNumber: cardNumber
     }).subscribe(response => {
       console.log(response);
-      sessionStorage.setItem('hasReturnedBook', 'true');
       window.location.reload();
     }, error => {
       console.log(error);
@@ -134,7 +134,7 @@ export class AdminBooksComponent implements OnInit {
       this.showReady = false;
       this.showExtended = false;
       this.showAccepted = false;
-    } 
+    }
   }
 
   private getSearchType(): HttpParams {
@@ -153,7 +153,7 @@ export class AdminBooksComponent implements OnInit {
     return new HttpParams().set('', '');
   }
 
-  private setQueryParams(queryParams: {[key: string]: string}): void {
+  private setQueryParams(queryParams: { [key: string]: string }): void {
     if (this.searchType === 'borrowedBookId') {
       queryParams['borrowedBookId'] = this.searchValue;
     }
