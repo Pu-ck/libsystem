@@ -24,7 +24,7 @@ export class NewPasswordComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.token = this.route.snapshot.queryParamMap.get('token')!;
+    this.token = this.route.snapshot.paramMap.get('token') || '';
     this.verifyToken();
   }
 

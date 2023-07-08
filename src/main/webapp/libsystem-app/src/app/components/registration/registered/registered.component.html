@@ -1,4 +1,20 @@
-<p *ngIf="tokenVerified">Your registration request has been created. Wait until the administrator enables your account -
-    the message about your account activation will be sent on provided email address</p>
+<div class="registered-form">
 
-<button *ngIf="tokenVerified" (click)="commonRedirectsService.redirectToLoginForm()">Back to login page</button>
+    <img class="image" src="assets\libsystem-logo.jpg" alt="Image">
+    <h1>Libsystem</h1>
+
+    <div class="registered-form-box">
+        <div class="form-group">
+            <div *ngIf="tokenVerified">
+                <p class="text-success message-container">Your registration request has been created.</p>
+                <p class="text-success message-container">Wait until the administrator enables your account.</p>
+                <p class="text-success message-container">Information will be sent on your email address.</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <button *ngIf="tokenVerified" (click)="commonRedirectsService.redirectToLoginForm()" class="btn button">Back
+                to
+                login page</button>
+        </div>
+    </div>
+</div>

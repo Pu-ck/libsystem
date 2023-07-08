@@ -34,6 +34,8 @@ const routes: Routes = [
       { path: 'login', component: LoginComponent },
       { path: 'registration', component: RegistrationComponent },
       { path: 'registered', component: RegisteredComponent },
+      { path: 'password-reminder', component: PasswordReminderComponent },
+      { path: 'password-reminder/new-password/:token', component: NewPasswordComponent },
       { path: 'user-profile', component: UserProfileComponent },
       { path: 'user-profile/books', component: UserBooksComponent },
       { path: 'user-profile/change-password', component: ChangePasswordComponent },
@@ -42,8 +44,6 @@ const routes: Routes = [
       { path: 'books/:id', component: BookDetailsComponent },
       { path: 'books/:id/borrow-book', component: BorrowBookComponent },
       { path: 'books/:id/borrow-book/borrowed', component: BorrowedComponent },
-      { path: 'password-reminder', component: PasswordReminderComponent },
-      { path: 'password-reminder/new-password', component: NewPasswordComponent },
       {
         path: '', canActivate: [AdministratorGuard], children: [
           { path: 'administration', component: AdministrationComponent },

@@ -1,0 +1,41 @@
+.registration-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    overflow-y: auto;
+    padding-bottom: 50px;
+}
+
+.registration-form-box {
+    background-color: rgb(252, 252, 252);
+    padding: 80px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    margin-top: 0px;
+    padding-bottom: 50px;
+    padding-top: 50px;
+}
+
+.form-group .form-control,
+.form-group .btn,
+.form-group .text-danger {
+    width: 100%;
+    font-size: inherit;
+}
+
+.image {
+    margin-top: 30px;
+    width: 50px;
+    height: auto;
+}
+
+h1 {
+    font-size: 30px;
+    margin-bottom: 15px;
+}
+
+.button {
+    align-items: center;
+}

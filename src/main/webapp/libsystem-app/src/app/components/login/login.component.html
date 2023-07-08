@@ -1,5 +1,6 @@
 <div class="login-form">
 
+    <img class="image" src="assets\libsystem-logo.jpg" alt="Image">
     <h1>Libsystem</h1>
 
     <div class="login-form-box">
@@ -33,8 +34,8 @@
             </div>
 
             <div class="form-group">
-                <div *ngIf="unauthorized" class="text-danger">Incorrect username or password</div>
-                <div *ngIf="notEnabled" class="text-danger">This account is currently disabled</div>
+                <div *ngIf="unauthorized" class="text-danger">Wrong username or password</div>
+                <div *ngIf="notEnabled" class="text-danger">Account is currently disabled</div>
             </div>
         </form>
 

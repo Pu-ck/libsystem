@@ -1,68 +1,88 @@
-<form name="form" (ngSubmit)="register()" #registrationForm="ngForm">
-    <div>
-        <label for="username">Username</label>
-        <input type="email" name="username" [(ngModel)]="model.username" #username="ngModel"
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required>
-        <div *ngIf="username?.invalid && (username?.dirty || username?.touched)">
-            <div *ngIf="username?.errors?.['required']">Username is required</div>
-            <div *ngIf="username?.errors?.['pattern']">Invalid username format - the username must be an email address
+<div class="registration-form">
+
+    <img class="image" src="assets\libsystem-logo.jpg" alt="Image">
+    <h1>Libsystem</h1>
+
+    <div class="registration-form-box">
+        <form name="form" (ngSubmit)="register()" #registrationForm="ngForm" class="form">
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="email" name="username" [(ngModel)]="model.username" #username="ngModel"
+                    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required class="form-control text-input">
+                <div *ngIf="username?.invalid && (username?.dirty || username?.touched)">
+                    <div *ngIf="username?.errors?.['required']" class="text-danger">Username is required</div>
+                    <div *ngIf="username?.errors?.['pattern']" class="text-danger">Provide valid email address</div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div>
-        <label for="password">Password</label>
-        <input type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required minlength="8"
-            maxlength="25">
-        <div *ngIf="password?.invalid && (password?.dirty || password?.touched)">
-            <div *ngIf="password?.errors?.['required']">Password is required</div>
-            <div *ngIf="password?.errors?.['minlength']">The password must be between 8 and 25 characters long</div>
-        </div>
-    </div>
-    <div>
-        <label for="firstName">First name</label>
-        <input type="text" name="firstName" [(ngModel)]="model.firstName" #firstName="ngModel" required>
 
-        <div *ngIf="firstName?.invalid && (firstName?.dirty || firstName?.touched)">
-            <div *ngIf="firstName?.errors?.['required']">First name is required</div>
-        </div>
-    </div>
-    <div>
-        <label for="lastName">Last name</label>
-        <input type="text" name="lastName" [(ngModel)]="model.lastName" #lastName="ngModel" required>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required
+                    minlength="8" maxlength="25" class="form-control text-input">
+                <div *ngIf="password?.invalid && (password?.dirty || password?.touched)">
+                    <div *ngIf="password?.errors?.['required']" class="text-danger">Password is required</div>
+                    <div *ngIf="password?.errors?.['minlength']" class="text-danger">Provided password is too short
+                    </div>
+                </div>
+            </div>
 
-        <div *ngIf="lastName?.invalid && (lastName?.dirty || lastName?.touched)">
-            <div *ngIf="lastName?.errors?.['required']">Last name is required</div>
-        </div>
-    </div>
-    <div>
-        <label for="cardNumber">Card number</label>
-        <input appNumericOnly type="text" name="cardNumber" [(ngModel)]="model.cardNumber" #cardNumber="ngModel"
-            required minlength="10" maxlength="10" pattern="^[0-9]+$">
-        <div *ngIf="cardNumber?.invalid && (cardNumber?.dirty || cardNumber?.touched)">
-            <div *ngIf="cardNumber?.errors?.['required']">Card number is required</div>
-            <div *ngIf="cardNumber?.errors?.['minlength']">Invalid card number length</div>
-            <div *ngIf="cardNumber?.errors?.['maxlength']">Invalid card number length</div>
-            <div *ngIf="cardNumber.errors?.['pattern']">Invalid card number format</div>
-        </div>
-    </div>
-    <div>
-        <label for="peselNumber">PESEL number</label>
-        <input appNumericOnly type="text" name="peselNumber" [(ngModel)]="model.peselNumber" #peselNumber="ngModel"
-            required minlength="11" maxlength="11" pattern="^[0-9]+$">
-        <div *ngIf="peselNumber?.invalid && (peselNumber?.dirty || peselNumber?.touched)">
-            <div *ngIf="peselNumber?.errors?.['required']">PESEL is required</div>
-            <div *ngIf="peselNumber?.errors?.['minlength']">Invalid PESEL number length</div>
-            <div *ngIf="peselNumber?.errors?.['maxlength']">Invalid PESEL number length</div>
-            <div *ngIf="peselNumber.errors?.['pattern']">Invalid PESEL number format</div>
-        </div>
-    </div>
-    <div>
-        <button type="submit" [disabled]="!registrationForm.valid">Register</button>
-        <div *ngIf="usernameTaken">Provided username is already taken</div>
-        <div *ngIf="cardNumberTaken">Provided card number is already taken</div>
-        <div *ngIf="cardNumberNotFound">Provided card number is not registered in the library</div>
-        <div *ngIf="peselNumberNotAuthenticated">Provided PESEL number is not associated with any library card</div>
-    </div>
-</form>
+            <div class="form-group">
+                <label for="firstName">First name</label>
+                <input type="text" name="firstName" [(ngModel)]="model.firstName" #firstName="ngModel" required
+                    class="form-control text-input">
+                <div *ngIf="firstName?.invalid && (firstName?.dirty || firstName?.touched)">
+                    <div *ngIf="firstName?.errors?.['required']" class="text-danger">First name is required</div>
+                </div>
+            </div>
 
-<button (click)="commonRedirectsService.redirectToLoginForm()">Login with existing account</button>
+            <div class="form-group">
+                <label for="lastName">Last name</label>
+                <input type="text" name="lastName" [(ngModel)]="model.lastName" #lastName="ngModel" required
+                    class="form-control text-input">
+                <div *ngIf="lastName?.invalid && (lastName?.dirty || lastName?.touched)">
+                    <div *ngIf="lastName?.errors?.['required']" class="text-danger">Last name is required</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="cardNumber">Card number</label>
+                <input appNumericOnly type="text" name="cardNumber" [(ngModel)]="model.cardNumber" #cardNumber="ngModel"
+                    required minlength="10" maxlength="10" class="form-control text-input">
+                <div *ngIf="cardNumber?.invalid && (cardNumber?.dirty || cardNumber?.touched)">
+                    <div *ngIf="cardNumber?.errors?.['required']" class="text-danger">Card number is required</div>
+                    <div *ngIf="cardNumber?.errors?.['minlength']" class="text-danger">Invalid card number length</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="peselNumber">PESEL number</label>
+                <input appNumericOnly type="text" name="peselNumber" [(ngModel)]="model.peselNumber"
+                    #peselNumber="ngModel" required minlength="11" maxlength="11" class="form-control text-input">
+                <div *ngIf="peselNumber?.invalid && (peselNumber?.dirty || peselNumber?.touched)">
+                    <div *ngIf="peselNumber?.errors?.['required']" class="text-danger">PESEL is required</div>
+                    <div *ngIf="peselNumber?.errors?.['minlength']" class="text-danger">Invalid PESEL number length
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" [disabled]="!registrationForm.valid" class="btn button">Register</button>
+                <div *ngIf="usernameTaken" class="text-danger">Username is already taken</div>
+                <div *ngIf="cardNumberTaken" class="text-danger">Card number is already taken</div>
+                <div *ngIf="cardNumberNotFound" class="text-danger">Card number is not registered</div>
+                <div *ngIf="peselNumberNotAuthenticated" class="text-danger">PESEL number is not registered
+                </div>
+            </div>
+        </form>
+
+        <div class="divider">
+            <hr class="my-3">
+        </div>
+
+        <div class="form-group">
+            <button (click)="commonRedirectsService.redirectToLoginForm()" class="btn button redirect-buttons">Login with existing
+                account</button>
+        </div>
+    </div>
+</div>

@@ -7,6 +7,7 @@ import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.exceptions.cardnumber.UnableToAuthenticateCardNumberException;
 import com.system.libsystem.exceptions.passwordreminder.PasswordReminderTokenExpiredException;
 import com.system.libsystem.exceptions.passwordreminder.PasswordReminderTokenNotFoundException;
+import com.system.libsystem.exceptions.user.UserNotEnabledException;
 import com.system.libsystem.mail.MailBuilder;
 import com.system.libsystem.mail.MailSender;
 import com.system.libsystem.rest.util.BookUtil;
@@ -26,8 +27,6 @@ import java.util.UUID;
 @Slf4j
 public class PasswordReminderService {
 
-    private static final int PASSWORD_REMINDER_TOKEN_EXPIRATION_TIME = 8;
-
     private final MailSender mailSender;
     private final PasswordReminderTokenRepository passwordReminderTokenRepository;
     private final UserService userService;
@@ -45,12 +44,12 @@ public class PasswordReminderService {
 
         saveNewPasswordReminderToken(userEntity, token);
 
+        if (!userEntity.isEnabled()) {
+            throw new UserNotEnabledException(userEntity.getId());
+        }
         if (BookUtil.isCardNumberValid(passwordReminderRequest.getCardNumber(), userEntity.getCardNumber())) {
             sendPasswordReminderMail(userEntity, passwordReminderRequest, token);
         } else {
-            log.error("Unable to authenticate and associate the provided card number "
-                    + passwordReminderRequest.getCardNumber() + " with user " + userEntity.getUsername() +
-                    " with id " + userEntity.getId());
             throw new UnableToAuthenticateCardNumberException();
         }
     }
@@ -61,9 +60,14 @@ public class PasswordReminderService {
                 .findByToken(resetPasswordRequest.getToken()).orElseThrow(()
                         -> new PasswordReminderTokenNotFoundException(resetPasswordRequest.getToken()));
         final UserEntity userEntity = userService.getUserById(passwordReminderTokenEntity.getUserEntity().getId());
-        userService.setOrUpdateUserPassword(userEntity, resetPasswordRequest.getPassword());
-        sendNewPasswordSetMail(userEntity);
-        log.info("New password has been set for user with id " + userEntity.getId());
+
+        if (userEntity.isEnabled()) {
+            userService.setOrUpdateUserPassword(userEntity, resetPasswordRequest.getPassword());
+            sendNewPasswordSetMail(userEntity);
+            log.info("New password has been set for user with id " + userEntity.getId());
+        } else {
+            throw new UserNotEnabledException(userEntity.getId());
+        }
     }
 
     private void saveNewPasswordReminderToken(UserEntity userEntity, String token) {
@@ -71,7 +75,7 @@ public class PasswordReminderService {
         final Calendar calendar = Calendar.getInstance();
 
         calendar.setTime(new Date());
-        calendar.add(Calendar.HOUR_OF_DAY, PASSWORD_REMINDER_TOKEN_EXPIRATION_TIME);
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
 
         passwordReminderTokenEntity.setToken(token);
         passwordReminderTokenEntity.setUserEntity(userEntity);
@@ -84,7 +88,6 @@ public class PasswordReminderService {
         final PasswordReminderTokenEntity passwordReminderTokenEntity = passwordReminderTokenRepository
                 .findByToken(token).orElseThrow(() -> new PasswordReminderTokenNotFoundException(token));
         if (isTokenExpired(passwordReminderTokenEntity)) {
-            log.info("The password reminder token with id " + passwordReminderTokenEntity.getId() + " has expired");
             throw new PasswordReminderTokenExpiredException(token, passwordReminderTokenEntity.getId());
         }
         return ResponseEntity.ok().build();
@@ -95,7 +98,7 @@ public class PasswordReminderService {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         final Date currentDateTime = calendar.getTime();
-        return currentDateTime.compareTo(passwordReminderTokenExpiryDateTime) < 0;
+        return currentDateTime.compareTo(passwordReminderTokenExpiryDateTime) >= 0;
     }
 
     private void sendPasswordReminderMail(UserEntity userEntity,

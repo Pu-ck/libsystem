@@ -1,1 +1,62 @@
-/* You can add global styles to this file, and also import other style files */
+.button {
+    border-color: black;
+    color: black;
+    transition: color 0.3s, border-color 0.3s, background-color 0.3s;
+    border-radius: 3px;
+}
+
+.button:hover,
+.button:focus {
+    border-color: lightblue;
+    color: white;
+    background-color: lightblue;
+}
+
+.text-input {
+    border-color: black;
+    color: black;
+    transition: color 0.3s, border-color 0.3s, background-color 0.3s;
+    border-radius: 3px;
+}
+
+.text-input:focus {
+  border-color: lightblue;
+  box-shadow: inset 0 1px 1px lightblue, 0 0 8px lightblue;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.input-group .btn {
+    flex: 1;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.message-container {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.divider {
+    display: flex;
+    justify-content: center;
+}
+
+.divider hr {
+    width: 100%;
+}
+
+.redirect-buttons {
+    margin-top: 10px;
+}

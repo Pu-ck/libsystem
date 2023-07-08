@@ -42,10 +42,12 @@ export class LoginComponent implements OnInit {
       if (error.status === 403 && error.error.message === 'User not enabled') {
         this.notEnabled = true;
         this.unauthorized = false;
+        this.loggedOut = false;
       }
       if (error.status === 401) {
         this.unauthorized = true;
         this.notEnabled = false;
+        this.loggedOut = false;
       }
     }
     );
