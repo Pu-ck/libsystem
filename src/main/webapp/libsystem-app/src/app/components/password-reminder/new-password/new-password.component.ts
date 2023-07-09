@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CommonRedirectsService } from 'src/app/services/redirects/common-redirects.service';
 
@@ -25,6 +25,7 @@ export class NewPasswordComponent implements OnInit {
 
   ngOnInit(): void {
     this.token = this.route.snapshot.paramMap.get('token') || '';
+    this.token = '2c4d12e3-8110-4337-8004-77d7db8aada5';
     this.verifyToken();
   }
 

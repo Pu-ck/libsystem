@@ -1,19 +1,38 @@
-<p>User profile</p>
+<div class="user">
+    <div class="user-box">
+        <div *ngIf="userDetails">
+            <h1>User details</h1>
+            <p>Username: <b>{{userDetails[0]}}</b></p>
 
-<nav>
-    <ul>
-        <li><a href="/user-profile/books">Your books</a></li>
-        <li><a href="/user-profile/favourites">Favourites</a></li>
-        <li><a href="/user-profile/change-password">Change password</a></li>
-    </ul>
-</nav>
+            <div class="divider">
+                <hr class="my-3">
+            </div>
 
-<div *ngIf="userDetails">
-    <p>User profile details</p>
-    <p>Username: {{userDetails[0]}}</p>
-    <p>First name: {{userDetails[1]}}</p>
-    <p>Last name: {{userDetails[2]}}</p>
-    <p>Card number: {{userDetails[3]}}</p>
-    <p>Borrowed books: {{userDetails[4]}}/10</p>
-    <p>Ordered books: {{userDetails[5]}}/10</p>
+            <p>First name: <b>{{userDetails[1]}}</b></p>
+
+            <div class="divider">
+                <hr class="my-3">
+            </div>
+
+            <p>Last name: <b>{{userDetails[2]}}</b></p>
+
+            <div class="divider">
+                <hr class="my-3">
+            </div>
+
+            <p>Card number: <b>{{userDetails[3]}}</b></p>
+
+            <div class="divider">
+                <hr class="my-3">
+            </div>
+
+            <p>Borrowed books: <b>{{userDetails[4]}}/10</b></p>
+
+            <div class="divider">
+                <hr class="my-3">
+            </div>
+
+            <p>Ordered books: <b>{{userDetails[5]}}/10</b></p>
+        </div>
+    </div>
 </div>

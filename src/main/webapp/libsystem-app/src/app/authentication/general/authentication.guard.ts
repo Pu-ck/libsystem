@@ -13,8 +13,8 @@ export class AuthenticationGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
-    const disabledRoutes = ['/login', '/registration', '/password-reminder', '/password-reminder/new-password', '/registered'];
-    if (disabledRoutes.includes(state.url)) {
+    const disabledRoutes = ['/login', '/registration', '/password-reminder', '/registered'];
+    if (disabledRoutes.includes(state.url) || state.url.startsWith('/password-reminder/new-password')) {
       if (sessionStorage.getItem('token')) {
         return this.router.parseUrl('/');
       } else {

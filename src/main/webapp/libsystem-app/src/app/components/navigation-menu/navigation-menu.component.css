@@ -1,0 +1,40 @@
+.main-navbar {
+    background-color: rgb(252, 252, 252);
+    height: 80px;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px lightblue;
+}
+
+.main-navbar .navbar-nav .nav-link {
+    color: black;
+}
+
+.main-navbar .navbar-nav .nav-link:hover {
+    color: white;
+    background-color: lightblue;
+}
+
+.main-navbar .dropdown-menu .dropdown-item:hover {
+    background-color: lightblue;
+    color: white;
+}
+
+h1 {
+    font-size: 30px;
+}
+
+.image {
+    width: 50px;
+    height: auto;
+    margin-left: -100px;
+    padding-right: 3px;
+}
+
+.nav-link {
+    font-size: 18px;
+    margin-left: 15px;
+}
+
+.logout-link {
+    cursor: pointer;
+}

@@ -22,7 +22,6 @@ import { BookDetailsComponent } from './components/books/book-details/book-detai
 import { BorrowBookComponent } from './components/books/book-details/borrow-book/borrow-book.component';
 import { BorrowedComponent } from './components/books/book-details/borrow-book/borrowed/borrowed.component';
 import { FavouritesComponent } from './components/user-profile/favourites/favourites.component';
-import { AdministrationComponent } from './components/administration/administration.component';
 import { UsersComponent } from './components/administration/users/users.component';
 import { CardNumbersComponent } from './components/administration/card-numbers/card-numbers.component';
 import { AdminBooksComponent } from './components/administration/admin-books/admin-books.component';
@@ -52,7 +51,6 @@ import { ExtendedBookComponent } from './components/administration/admin-books/e
     BorrowBookComponent,
     BorrowedComponent,
     FavouritesComponent,
-    AdministrationComponent,
     UsersComponent,
     CardNumbersComponent,
     AdminBooksComponent,

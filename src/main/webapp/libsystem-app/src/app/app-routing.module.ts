@@ -15,7 +15,6 @@ import { BookDetailsComponent } from './components/books/book-details/book-detai
 import { BorrowBookComponent } from './components/books/book-details/borrow-book/borrow-book.component';
 import { BorrowedComponent } from './components/books/book-details/borrow-book/borrowed/borrowed.component';
 import { FavouritesComponent } from './components/user-profile/favourites/favourites.component';
-import { AdministrationComponent } from './components/administration/administration.component';
 import { AdministratorGuard } from './authentication/administrator/administrator.guard';
 import { UsersComponent } from './components/administration/users/users.component';
 import { CardNumbersComponent } from './components/administration/card-numbers/card-numbers.component';
@@ -46,7 +45,6 @@ const routes: Routes = [
       { path: 'books/:id/borrow-book/borrowed', component: BorrowedComponent },
       {
         path: '', canActivate: [AdministratorGuard], children: [
-          { path: 'administration', component: AdministrationComponent },
           { path: 'administration/books', component: AdminBooksComponent },
           { path: 'administration/users', component: UsersComponent },
           { path: 'administration/users/:id/user-enabled-status', component: UserEnabledStatusComponent },
