@@ -21,6 +21,8 @@
 
 h1 {
     font-size: 30px;
+    position: absolute;
+    margin-left: -45px;
 }
 
 .image {
@@ -28,6 +30,7 @@ h1 {
     height: auto;
     margin-left: -100px;
     padding-right: 3px;
+    position: absolute;
 }
 
 .nav-link {

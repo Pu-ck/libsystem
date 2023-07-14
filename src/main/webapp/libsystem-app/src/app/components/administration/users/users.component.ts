@@ -56,7 +56,6 @@ export class UsersComponent implements OnInit {
         if (error.status === 404 && error.error.message === 'User not found') {
           this.userNotFound = true;
           this.users = [];
-          console.log(error);
         }
       }
     );
@@ -99,7 +98,6 @@ export class UsersComponent implements OnInit {
         if (error.status === 404 && error.error.message === 'User not found') {
           this.userNotFound = true;
           this.users = [];
-          console.log(error);
         }
       }
     );

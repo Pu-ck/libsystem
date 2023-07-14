@@ -1,59 +1,104 @@
-<button [disabled]="displayedStatus == 'Ordered'" (click)="setDisplayedStatus('Ordered')">Ordered</button>
-<button [disabled]="displayedStatus == 'Borrowed'" (click)="setDisplayedStatus('Borrowed')">Borrowed</button>
-<button [disabled]="displayedStatus == 'Returned'" (click)="setDisplayedStatus('Returned')">Returned</button>
-<button [disabled]="displayedStatus == 'Rejected'" (click)="setDisplayedStatus('Rejected')">Rejected</button>
-<button [disabled]="displayedStatus == 'Ready'" (click)="setDisplayedStatus('Ready')">Ready</button>
-<button [disabled]="displayedStatus == 'All'" (click)="setDisplayedStatus('All')">All</button>
+<div class="container table-form">
+  <div class="table-form-box">
+    <p class="text-success" *ngIf="bookExtended">Book extension request sent successfully - wait until the administrator
+      extends the requested borrowed book return date</p>
+    <h1>Your books</h1>
+    <div class="row">
+      <div class="d-flex align-items-center justify-content-between w-100">
+        <div class="table-order-buttons" role="group">
+          <button class="btn button" [disabled]="displayedStatus == 'Ordered'" (click)="setDisplayedStatus('Ordered')">Ordered</button>
+          <button class="btn button" [disabled]="displayedStatus == 'Borrowed'" (click)="setDisplayedStatus('Borrowed')">Borrowed</button>
+          <button class="btn button" [disabled]="displayedStatus == 'Returned'" (click)="setDisplayedStatus('Returned')">Returned</button>
+          <button class="btn button" [disabled]="displayedStatus == 'Rejected'" (click)="setDisplayedStatus('Rejected')">Rejected</button>
+          <button class="btn button" [disabled]="displayedStatus == 'Ready'" (click)="setDisplayedStatus('Ready')">Ready</button>
+          <button class="btn button" [disabled]="displayedStatus == 'All'" (click)="setDisplayedStatus('All')">All</button>
+        </div>
+        
+        <div class="pagination-container">
+          <nav>
+            <ul class="pagination">
+              <li class="page-item">
+                <button [disabled]="currentPage === 1" class="btn button pagination-button" (click)="onPageChange(currentPage - 1)">←</button>
+              </li>
+              <li class="page-item">
+                <button [disabled]="currentPage === getTotalPages()" class="btn button pagination-button" (click)="onPageChange(currentPage + 1)">→</button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Book details</th>
-      <th>Borrow date</th>
-      <th>Return date</th>
-      <th>Ready for pickup date</th>
-      <th>Current penalty</th>
-      <th>Affiliate</th>
-      <th>Status</th>
-      <th>Extended</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let book of books">
-      <ng-container *ngIf="book.status == displayedStatus || displayedStatus == 'All'">
-        <td>
-          <a [routerLink]="book.bookDetailsLink">{{ book.title }}</a>
-        </td>
-        <td>
-          {{ book.borrowDate }}
-        </td>
-        <td>
-          {{ book.returnDate }}
-        </td>
-        <td>
-          {{ book.readyDate }}
-        </td>
-        <td>
-          {{ book.penalty }}
-        </td>
-        <td>
-          {{ book.affiliate }}
-        </td>
-        <td>
-          {{ book.status }}
-        </td>
-        <td>
-          {{ book.extended ? 'Yes' : 'No' }}
-        </td>
-        <td>
-          <button [disabled]="book.extended || book.closed || !book.accepted"
-            (click)="bookExtensionConfirmation(book.borrowedBookId)">Extend</button>
-        </td>
-      </ng-container>
-    </tr>
-  </tbody>
-</table>
+    <table class="table table-hover common-table">
+      <thead>
+        <tr>
+          <th class="table-column">Id</th>
+          <th class="table-column">Title</th>
+          <th class="table-column">Borrow date</th>
+          <th class="table-column">Return date</th>
+          <th class="table-column">Ready for pickup date</th>
+          <th class="table-column">Current penalty</th>
+          <th class="table-column">Affiliate</th>
+          <th class="table-column">Status</th>
+          <th class="table-column">Extended</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let book of books.slice(getFirstItemIndex(), getLastItemIndex() + 1)">
+          <ng-container *ngIf="book.status == displayedStatus || displayedStatus == 'All'">
+            <td class="table-cell">
+              {{ book.borrowedBookId }}
+            </td>
+            <td class="table-cell" width=auto>
+              {{ book.title.length > 30 ? (book.title | slice:0:30) + '...' : book.title }}
+            </td>
+            <td class="table-cell">
+              {{ book.borrowDate === '' ? '━' : book.borrowDate }}
+            </td>
+            <td class="table-cell">
+              {{ book.returnDate === '' ? '━' : book.returnDate }}
+            </td>
+            <td class="table-cell">
+              {{ book.readyDate === '' || book.readyDate === null ? '━' : book.readyDate }}
+            </td>
+            <td class="table-cell">
+              {{ book.penalty === '' ? '━' : book.penalty }}
+            </td>
+            <td class="table-cell" width="auto">
+              {{ book.affiliate }}
+            </td>
+            <td class="table-cell">
+              {{ book.status }}
+            </td>
+            <td class="table-cell">
+              {{ book.extended ? 'Yes' : 'No' }}
+            </td>
+            <td class="table-cell">
+              <button class="btn table-button button" [disabled]="book.extended || book.closed || !book.accepted"
+                (click)="openModal(); borrowedBookId = book.borrowedBookId">Extend</button>
+            </td>
+            <td class="table-cell">
+              <button class="btn table-button button" [routerLink]="book.bookDetailsLink">Details</button>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
-<p *ngIf="bookExtended">Book extension request sent successfully - wait for an administrator to extended the book's
-  return date</p>
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body modal-text">
+        <p>Are you sure you want to send a return date extension request for this book? You can extend the borrowed book
+          only once.</p>
+      </div>
+      <button type="button" class="btn button modal-button"
+        (click)="requestBookExtension(borrowedBookId)">Extend</button>
+      <button type="button" class="btn button modal-button" (click)="onCloseHandled()">Cancel</button>
+    </div>
+  </div>
+</div>
