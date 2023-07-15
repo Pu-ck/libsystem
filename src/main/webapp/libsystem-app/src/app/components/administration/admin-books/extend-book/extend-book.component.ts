@@ -33,7 +33,7 @@ export class ExtendBookComponent implements OnInit {
       extendTime: this.model.days
     }).subscribe(response => {
       console.log(response);
-      sessionStorage.setItem('hasExtendedBorrowedBook', 'true');
+      localStorage.setItem('hasExtendedBorrowedBook', 'true');
       this.router.navigate([`administration/books/${this.borrowedBookId}/extend-book/extended-book`]);
     }, error => {
       console.log(error);

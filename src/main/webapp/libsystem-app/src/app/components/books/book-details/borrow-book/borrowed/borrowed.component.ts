@@ -17,7 +17,7 @@ export class BorrowedComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.commonRedirectsService.checkSingleVisitPageSessionStorageCondition('hasBorrowedBook');
+    this.commonRedirectsService.checkSingleVisitPageLocalStorageCondition('hasBorrowedBook');
     this.borrowedBookValidated = true;
   }
 

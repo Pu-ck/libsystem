@@ -31,7 +31,7 @@ export class RegisterCardNumberComponent implements OnInit {
       cardNumber: this.model.cardNumber, peselNumber: this.model.peselNumber
     }).subscribe(response => {
       console.log(response);
-      sessionStorage.setItem('hasRegisteredCardNumber', 'true');
+      localStorage.setItem('hasRegisteredCardNumber', 'true');
       this.router.navigateByUrl(`/administration/card-numbers/register-card-number/${this.model.cardNumber}/card-number-registered`);
     }, error => {
       this.userEnabledService.validateIfUserIsEnabled(error);

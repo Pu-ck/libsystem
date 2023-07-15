@@ -1,21 +1,56 @@
-Your favourite books
-<table>
-  <thead>
-    <tr>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let favouriteBook of favouriteBooks">
-      <td>
-        <a [routerLink]="'/books/' + favouriteBook.bookId">{{ favouriteBook.title }}</a> by
-      </td>
-      <td>
-        <a>{{ favouriteBook.authors }}</a>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<ng-container *ngIf="favouriteBooksListEmpty !== undefined"></ng-container>
+<div *ngIf="favouriteBooksListEmpty" class="favourite-books-empty-form">
+  <div class="favourite-books-empty-form-box">
+    <h1>Favourites</h1>
+    <div class="message-container">
+      <p class="text-danger">Your list of favourite books is currently empty</p>
+    </div>
+  </div>
+</div>
 
-<p *ngIf="favouriteBooks.length === 0">Your list of favourite books is currently empty</p>
+<div *ngIf="!favouriteBooksListEmpty" class="favourite-books-form">
+  <div class="favourite-books-form-box">
+
+    <div class="d-flex align-items-center justify-content-between w-100">
+      <h1>Favourites</h1>
+
+      <div class="pagination-container">
+        <nav>
+          <ul class="pagination">
+            <li class="page-item">
+              <button [disabled]="currentPage === 1" class="btn button pagination-button"
+                (click)="onPageChange(currentPage - 1)">←</button>
+            </li>
+            <li class="page-item">
+              <button [disabled]="currentPage === getTotalPages()" class="btn button pagination-button"
+                (click)="onPageChange(currentPage + 1)">→</button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6"
+        *ngFor="let favouriteBook of favouriteBooks.slice(getFirstItemIndex(), getLastItemIndex() + 1)">
+        <div class="card card-hover" [routerLink]="'/books/' + favouriteBook.bookId">
+          <div class="card-body d-flex flex-column">
+            <div class="d-flex justify-content-between">
+              <h5 class="card-title mb-0">
+                <a>{{ favouriteBook.title.lenght > 35 ? (favouriteBook.title | slice:0:35) + '...' : favouriteBook.title
+                  }}</a>
+              </h5>
+              <button class="btn table-button button card-remove-button"
+                (click)="removeFromFavourites($event, favouriteBook.bookId)">Remove</button>
+            </div>
+            <p class="card-text">
+              <a>by {{ favouriteBook.authors.length > 60 ? (favouriteBook.authors | slice:0:60) + '...' :
+                favouriteBook.authors }}</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

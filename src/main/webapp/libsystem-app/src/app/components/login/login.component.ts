@@ -35,8 +35,8 @@ export class LoginComponent implements OnInit {
     }).subscribe(response => {
       this.sessionID = response.sessionID;
       this.userType = response.userType;
-      sessionStorage.setItem('token', this.sessionID);
-      sessionStorage.setItem('userType', this.userType);
+      localStorage.setItem('token', this.sessionID);
+      localStorage.setItem('userType', this.userType);
       window.location.href = '/';
     }, error => {
       if (error.status === 403 && error.error.message === 'User not enabled') {

@@ -18,7 +18,7 @@ export class CardNumberRegisteredComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.commonRedirectsService.checkSingleVisitPageSessionStorageCondition('hasRegisteredCardNumber');
+    this.commonRedirectsService.checkSingleVisitPageLocalStorageCondition('hasRegisteredCardNumber');
     this.cardNumberRegistered = true;
     this.setCardNumber();
   }

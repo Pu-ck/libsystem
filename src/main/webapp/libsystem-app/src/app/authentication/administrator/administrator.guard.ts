@@ -12,7 +12,7 @@ export class AdministratorGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean | UrlTree {
-    const userType = sessionStorage.getItem('userType');
+    const userType = localStorage.getItem('userType');
     if (userType === 'ADMIN') {
       return true;
     } else {

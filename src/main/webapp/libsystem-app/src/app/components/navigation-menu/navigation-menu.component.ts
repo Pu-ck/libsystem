@@ -23,11 +23,11 @@ export class NavigationMenuComponent implements OnInit {
     this.hideNavbarOnLogout();
     this.checkIfUserIsLoggedIn();
     this.userTypeService.validateIfAdminIsLoggedIn();
-    this.userType = sessionStorage.getItem('userType') || '';
+    this.userType = localStorage.getItem('userType') || '';
   }
 
   private checkIfUserIsLoggedIn(): void {
-    let token = sessionStorage.getItem('token');
+    let token = localStorage.getItem('token');
     if (token != null) {
       this.loggedIn = true;
     } else {

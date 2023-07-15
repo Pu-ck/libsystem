@@ -14,7 +14,7 @@ export class UserBooksComponent implements OnInit {
   public bookExtended: boolean = false;
   public displayedStatus: string = 'All';
   public books: any[] = [];
-  public borrowedBookId: number = 0;
+  public borrowedBookId!: number;
   public display = "none";
   public hasSentBookExtensionRequest: string = 'false';
 
@@ -35,7 +35,7 @@ export class UserBooksComponent implements OnInit {
       this.bookExtended = true;
       this.display = 'none'
       window.location.reload();
-      sessionStorage.setItem('hasSentBookExtensionRequest', 'true');
+      localStorage.setItem('hasSentBookExtensionRequest', 'true');
       console.log(response);
     }, error => {
       this.userEnabledService.validateIfUserIsEnabled(error);
@@ -106,10 +106,10 @@ export class UserBooksComponent implements OnInit {
   }
 
   private checkIfTheBookHasBeenSuccessfullyExtended(): void {
-    this.hasSentBookExtensionRequest = sessionStorage.getItem('hasSentBookExtensionRequest') || 'false';
+    this.hasSentBookExtensionRequest = localStorage.getItem('hasSentBookExtensionRequest') || 'false';
     if (this.hasSentBookExtensionRequest === 'true') {
       this.bookExtended = true;
-      sessionStorage.setItem('hasSentBookExtensionRequest', 'false');
+      localStorage.setItem('hasSentBookExtensionRequest', 'false');
     }
   }
 

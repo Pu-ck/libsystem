@@ -102,3 +102,9 @@
 .pagination-button {
     border-radius: 0;
 }
+
+.card-hover:hover {
+    background-color: lightblue;
+    cursor: pointer;
+    transition: color 0.3s, border-color 0.3s, background-color 0.3s;
+}

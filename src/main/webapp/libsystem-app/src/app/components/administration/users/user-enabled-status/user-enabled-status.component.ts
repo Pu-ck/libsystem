@@ -37,7 +37,7 @@ export class UserEnabledStatusComponent implements OnInit {
       reason: this.model.reason,
     }).subscribe(response => {
       console.log(response);
-      sessionStorage.setItem('hasUpdatedUserEnableStatus', 'true');
+      localStorage.setItem('hasUpdatedUserEnableStatus', 'true');
       this.router.navigateByUrl(`/administration/users/${this.userId}/user-enabled-status/user-enabled-status-updated`);
     }, error => {
       this.userEnabledService.validateIfUserIsEnabled(error);
@@ -63,7 +63,7 @@ export class UserEnabledStatusComponent implements OnInit {
   }
 
   private redirectIfAdminIdIsMatchingUserId(): void {
-    this.adminId = sessionStorage.getItem('adminId') || '';
+    this.adminId = localStorage.getItem('adminId') || '';
     if (this.adminId === this.userId) {
       this.router.navigateByUrl('/');
     }

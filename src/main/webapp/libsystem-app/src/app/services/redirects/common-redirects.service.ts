@@ -37,16 +37,16 @@ export class CommonRedirectsService {
       if (logoutType === 'accountDisabled') {
         this.router.navigate(['/login'], { queryParams: { disabled: true } });
       }
-      sessionStorage.clear();
+      localStorage.clear();
     });
   }
 
-  public checkSingleVisitPageSessionStorageCondition(sessionStorageItem: string): void {
-    const condition = sessionStorage.getItem(sessionStorageItem);
+  public checkSingleVisitPageLocalStorageCondition(localStorageItem: string): void {
+    const condition = localStorage.getItem(localStorageItem);
     if (condition !== 'true') {
       this.router.navigateByUrl('/');
     }
-    sessionStorage.setItem(sessionStorageItem, 'false');
+    localStorage.setItem(localStorageItem, 'false');
   }
 
 }

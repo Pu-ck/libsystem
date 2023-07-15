@@ -20,7 +20,7 @@ export class UserEnabledService {
       reason: reason,
     }).subscribe(response => {
       console.log(response);
-      sessionStorage.setItem('hasUpdatedUserEnableStatus', 'true');
+      localStorage.setItem('hasUpdatedUserEnableStatus', 'true');
       this.router.navigateByUrl(`/administration/users/${userId}/user-enabled-status/user-enabled-status-updated`);
     }, error => {
       console.log(error);

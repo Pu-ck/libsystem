@@ -11,8 +11,8 @@ export class UsertypeService {
   ) { }
 
   public validateIfAdminIsLoggedIn(): void {
-    const userType = sessionStorage.getItem('userType');
-    const adminId = sessionStorage.getItem('adminId');
+    const userType = localStorage.getItem('userType');
+    const adminId = localStorage.getItem('adminId');
     if (userType === 'ADMIN' && adminId == null) {
       this.setAdminId();
     }
@@ -22,7 +22,7 @@ export class UsertypeService {
     const url = '/api/administration/users/admin-id';
     this.http.get<any[]>(url, {}).subscribe(
       response => {
-        sessionStorage.setItem('adminId', response.toString());
+        localStorage.setItem('adminId', response.toString());
       },
       error => {
         console.log(error);

@@ -18,7 +18,7 @@ export class ExtendedBookComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.commonRedirectsService.checkSingleVisitPageSessionStorageCondition('hasExtendedBorrowedBook');
+    this.commonRedirectsService.checkSingleVisitPageLocalStorageCondition('hasExtendedBorrowedBook');
     this.borrowedBookExtended = true;
     this.setBorrowedBookId();
   }

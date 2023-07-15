@@ -30,7 +30,7 @@ export class UsersComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.adminId = sessionStorage.getItem('adminId') || '';
+    this.adminId = localStorage.getItem('adminId') || '';
     this.route.queryParams.subscribe(params => {
       if (!params['userId']) {
         this.getUsers();
