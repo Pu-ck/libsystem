@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
+import { PaginationService } from 'src/app/services/pagination/pagination.service';
 
 @Component({
   selector: 'app-favourites',
@@ -17,28 +18,16 @@ export class FavouritesComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private userEnabledService: UserEnabledService
+    private userEnabledService: UserEnabledService,
+    public pagination: PaginationService
   ) { }
 
   ngOnInit(): void {
     this.getUserFavouriteBooks();
   }
 
-  public getFirstItemIndex(): number {
-    return (this.currentPage - 1) * this.itemsPerPage;
-  }
-
-  public getLastItemIndex(): number {
-    const lastIndex = this.currentPage * this.itemsPerPage - 1;
-    return Math.min(lastIndex, this.favouriteBooks.length - 1);
-  }
-
   public onPageChange(page: number): void {
     this.currentPage = page;
-  }
-
-  public getTotalPages(): number {
-    return Math.ceil(this.favouriteBooks.length / this.itemsPerPage);
   }
 
   public removeFromFavourites(event: Event, bookId: number): void {

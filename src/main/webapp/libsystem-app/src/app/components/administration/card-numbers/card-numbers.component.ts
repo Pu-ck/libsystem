@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
+import { PaginationService } from 'src/app/services/pagination/pagination.service';
 
 @Component({
   selector: 'app-card-numbers',
@@ -15,13 +16,17 @@ export class CardNumbersComponent implements OnInit {
   public searchType: string = '';
   public searchValue: string = '';
 
+  public currentPage: number = 1;
+  public itemsPerPage: number = 20;
+
   public cardNumberNotFound: boolean = false;
 
   constructor(
     private http: HttpClient,
     private router: Router,
     private userEnabledService: UserEnabledService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public pagination: PaginationService
   ) { }
 
   ngOnInit(): void {
@@ -32,6 +37,10 @@ export class CardNumbersComponent implements OnInit {
         this.getCardNumber(params['cardNumber']);
       }
     });
+  }
+
+  public onPageChange(page: number): void {
+    this.currentPage = page;
   }
 
   public getCardNumbers(): void {

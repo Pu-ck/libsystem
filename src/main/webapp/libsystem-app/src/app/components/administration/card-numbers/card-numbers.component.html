@@ -1,47 +1,79 @@
-<p>Card numbers</p>
+<div class="table-form">
+  <div class="table-form-box">
+    <h1>Card numbers</h1>
 
-<button (click)="redirectToRegisterNewCardNumberForm()">Register new card number</button>
+    <div class="divider">
+      <hr class="my-3">
+    </div>
 
-<form name="form" (submit)="getCardNumbers()" #searchForm="ngForm">
+    <div class="d-flex align-items-center justify-content-between w-100">
+      <div>
+        <button class="btn button card-number-table-button" (click)="redirectToRegisterNewCardNumberForm()">Register
+          card number</button>
+      </div>
 
-  <label for="searchType">Search with</label>
-  <select name="searchType" [(ngModel)]="searchType">
-    <option value="cardNumberId">Card number ID</option>
-    <option value="cardNumber">Card number</option>
-  </select>
 
-  <div>
-    <input appNumericOnly type="text" name="searchValue" [(ngModel)]="searchValue">
-    <button type="submit">Search</button>
+      <div class="pagination-container">
+        <nav>
+          <ul class="pagination">
+            <li class="page-item">
+              <button [disabled]="currentPage === 1 || cardNumberNotFound" class="btn button pagination-button"
+                (click)="onPageChange(currentPage - 1)">←</button>
+            </li>
+            <li class="page-item">
+              <button
+                [disabled]="currentPage === pagination.getTotalPages(cardNumbers, itemsPerPage) || cardNumberNotFound"
+                class="btn button pagination-button" (click)="onPageChange(currentPage + 1)">→</button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <form name="form" (submit)="getCardNumbers()" #searchForm="ngForm">
+      <div class="search-container">
+        <label for="searchType">Search with</label>
+        <div class="search-input-group">
+          <select name="searchType" [(ngModel)]="searchType" class="form-select search-select" id="searchTypeSelect">
+            <option value="cardNumberId">Card number ID</option>
+            <option value="cardNumber">Card number</option>
+          </select>
+          <input class="form-control text-input search-input" appNumericOnly type="text" name="searchValue"
+            [(ngModel)]="searchValue">
+          <button class="btn button card-number-table-button search-button" type="submit">Search</button>
+        </div>
+      </div>
+    </form>
+
+    <table class="table table-hover common-table">
+      <thead>
+        <tr>
+          <th class="table-column">Card number ID</th>
+          <th class="table-column">User ID</th>
+          <th class="table-column">Card number</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let cardNumber of cardNumbers.slice(pagination.getFirstItemIndex(currentPage, itemsPerPage), pagination.getLastItemIndex(currentPage, itemsPerPage, cardNumbers) + 1)">
+          <td class="table-cell" width="250px">
+            {{ cardNumber.id }}
+          </td>
+          <td class="table-cell">
+            <ng-container *ngIf="cardNumber.userId">
+              <a [routerLink]="['/administration/users']" [queryParams]="{ userId: cardNumber.userId }">
+                {{ cardNumber.userId }}
+              </a>
+            </ng-container>
+            <span *ngIf="!cardNumber.userId">━</span>
+          </td>
+          <td class="table-cell">
+            {{ cardNumber.cardNumber }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="cardNumberNotFound">Unable to find specified card number</p>
   </div>
-</form>
-
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>User ID</th>
-      <th>Card number</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let cardNumber of cardNumbers">
-      <td>
-        {{ cardNumber.id }}
-      </td>
-      <td>
-        <ng-container *ngIf="cardNumber.userId">
-          <a [routerLink]="['/administration/users']" [queryParams]="{ userId: cardNumber.userId }">
-            {{ cardNumber.userId }}
-          </a>
-        </ng-container>
-        <span *ngIf="!cardNumber.userId">None</span>
-      </td>
-      <td>
-        {{ cardNumber.cardNumber }}
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<p *ngIf="cardNumberNotFound">Unable to find specified card number</p>
+</div>

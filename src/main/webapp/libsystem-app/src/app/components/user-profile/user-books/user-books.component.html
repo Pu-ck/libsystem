@@ -1,27 +1,38 @@
 <div class="container table-form">
   <div class="table-form-box">
+
     <p class="text-success" *ngIf="bookExtended">Book extension request sent successfully - wait until the administrator
       extends the requested borrowed book return date</p>
+
     <h1>Your books</h1>
+
     <div class="row">
       <div class="d-flex align-items-center justify-content-between w-100">
         <div class="table-order-buttons" role="group">
-          <button class="btn button" [disabled]="displayedStatus == 'Ordered'" (click)="setDisplayedStatus('Ordered')">Ordered</button>
-          <button class="btn button" [disabled]="displayedStatus == 'Borrowed'" (click)="setDisplayedStatus('Borrowed')">Borrowed</button>
-          <button class="btn button" [disabled]="displayedStatus == 'Returned'" (click)="setDisplayedStatus('Returned')">Returned</button>
-          <button class="btn button" [disabled]="displayedStatus == 'Rejected'" (click)="setDisplayedStatus('Rejected')">Rejected</button>
-          <button class="btn button" [disabled]="displayedStatus == 'Ready'" (click)="setDisplayedStatus('Ready')">Ready</button>
-          <button class="btn button" [disabled]="displayedStatus == 'All'" (click)="setDisplayedStatus('All')">All</button>
+          <button class="btn button" [disabled]="displayedStatus == 'Ordered'"
+            (click)="setDisplayedStatus('Ordered')">Ordered</button>
+          <button class="btn button" [disabled]="displayedStatus == 'Borrowed'"
+            (click)="setDisplayedStatus('Borrowed')">Borrowed</button>
+          <button class="btn button" [disabled]="displayedStatus == 'Returned'"
+            (click)="setDisplayedStatus('Returned')">Returned</button>
+          <button class="btn button" [disabled]="displayedStatus == 'Rejected'"
+            (click)="setDisplayedStatus('Rejected')">Rejected</button>
+          <button class="btn button" [disabled]="displayedStatus == 'Ready'"
+            (click)="setDisplayedStatus('Ready')">Ready</button>
+          <button class="btn button" [disabled]="displayedStatus == 'All'"
+            (click)="setDisplayedStatus('All')">All</button>
         </div>
-        
+
         <div class="pagination-container">
           <nav>
             <ul class="pagination">
               <li class="page-item">
-                <button [disabled]="currentPage === 1" class="btn button pagination-button" (click)="onPageChange(currentPage - 1)">←</button>
+                <button [disabled]="currentPage === 1" class="btn button pagination-button"
+                  (click)="onPageChange(currentPage - 1)">←</button>
               </li>
               <li class="page-item">
-                <button [disabled]="currentPage === getTotalPages()" class="btn button pagination-button" (click)="onPageChange(currentPage + 1)">→</button>
+                <button [disabled]="currentPage === pagination.getTotalPages(books, itemsPerPage)"
+                  class="btn button pagination-button" (click)="onPageChange(currentPage + 1)">→</button>
               </li>
             </ul>
           </nav>
@@ -46,7 +57,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let book of books.slice(getFirstItemIndex(), getLastItemIndex() + 1)">
+        <tr
+          *ngFor="let book of books.slice(pagination.getFirstItemIndex(currentPage, itemsPerPage), pagination.getLastItemIndex(currentPage, itemsPerPage, books) + 1)">
           <ng-container *ngIf="book.status == displayedStatus || displayedStatus == 'All'">
             <td class="table-cell">
               {{ book.borrowedBookId }}
