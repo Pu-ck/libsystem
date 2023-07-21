@@ -1,20 +1,37 @@
-<p>Disable user {{ username }} with id {{ userId }}</p>
+<div class="disable-user-form">
+    <div class="disable-user-form-box">
 
-<form name="form" (ngSubmit)="userEnabledService.updateUserEnabledStatus(userId, model.reason)"
-    #userEnableForm="ngForm">
+        <h1>Disable user with ID {{ userId }}</h1>
 
-    <ng-container>
-        <label for="reason">Reason</label>
-        <input type="text" name="reason" [(ngModel)]="model.reason" #reason="ngModel" maxlength="100" required>
-        <div *ngIf="reason?.invalid && (reason?.dirty || reason?.touched)">
-            <div *ngIf="reason?.errors?.['required']">Reason is required</div>
+        <form name="form" (ngSubmit)="userEnabledService.disableUser(userId, model.reason)" #userEnableForm="ngForm">
+
+            <div class="form-group">
+                <label for="reason">Reason</label>
+                <textarea type="text" name="reason" [(ngModel)]="model.reason" #reason="ngModel" maxlength="140" required
+                    class="form-control text-input"></textarea>
+
+                <div *ngIf="reason?.invalid && (reason?.dirty || reason?.touched)">
+                    <div *ngIf="reason?.errors?.['required']" class="text-danger">Reason is required</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+
+                <button class="btn button" type="submit" [disabled]="!userEnableForm.valid">Disable</button>
+
+            </div>
+
+        </form>
+
+        <div class="divider">
+            <hr class="my-3">
         </div>
-    </ng-container>
 
-    <div>
-        <button type="submit" [disabled]="!userEnableForm.valid">Disable</button>
+        <div class="redirect-buttons">
+            <div class="form-group">
+                <button class="btn button" (click)="commonRedirectsService.redirectToUsersList()">Back to users
+                    list</button>
+            </div>
+        </div>
     </div>
-
-</form>
-
-<button (click)="commonRedirectsService.redirectToUsersList()">Back to users list</button>
+</div>

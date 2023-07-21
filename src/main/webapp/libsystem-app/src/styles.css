@@ -109,7 +109,11 @@
     transition: color 0.3s, border-color 0.3s, background-color 0.3s;
 }
 
+.item-not-found-label {
+    text-align: center;
+    vertical-align: middle;
+}
+
 a {
     text-decoration: none;
 }
-

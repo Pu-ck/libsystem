@@ -1,4 +1,15 @@
-<p *ngIf="userEnabledStatusUpdated">Enabled status of user with id {{ userId }} has been successfully updated.</p>
+<div class="user-disabled-form">
+    <div class="user-disabled-form-box">
 
-<button *ngIf="userEnabledStatusUpdated" (click)="commonRedirectsService.redirectToUsersList()">Back to users
-    list</button>
+        <div class="message-container">
+            <p class="text-success" *ngIf="userEnabledStatusUpdated">Successfully disabled user with id {{ userId }}</p>
+        </div>
+
+        <div class="form-group">
+            <button class="btn button" *ngIf="userEnabledStatusUpdated"
+                (click)="commonRedirectsService.redirectToUsersList()">Back to
+                users
+                list</button>
+        </div>
+    </div>
+</div>

@@ -1,81 +1,138 @@
-<p>Users</p>
+<div class="table-form">
+    <div class="table-form-box">
 
-<form name="form" (submit)="getUsers()" #searchForm="ngForm">
+        <p class="text-success" *ngIf="userEnabled">Successfully enabled user with id {{ userId }}</p>
 
-    <label for="searchType">Search with</label>
-    <select name="searchType" [(ngModel)]="searchType">
-        <option value="userId">User ID</option>
-        <option value="username">Username</option>
-        <option value="cardNumber">Card number</option>
-    </select>
+        <h1>Users</h1>
 
-    <div>
-        <input *ngIf="searchType !== 'username'" appNumericOnly type="text" name="searchValue"
-            [(ngModel)]="searchValue">
-        <input *ngIf="searchType === 'username'" type="text" name="searchValue" [(ngModel)]="searchValue">
-        <button type="submit">Search</button>
+        <div class="divider">
+            <hr class="my-3">
+        </div>
+
+        <div class="row">
+            <div class="d-flex align-items-center justify-content-between w-100">
+                <div class="table-order-buttons" role="group">
+                    <button class="btn button" [disabled]="showEnabled == true"
+                        (click)="setDisplayedStatus('Enabled')">Enabled</button>
+                    <button class="btn button" [disabled]="showDisabled == true"
+                        (click)="setDisplayedStatus('Disabled')">Disabled</button>
+                    <button class="btn button" [disabled]="showAll == true"
+                        (click)="setDisplayedStatus('All')">All</button>
+                </div>
+
+                <div class="pagination-container">
+                    <nav>
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <button [disabled]="currentPage === 1 || userNotFound"
+                                    class="btn button pagination-button"
+                                    (click)="onPageChange(currentPage - 1)">←</button>
+                            </li>
+                            <li class="page-item">
+                                <button
+                                    [disabled]="currentPage === pagination.getTotalPages(users, itemsPerPage) || userNotFound"
+                                    class="btn button pagination-button"
+                                    (click)="onPageChange(currentPage + 1)">→</button>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <form name="form" (submit)="getUsers()" #searchForm="ngForm">
+
+            <div class="search-container">
+
+                <label for="searchType">Search with</label>
+                <div class="search-input-group">
+                    <select name="searchType" [(ngModel)]="searchType" class="form-select search-select"
+                        id="searchTypeSelect">
+                        <option value="userId">User ID</option>
+                        <option value="username">Username</option>
+                        <option value="cardNumber">Card number</option>
+                    </select>
+
+                    <input class="form-control text-input search-input" *ngIf="searchType !== 'username'" appNumericOnly
+                        type="text" name="searchValue" [(ngModel)]="searchValue">
+                    <input class="form-control text-input search-input" *ngIf="searchType === 'username'" type="text"
+                        name="searchValue" [(ngModel)]="searchValue">
+                    <button class="btn button card-number-table-button search-button" type="submit">Search</button>
+
+                </div>
+            </div>
+        </form>
+
+        <table class="table table-hover common-table">
+            <thead>
+                <tr>
+                    <th class="table-column">User ID</th>
+                    <th class="table-column">Card number</th>
+                    <th class="table-column">Username</th>
+                    <th class="table-column">First name</th>
+                    <th class="table-column">Last name</th>
+                    <th class="table-column">Enabled</th>
+                    <th class="table-column">Ordered books</th>
+                    <th class="table-column">Borrowed books</th>
+                    <th class="table-column">User type</th>
+                    <th class="table-column"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr
+                    *ngFor="let user of users.slice(pagination.getFirstItemIndex(currentPage, itemsPerPage), pagination.getLastItemIndex(currentPage, itemsPerPage, users) + 1)">
+                    <ng-container *ngIf="user.enabled === showEnabled || showAll === true">
+                        <td class="table-cell">
+                            {{ user.id }}
+                        </td>
+                        <td class="table-cell">
+                            <a [routerLink]="['/administration/card-numbers']"
+                                [queryParams]="{ cardNumber: user.cardNumber }">{{ user.cardNumber }}</a>
+                        </td>
+                        <td class="table-cell">
+                            {{ user.username.length > 20 ? (user.username | slice:0:20) + '...' : user.username }}
+                        </td>
+                        <td class="table-cell">
+                            {{ user.firstName.length > 20 ? (user.firstName | slice:0:20) + '...' : user.firstName }}
+                        </td>
+                        <td class="table-cell">
+                            {{ user.lastName.length > 20 ? (user.lastName | slice:0:20) + '...' : user.lastName }}
+                        </td>
+                        <td class="table-cell">
+                            {{ user.enabled ? 'Yes' : 'No' }}
+                        </td>
+                        <td class="table-cell">
+                            {{ user.orderedBooks }}
+                        </td>
+                        <td class="table-cell">
+                            {{ user.borrowedBooks }}
+                        </td>
+                        <td class="table-cell">
+                            {{ user.userType }}
+                        </td>
+                        <td class="table-cell">
+                            <button class="btn table-button button" [disabled]="user.id.toString() === adminId"
+                                (click)="redirectToUserUpdateEnabledStatusForm(user.id, user.enabled)">
+                                {{ user.enabled ? 'Disable' : 'Enable' }}
+                            </button>
+                        </td>
+                    </ng-container>
+                </tr>
+            </tbody>
+        </table>
+        <p *ngIf="userNotFound" class="item-not-found-label">Unable to find specified user</p>
     </div>
-</form>
+</div>
 
-<button [disabled]="showEnabled == true" (click)="setDisplayedStatus('Enabled')">Enabled</button>
-<button [disabled]="showDisabled == true" (click)="setDisplayedStatus('Disabled')">Disabled</button>
-<button [disabled]="showAll == true" (click)="setDisplayedStatus('All')">All</button>
-
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Card number</th>
-            <th>Username</th>
-            <th>First name</th>
-            <th>Last name</th>
-            <th>Enabled</th>
-            <th>Ordered books</th>
-            <th>Borrowed books</th>
-            <th>User type</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let user of users">
-            <ng-container *ngIf="user.enabled === showEnabled || showAll === true">
-                <td>
-                    {{ user.id }}
-                </td>
-                <td>
-                    <a [routerLink]="['/administration/card-numbers']"
-                        [queryParams]="{ cardNumber: user.cardNumber }">{{ user.cardNumber }}</a>
-                </td>
-                <td>
-                    {{ user.username }}
-                </td>
-                <td>
-                    {{ user.firstName }}
-                </td>
-                <td>
-                    {{ user.lastName }}
-                </td>
-                <td>
-                    {{ user.enabled ? 'Yes' : 'No' }}
-                </td>
-                <td>
-                    {{ user.orderedBooks }}
-                </td>
-                <td>
-                    {{ user.borrowedBooks }}
-                </td>
-                <td>
-                    {{ user.userType }}
-                </td>
-                <td>
-                    <button [disabled]="user.id.toString() === adminId"
-                        (click)="redirectToUserUpdateEnabledStatusForm(user.id, user.enabled)">
-                        {{ user.enabled ? 'Disable' : 'Enable' }}
-                    </button>
-                </td>
-            </ng-container>
-        </tr>
-    </tbody>
-</table>
-
-<p *ngIf="userNotFound">Unable to find specified user</p>
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body modal-text">
+                <p>Are you sure you want to enable this user?</p>
+            </div>
+            <button type="button" class="btn button modal-button"
+                (click)="userEnabledService.enableUser(userId, '')">Enable</button>
+            <button type="button" class="btn button modal-button" (click)="onCloseHandled()">Cancel</button>
+        </div>
+    </div>
+</div>

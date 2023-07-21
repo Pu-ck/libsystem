@@ -20,7 +20,7 @@ export class UserEnabledStatusUpdatedComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.commonRedirectsService.checkSingleVisitPageLocalStorageCondition('hasUpdatedUserEnableStatus');
+    this.commonRedirectsService.checkSingleVisitPageLocalStorageCondition('hasDisabledUser');
     this.userEnabledStatusUpdated = true;
     this.setUserId();
   }

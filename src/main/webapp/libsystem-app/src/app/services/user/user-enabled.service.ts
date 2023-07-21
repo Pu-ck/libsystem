@@ -14,13 +14,28 @@ export class UserEnabledService {
     private commonRedirectsService: CommonRedirectsService
   ) { }
 
-  public updateUserEnabledStatus(userId: string, reason: string): void {
+  public enableUser(userId: string, reason: string): void {
     const url = `/api/administration/users/${userId}/update-user-enabled-status`
     this.http.put<any>(url, {
       reason: reason,
     }).subscribe(response => {
       console.log(response);
-      localStorage.setItem('hasUpdatedUserEnableStatus', 'true');
+      localStorage.setItem('hasEnabledUser', 'true');
+      localStorage.setItem('enabledUserId', userId);
+      window.location.reload();
+    }, error => {
+      console.log(error);
+    }
+    );
+  }
+
+  public disableUser(userId: string, reason: string): void {
+    const url = `/api/administration/users/${userId}/update-user-enabled-status`
+    this.http.put<any>(url, {
+      reason: reason,
+    }).subscribe(response => {
+      console.log(response);
+      localStorage.setItem('hasDisabledUser', 'true');
       this.router.navigateByUrl(`/administration/users/${userId}/user-enabled-status/user-enabled-status-updated`);
     }, error => {
       console.log(error);

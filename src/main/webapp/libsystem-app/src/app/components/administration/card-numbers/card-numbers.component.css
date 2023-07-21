@@ -39,8 +39,7 @@ a {
 }
 
 a:hover {
-    color: rgb(110, 203, 234);
-    font-weight: 700;
+    color: rgb(0, 118, 157);
 }
 
 .form-select:focus {

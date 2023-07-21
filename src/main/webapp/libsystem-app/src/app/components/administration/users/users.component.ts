@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
+import { PaginationService } from 'src/app/services/pagination/pagination.service';
 
 @Component({
   selector: 'app-users',
@@ -10,8 +11,11 @@ import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 })
 export class UsersComponent implements OnInit {
 
+  public currentPage: number = 1;
+  public itemsPerPage: number = 20;
+
   public users: any[] = [];
-  public userId: string = '';
+  public userId: string = localStorage.getItem('enabledUserId') || '';
   public adminId: string = '';
 
   public searchType: string = '';
@@ -19,28 +23,42 @@ export class UsersComponent implements OnInit {
 
   public userNotFound: boolean = false;
   public showEnabled: boolean = false;
-  public showDisabled = false;
+  public showDisabled: boolean = false;
+  public userEnabled: boolean = false;
   public showAll: boolean = true;
+
+  public display = "none";
 
   constructor(
     private http: HttpClient,
     private router: Router,
-    private userEnabledService: UserEnabledService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public userEnabledService: UserEnabledService,
+    public pagination: PaginationService
   ) { }
 
   ngOnInit(): void {
-    this.adminId = localStorage.getItem('adminId') || '';
-    this.route.queryParams.subscribe(params => {
-      if (!params['userId']) {
-        this.getUsers();
-      } else {
-        this.getUser(params['userId']);
-      }
-    });
+    this.setAdminId();
+    this.displayUsersOnInitOrUserOnRedirect();
+    this.checkIfUserHasBeenEnabled();
+  }
+
+  public onPageChange(page: number): void {
+    this.currentPage = page;
+    this.userEnabled = false;
+  }
+
+  public openModal(): void {
+    this.display = "block";
+    this.userEnabled = false;
+  }
+
+  public onCloseHandled(): void {
+    this.display = "none";
   }
 
   public getUsers(): void {
+    this.userEnabled = false;
     const url = '/api/administration/users';
     let params = this.getSearchType();
     this.http.get<any[]>(url, { params }).subscribe(
@@ -66,14 +84,17 @@ export class UsersComponent implements OnInit {
       this.showEnabled = true;
       this.showDisabled = false;
       this.showAll = false;
+      this.userEnabled = false;
     } else if (status === 'Disabled') {
       this.showDisabled = true;
       this.showEnabled = false;
       this.showAll = false;
+      this.userEnabled = false;
     } else if (status === 'All') {
       this.showAll = true;
       this.showEnabled = false;
       this.showDisabled = false;
+      this.userEnabled = false;
     }
   }
 
@@ -81,8 +102,30 @@ export class UsersComponent implements OnInit {
     if (status) {
       this.router.navigate([`administration/users/${id}/user-enabled-status`]);
     } else {
-      this.userEnabledService.updateUserEnabledStatus(id, '');
+      this.userId = id;
+      this.openModal();
     }
+  }
+
+  private checkIfUserHasBeenEnabled(): void {
+    if (localStorage.getItem('hasEnabledUser') === 'true') {
+      this.userEnabled = true;
+      localStorage.setItem('hasEnabledUser', 'false');
+    }
+  }
+
+  private displayUsersOnInitOrUserOnRedirect(): void {
+    this.route.queryParams.subscribe(params => {
+      if (!params['userId']) {
+        this.getUsers();
+      } else {
+        this.getUser(params['userId']);
+      }
+    });
+  }
+
+  private setAdminId(): void {
+    this.adminId = localStorage.getItem('adminId') || '';
   }
 
   private getUser(userId: string): void {

@@ -36,8 +36,8 @@ export class UserBooksComponent implements OnInit {
     }).subscribe(response => {
       this.bookExtended = true;
       this.display = 'none'
-      window.location.reload();
       localStorage.setItem('hasSentBookExtensionRequest', 'true');
+      window.location.reload();
       console.log(response);
     }, error => {
       this.userEnabledService.validateIfUserIsEnabled(error);

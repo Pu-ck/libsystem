@@ -30,13 +30,7 @@ export class CardNumbersComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      if (!params['cardNumber']) {
-        this.getCardNumbers();
-      } else {
-        this.getCardNumber(params['cardNumber']);
-      }
-    });
+    this.displayCardNumbersOnInitOrCardNumberOnRedirect();
   }
 
   public onPageChange(page: number): void {
@@ -67,6 +61,16 @@ export class CardNumbersComponent implements OnInit {
 
   public redirectToRegisterNewCardNumberForm(): void {
     this.router.navigate(['administration/card-numbers/register-card-number']);
+  }
+
+  private displayCardNumbersOnInitOrCardNumberOnRedirect(): void {
+    this.route.queryParams.subscribe(params => {
+      if (!params['cardNumber']) {
+        this.getCardNumbers();
+      } else {
+        this.getCardNumber(params['cardNumber']);
+      }
+    });
   }
 
   private getCardNumber(cardNumber: string): void {
