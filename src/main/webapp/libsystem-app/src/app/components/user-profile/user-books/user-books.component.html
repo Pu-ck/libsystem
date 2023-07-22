@@ -51,12 +51,12 @@
           <th class="table-column">Title</th>
           <th class="table-column">Borrow date</th>
           <th class="table-column">Return date</th>
-          <th class="table-column">Ready for pickup date</th>
+          <th class="table-column">Ready date</th>
+          <th class="table-column">Remaining days</th>
           <th class="table-column">Current penalty</th>
           <th class="table-column">Affiliate</th>
           <th class="table-column">Status</th>
           <th class="table-column">Extended</th>
-          <th></th>
           <th></th>
         </tr>
       </thead>
@@ -80,6 +80,13 @@
               {{ book.readyDate === '' || book.readyDate === null ? '━' : book.readyDate }}
             </td>
             <td class="table-cell">
+              <span [ngClass]="{
+                'text-danger': getRemainingDays(book.returnDate) <= 0 && book.status !== 'Returned'
+              }">
+                {{ book.status !== 'Borrowed' ? '━' : getRemainingDays(book.returnDate) <= 0 ? 'Overdue' :
+                  getRemainingDays(book.returnDate) }} </span>
+            </td>
+            <td class="table-cell">
               {{ book.penalty === '' ? '━' : book.penalty }}
             </td>
             <td class="table-cell" width="auto">
@@ -91,17 +98,31 @@
             <td class="table-cell">
               {{ book.extended ? 'Yes' : 'No' }}
             </td>
+
             <td class="table-cell">
-              <button class="btn table-button button" [disabled]="book.extended || book.closed || !book.accepted"
-                (click)="openModal(); borrowedBookId = book.borrowedBookId">Extend</button>
+              <a class="nav-item">
+
+                <li class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false" data-bs-toggle="dropdown">
+                  Options
+                </li>
+
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <button class="dropdown-item" [disabled]="book.extended || book.closed || !book.accepted"
+                    (click)="openModal(); borrowedBookId = book.borrowedBookId">Extend</button>
+                  <button class="dropdown-item" [routerLink]="book.bookDetailsLink">Show in catalogue</button>
+                </div>
+
+              </a>
             </td>
-            <td class="table-cell">
-              <button class="btn table-button button" [routerLink]="book.bookDetailsLink">Details</button>
-            </td>
+
           </ng-container>
         </tr>
       </tbody>
     </table>
+
+    <p class="item-not-found-label text-danger" *ngIf="noBooksWithStatusFound">No books found</p>
+
   </div>
 </div>
 

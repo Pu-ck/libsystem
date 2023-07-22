@@ -1,0 +1,30 @@
+.extend-book-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 90vh;
+}
+
+.extend-book-form-box {
+    background-color: rgb(252, 252, 252);
+    padding: 80px;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px lightblue;
+    margin-top: -20px;
+    padding-bottom: 70px;
+    padding-top: 30px;
+}
+
+.form-group .form-control,
+.form-group .btn,
+.form-group .text-danger {
+    width: 100%;
+    font-size: inherit;
+}
+
+h1 {
+    font-size: 20px;
+    margin-bottom: 45px;
+    text-align: center;
+}

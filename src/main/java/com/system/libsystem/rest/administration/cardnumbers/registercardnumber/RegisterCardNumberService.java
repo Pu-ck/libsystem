@@ -26,7 +26,6 @@ public class RegisterCardNumberService {
 
     private final CardNumberRepository cardNumberRepository;
 
-    @Transactional
     public void registerNewCardNumber(RegisterCardNumberRequest registerCardNumberRequest) {
         validateCardNumberAndPeselNumberFormats(registerCardNumberRequest);
         checkIfCardNumberIsAlreadyRegistered(registerCardNumberRequest);

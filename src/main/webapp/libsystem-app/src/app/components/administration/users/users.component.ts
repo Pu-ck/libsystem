@@ -57,17 +57,34 @@ export class UsersComponent implements OnInit {
     this.display = "none";
   }
 
-  public getUsers(): void {
+  public getUsers(status: string): void {
     this.userEnabled = false;
     const url = '/api/administration/users';
     let params = this.getSearchType();
     this.http.get<any[]>(url, { params }).subscribe(
       response => {
-        this.users = response;
-        this.userNotFound = false;
+
+        if (status === 'All') {
+          this.users = response;
+        }
+        if (status === 'Enabled') {
+          this.users = response.filter(users => users.enabled === true);
+        }
+        if (status === 'Disabled') {
+          this.users = response.filter(users => users.enabled === false);
+        }
+
         let queryParams: { [key: string]: string } = {};
         this.setQueryParams(queryParams);
         this.router.navigate(['/administration/users'], { queryParams });
+        if (this.users.length === 0) {
+          this.userNotFound = true;
+        } else {
+          this.userNotFound = false
+        }
+        if (this.users.length === 1) {
+          this.currentPage = 1;
+        }
       },
       error => {
         this.userEnabledService.validateIfUserIsEnabled(error);
@@ -80,6 +97,8 @@ export class UsersComponent implements OnInit {
   }
 
   public setDisplayedStatus(status: string): void {
+    this.currentPage = 1;
+    this.getUsers(status);
     if (status === 'Enabled') {
       this.showEnabled = true;
       this.showDisabled = false;
@@ -117,7 +136,7 @@ export class UsersComponent implements OnInit {
   private displayUsersOnInitOrUserOnRedirect(): void {
     this.route.queryParams.subscribe(params => {
       if (!params['userId']) {
-        this.getUsers();
+        this.getUsers('All');
       } else {
         this.getUser(params['userId']);
       }

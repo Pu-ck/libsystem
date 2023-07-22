@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
+import { PaginationService } from 'src/app/services/pagination/pagination.service';
 
 @Component({
   selector: 'app-administration-books',
@@ -9,6 +10,9 @@ import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
   styleUrls: ['./admin-books.component.css']
 })
 export class AdminBooksComponent implements OnInit {
+
+  public currentPage: number = 1;
+  public itemsPerPage: number = 20;
 
   public borrowedBooks: any[] = [];
 
@@ -18,6 +22,14 @@ export class AdminBooksComponent implements OnInit {
   public showClosed: boolean = false;
   public showAll: boolean = true;
 
+  public bookReturned: boolean = false;
+  public bookAccepted: boolean = false;
+  public bookRejected: boolean = false;
+  public bookReady: boolean = false;
+
+  public borrowedBookId: string = localStorage.getItem('borrowedBookId') || '';
+  public borrowedBookCardNumber!: string;
+
   public borrowedBookNotFound: boolean = false;
 
   public searchType: string = '';
@@ -25,28 +37,55 @@ export class AdminBooksComponent implements OnInit {
 
   public model: any = {};
 
+  public displayAcceptModal = "none";
+  public displayReadyModal = "none";
+  public displayRejectModal = "none";
+  public displayReturnModal = "none";
+
   constructor(
     private http: HttpClient,
     private router: Router,
-    private userEnabledService: UserEnabledService
+    private userEnabledService: UserEnabledService,
+    public pagination: PaginationService
   ) { }
 
   ngOnInit(): void {
-    this.getBorrowedBooks();
+    this.checkIfBookStatusHasBeenChanged();
+    this.getBorrowedBooks('All');
   }
 
-  public getBorrowedBooks(): void {
+  public getBorrowedBooks(status: string): void {
     const url = '/api/administration/books';
     let params = this.getSearchType();
     this.http.get<any[]>(url, { params }).subscribe(
       response => {
-        this.borrowedBooks = response;
-        this.borrowedBookNotFound = false;
+        
+        if (status === 'All') {
+          this.borrowedBooks = response;
+        }
+        if (status === 'Accepted') {
+          this.borrowedBooks = response.filter(borrowedBook => borrowedBook.accepted === true);
+        }
+        if (status === 'Closed') {
+          this.borrowedBooks = response.filter(borrowedBook => borrowedBook.closed === true);
+        }
+        if (status === 'Ready') {
+          this.borrowedBooks = response.filter(borrowedBook => borrowedBook.ready === true);
+        }
+        if (status === 'Extended') {
+          this.borrowedBooks = response.filter(borrowedBook => borrowedBook.extended === true);
+        }
+
         let queryParams: { [key: string]: string } = {};
         this.setQueryParams(queryParams);
         this.router.navigate(['/administration/books'], { queryParams });
         if (this.borrowedBooks.length === 0) {
           this.borrowedBookNotFound = true;
+        } else {
+          this.borrowedBookNotFound = false;
+        }
+        if (this.borrowedBooks.length === 1) {
+          this.currentPage = 1;
         }
       },
       error => {
@@ -66,6 +105,12 @@ export class AdminBooksComponent implements OnInit {
       accepted: accepted
     }).subscribe(response => {
       console.log(response);
+      if (accepted) {
+        localStorage.setItem('bookReady', 'true');
+      } else {
+        localStorage.setItem('bookRejected', 'true');
+      }
+      localStorage.setItem('borrowedBookId', borrowedBookId);
       window.location.reload();
     }, error => {
       console.log(error);
@@ -79,6 +124,8 @@ export class AdminBooksComponent implements OnInit {
       cardNumber: cardNumber
     }).subscribe(response => {
       console.log(response);
+      localStorage.setItem('bookAccepted', 'true');
+      localStorage.setItem('borrowedBookId', borrowedBookId);
       window.location.reload();
     }, error => {
       console.log(error);
@@ -92,6 +139,8 @@ export class AdminBooksComponent implements OnInit {
       cardNumber: cardNumber
     }).subscribe(response => {
       console.log(response);
+      localStorage.setItem('bookReturned', 'true');
+      localStorage.setItem('borrowedBookId', borrowedBookId);
       window.location.reload();
     }, error => {
       console.log(error);
@@ -104,6 +153,9 @@ export class AdminBooksComponent implements OnInit {
   }
 
   public setDisplayedStatus(status: string): void {
+    this.clearAllSuccessfulActionsLabels();
+    this.currentPage = 1;
+    this.getBorrowedBooks(status);
     if (status === 'Accepted') {
       this.showAccepted = true;
       this.showClosed = false;
@@ -135,6 +187,60 @@ export class AdminBooksComponent implements OnInit {
       this.showExtended = false;
       this.showAccepted = false;
     }
+  }
+
+  public openModalByType(type: string): void {
+    this.clearAllSuccessfulActionsLabels();
+    if (type === 'accept') {
+      this.displayAcceptModal = 'block';
+    }
+    if (type === 'ready') {
+      this.displayReadyModal = 'block';
+    }
+    if (type === 'reject') {
+      this.displayRejectModal = 'block';
+    }
+    if (type === 'return') {
+      this.displayReturnModal = 'block';
+    }
+  }
+
+  public onPageChange(page: number): void {
+    this.currentPage = page;
+    this.clearAllSuccessfulActionsLabels();
+  }
+
+  public onCloseHandled(): void {
+    this.displayAcceptModal = 'none';
+    this.displayReadyModal = 'none';
+    this.displayRejectModal = 'none';
+    this.displayReturnModal = 'none';
+  }
+
+  private checkIfBookStatusHasBeenChanged(): void {
+    if (localStorage.getItem('bookAccepted') === 'true') {
+      this.bookAccepted = true;
+      localStorage.setItem('bookAccepted', 'false');
+    }
+    if (localStorage.getItem('bookRejected') === 'true') {
+      this.bookRejected = true;
+      localStorage.setItem('bookRejected', 'false');
+    }
+    if (localStorage.getItem('bookReturned') === 'true') {
+      this.bookReturned = true;
+      localStorage.setItem('bookReturned', 'false');
+    }
+    if (localStorage.getItem('bookReady') === 'true') {
+      this.bookReady = true;
+      localStorage.setItem('bookReady', 'false');
+    }
+  }
+
+  private clearAllSuccessfulActionsLabels(): void {
+    this.bookAccepted = false;
+    this.bookReady = false;
+    this.bookRejected = false;
+    this.bookReturned = false;
   }
 
   private getSearchType(): HttpParams {

@@ -11,13 +11,17 @@ import { PaginationService } from 'src/app/services/pagination/pagination.servic
 export class UserBooksComponent implements OnInit {
 
   public currentPage: number = 1;
-  public itemsPerPage: number = 10;
+  public itemsPerPage: number = 20;
+
   public bookExtended: boolean = false;
+  public noBooksWithStatusFound: boolean = false;
+
   public displayedStatus: string = 'All';
-  public books: any[] = [];
-  public borrowedBookId!: number;
-  public display = "none";
   public hasSentBookExtensionRequest: string = 'false';
+  public display: string = 'none';
+
+  public books: any[] = [];
+  public borrowedBookId!: number;  
 
   constructor(
     private http: HttpClient,
@@ -27,7 +31,7 @@ export class UserBooksComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkIfTheBookHasBeenSuccessfullyExtended();
-    this.getUserBooks();
+    this.getUserBooks('All');
   }
 
   public requestBookExtension(borrowedBookId: number): void {
@@ -47,6 +51,8 @@ export class UserBooksComponent implements OnInit {
   }
 
   public setDisplayedStatus(status: string): void {
+    this.currentPage = 1;
+    this.getUserBooks(status);
     if (status === 'Borrowed') {
       this.displayedStatus = 'Borrowed';
       this.bookExtended = false;
@@ -82,11 +88,45 @@ export class UserBooksComponent implements OnInit {
     this.bookExtended = false;
   }
 
-  private getUserBooks(): void {
+  public getRemainingDays(returnDate: string): number {
+    const timeDifference = new Date(returnDate).getTime() - new Date().getTime();
+    const daysDifference = timeDifference / (1000 * 3600 * 24);
+    return Math.round(daysDifference);
+  }
+
+  private getUserBooks(status: string): void {
     const url = '/api/userprofile/books';
     this.http.get<any[]>(url, {}).subscribe(
       response => {
-        this.books = response;
+
+        if (status === 'All') {
+          this.books = response;
+        }
+        if (status === 'Ordered') {
+          this.books = response.filter(book => book.status === 'Ordered');
+        }
+        if (status === 'Borrowed') {
+          this.books = response.filter(book => book.status === 'Borrowed');
+        }
+        if (status === 'Returned') {
+          this.books = response.filter(book => book.statu === 'Returned');
+        }
+        if (status === 'Rejected') {
+          this.books = response.filter(book => book.status === 'Rejected');
+        }
+        if (status === 'Ready') {
+          this.books = response.filter(book => book.status === 'Ready');
+        }
+
+        if (this.books.length === 1) {
+          this.currentPage = 1;
+        }
+        if (this.books.length === 0) {
+          this.noBooksWithStatusFound = true;
+        } else {
+          this.noBooksWithStatusFound = false;
+        }
+
       },
       error => {
         this.userEnabledService.validateIfUserIsEnabled(error);

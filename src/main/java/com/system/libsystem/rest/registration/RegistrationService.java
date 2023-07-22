@@ -42,32 +42,31 @@ public class RegistrationService {
 
     @Transactional
     public ResponseEntity<RegistrationResponse> register(RegistrationRequest registrationRequest) {
-        if (isCardNumberAlreadyRegistered(registrationRequest)) {
-            final UserEntity userEntity = new UserEntity();
-            setUserDetails(registrationRequest, userEntity);
-
-            final LocalDateTime datetime = LocalDateTime.now();
-            final String registrationTime = datetime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
-
-            final String token = userService.registerUser(userEntity);
-            final String confirmationAddress = userConfirmationAddress + token;
-
-            sendAccountConfirmationMail(registrationRequest, registrationTime, confirmationAddress);
-            sendAccountRegistrationMail(registrationRequest);
-            log.info("New account created for user with id " + userEntity.getId());
-
-            final RegistrationResponse registrationResponse = new RegistrationResponse();
-            registrationResponse.setToken(token);
-
-            return ResponseEntity.ok(registrationResponse);
-        } else {
+        if (!isCardNumberAlreadyRegistered(registrationRequest)) {
             log.error("Unable to authenticate card number " + registrationRequest.getCardNumber() + " and PESEL number" +
                     registrationRequest.getPeselNumber());
             throw new UnableToAuthenticatePeselNumberException();
         }
+
+        final UserEntity userEntity = new UserEntity();
+        setUserDetails(registrationRequest, userEntity);
+
+        final LocalDateTime datetime = LocalDateTime.now();
+        final String registrationTime = datetime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+
+        final String token = userService.registerUser(userEntity);
+        final String confirmationAddress = userConfirmationAddress + token;
+
+        sendAccountConfirmationMail(registrationRequest, registrationTime, confirmationAddress);
+        sendAccountRegistrationMail(registrationRequest);
+        log.info("New account created for user with id " + userEntity.getId());
+
+        final RegistrationResponse registrationResponse = new RegistrationResponse();
+        registrationResponse.setToken(token);
+
+        return ResponseEntity.ok(registrationResponse);
     }
 
-    @Transactional
     public void confirmToken(String token) {
         final ConfirmationTokenEntity confirmationTokenEntity = confirmationTokenService.getToken(token).orElseThrow(() ->
                 new ConfirmationTokenNotFoundException(token));

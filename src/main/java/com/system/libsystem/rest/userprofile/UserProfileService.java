@@ -74,7 +74,6 @@ public class UserProfileService {
         return userBooks;
     }
 
-    @Transactional
     public void changeUserPassword(ChangePasswordRequest changePasswordRequest, HttpServletRequest httpServletRequest) {
         final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
         final String oldPassword = userEntity.getPassword();
@@ -95,7 +94,6 @@ public class UserProfileService {
         sendNewPasswordSetInApplicationMail(userEntity);
     }
 
-    @Transactional
     public void extendBookReturnDate(ExtendBookRequest extendBookRequest, HttpServletRequest httpServletRequest) {
         final UserEntity userEntity = userService.getCurrentlyLoggedUser(httpServletRequest);
         final BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById(extendBookRequest

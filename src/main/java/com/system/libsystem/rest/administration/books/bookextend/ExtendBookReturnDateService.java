@@ -31,7 +31,6 @@ public class ExtendBookReturnDateService {
     private final BorrowedBookService borrowedBookService;
     private final MailSender mailSender;
 
-    @Transactional
     public void extendRequestedBookReturnDate(ExtendBookReturnDateRequest extendBookReturnDateRequest) {
         final BorrowedBookEntity borrowedBookEntity = borrowedBookService.getBorrowedBookById(extendBookReturnDateRequest
                 .getBorrowedBookId());

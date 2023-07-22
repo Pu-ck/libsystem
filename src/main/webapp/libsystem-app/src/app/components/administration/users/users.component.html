@@ -40,12 +40,13 @@
             </div>
         </div>
 
-        <form name="form" (submit)="getUsers()" #searchForm="ngForm">
+        <form name="form" (submit)="getUsers('All')" #searchForm="ngForm">
 
             <div class="search-container">
 
                 <label for="searchType">Search with</label>
                 <div class="search-input-group">
+
                     <select name="searchType" [(ngModel)]="searchType" class="form-select search-select"
                         id="searchTypeSelect">
                         <option value="userId">User ID</option>
@@ -111,16 +112,34 @@
                             {{ user.userType }}
                         </td>
                         <td class="table-cell">
-                            <button class="btn table-button button" [disabled]="user.id.toString() === adminId"
-                                (click)="redirectToUserUpdateEnabledStatusForm(user.id, user.enabled)">
-                                {{ user.enabled ? 'Disable' : 'Enable' }}
-                            </button>
+                            <a class="nav-item">
+
+                                <li class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                    data-bs-toggle="dropdown">
+                                    Options
+                                </li>
+
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <button class="dropdown-item"
+                                        [disabled]="user.id.toString() === adminId || user.enabled"
+                                        (click)="redirectToUserUpdateEnabledStatusForm(user.id, user.enabled)">
+                                        Enable
+                                    </button>
+                                    <button class="dropdown-item"
+                                        [disabled]="user.id.toString() === adminId || !user.enabled"
+                                        (click)="redirectToUserUpdateEnabledStatusForm(user.id, user.enabled)">
+                                        Disable
+                                    </button>
+                                </div>
+                            </a>
                         </td>
+
                     </ng-container>
                 </tr>
             </tbody>
         </table>
-        <p *ngIf="userNotFound" class="item-not-found-label">Unable to find specified user</p>
+        <p *ngIf="userNotFound" class="item-not-found-label text-danger">No users found</p>
     </div>
 </div>
 

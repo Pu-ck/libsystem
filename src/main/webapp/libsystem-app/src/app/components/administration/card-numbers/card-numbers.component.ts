@@ -47,6 +47,9 @@ export class CardNumbersComponent implements OnInit {
         let queryParams: { [key: string]: string } = {};
         this.setQueryParams(queryParams);
         this.router.navigate(['/administration/card-numbers'], { queryParams });
+        if (this.cardNumbers.length === 1) {
+          this.currentPage = 1;
+        }
       },
       error => {
         this.userEnabledService.validateIfUserIsEnabled(error);

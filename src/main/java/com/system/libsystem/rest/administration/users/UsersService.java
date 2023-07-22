@@ -65,7 +65,6 @@ public class UsersService extends CommonAdminPanelEntitySearch<UserRepository, U
         return userEntities;
     }
 
-    @Transactional
     public void updateUserEnabledStatus(UpdateUserEnabledStatusRequest updateUserEnabledStatusRequest,
                                         HttpServletRequest httpServletRequest) {
         final UserEntity userEntity = userRepository.findById(updateUserEnabledStatusRequest.getUserId())

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Component
@@ -23,6 +24,7 @@ public class NewBooksAddedCheckerTask {
     private final BookRepository bookRepository;
     private final NewBookRepository newBookRepository;
 
+    @Transactional
     public void updateNewAddedBooks() {
         final HashMap<Long, Long> updatedNewBooksAssociatedWithBooksMap = new HashMap<>();
         if (isNewBookEntityRepositoryEmpty()) {

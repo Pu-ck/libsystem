@@ -13,7 +13,7 @@
     margin-top: 45px;
     padding-bottom: 50px;
     padding-top: 50px;
-    width: 1390px;
+    width: 1300px;
     margin-bottom: 50px;
     min-height: 510px;
 }
@@ -30,4 +30,14 @@ h1 {
 
 hr {
     padding-bottom: 28px;
+}
+
+.nav-link:hover {
+    color: black;
+    background-color: inherit;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: lightblue;
+    color: white;
 }

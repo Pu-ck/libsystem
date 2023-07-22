@@ -1,5 +1,15 @@
-<p *ngIf="borrowedBookExtended">The return date of borrowed book with id {{ borrowedBookId }} has been successfully
-    extended.</p>
+<div class="book-extended-form">
+    <div class="book-extended-form-box">
 
-<button *ngIf="borrowedBookExtended" (click)="commonRedirectsService.redirectToBorrowedAndOrderedBooks()">Back to
-    borrwoed and ordered books</button>
+        <div class="message-container">
+            <p class="text-success" *ngIf="borrowedBookExtended">Book with ID {{ borrowedBookId }} has been
+                successfully extended</p>
+        </div>
+
+        <div class="form-group">
+            <button class="btn button" *ngIf="borrowedBookExtended"
+                (click)="commonRedirectsService.redirectToBorrowedAndOrderedBooks()">Back to
+                books list</button>
+        </div>
+    </div>
+</div>
