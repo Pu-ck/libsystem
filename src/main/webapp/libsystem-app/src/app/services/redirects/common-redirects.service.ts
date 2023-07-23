@@ -25,7 +25,11 @@ export class CommonRedirectsService {
   }
 
   public redirectToBorrowedAndOrderedBooks(): void {
-    this.router.navigate([`administration/books/`]);
+    this.router.navigate(['administration/books/']);
+  }
+
+  public redirectToBookCatalogue(): void {
+    this.router.navigate(['/books']);
   }
 
   public logout(logoutType: string): void {

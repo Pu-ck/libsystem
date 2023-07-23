@@ -19,6 +19,8 @@
             (click)="setDisplayedStatus('Accepted')">Accepted</button>
           <button class="btn button" [disabled]="showExtended == true"
             (click)="setDisplayedStatus('Extended')">Extended</button>
+            <button class="btn button" [disabled]="showExtension == true"
+            (click)="setDisplayedStatus('Extension')">Extension</button>
           <button class="btn button" [disabled]="showClosed == true"
             (click)="setDisplayedStatus('Closed')">Closed</button>
           <button class="btn button" [disabled]="showReady == true" (click)="setDisplayedStatus('Ready')">Ready</button>
@@ -56,7 +58,7 @@
 
           <input class="form-control text-input search-input" appNumericOnly type="text" name="searchValue"
             [(ngModel)]="searchValue">
-          <button class="btn button card-number-table-button search-button" type="submit">Search</button>
+          <button class="btn button table-search-button search-button" type="submit">Search</button>
         </div>
       </div>
     </form>
@@ -76,6 +78,7 @@
           <th class="table-column">Ready</th>
           <th class="table-column">Accepted</th>
           <th class="table-column">Extended</th>
+          <th class="table-column">Extension</th>
           <th class="table-column">Closed</th>
           <th class="table-column"></th>
         </tr>
@@ -122,7 +125,10 @@
             {{ borrowedBook.accepted ? 'Yes' : 'No' }}
           </td>
           <td class="table-cell">
-            {{ borrowedBook.extended ? 'Yes' : 'No' }}
+            {{ !isBorrowedBookRequestedForExtension(borrowedBook.borrowDate, borrowedBook.returnDate, borrowedBook.extended) && borrowedBook.extended ? 'Yes' : 'No' }}
+          </td>
+          <td class="table-cell">
+            {{ isBorrowedBookRequestedForExtension(borrowedBook.borrowDate, borrowedBook.returnDate, borrowedBook.extended) ? 'Yes' : 'No' }}
           </td>
           <td class="table-cell">
             {{ borrowedBook.closed ? 'Yes' : 'No' }}
@@ -147,7 +153,7 @@
                   (click)="openModalByType('accept'); borrowedBookId = borrowedBook.id; borrowedBookCardNumber = borrowedBook.cardNumber">Accept
                   order</button>
                 <button class="dropdown-item"
-                  [disabled]="borrowedBook.extended || borrowedBook.closed || !borrowedBook.accepted"
+                  [disabled]="!isBorrowedBookRequestedForExtension(borrowedBook.borrowDate, borrowedBook.returnDate, borrowedBook.extended) && borrowedBook.extended || borrowedBook.closed || !borrowedBook.accepted"
                   (click)="redirectToExtendBorrowedBookForm(borrowedBook.id)">Extend book</button>
                 <button class="dropdown-item"
                   [disabled]="borrowedBook.closed || !borrowedBook.accepted || !borrowedBook.ready"

@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { CommonBookMethodsService } from 'src/app/services/book/common-book-methods.service';
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 import affiliates from 'src/config/affiliates.json';
+import { BookDetails } from 'src/app/models/books/book-details';
+import { CommonRedirectsService } from 'src/app/services/redirects/common-redirects.service';
 
 @Component({
   selector: 'app-borrow-book',
@@ -15,7 +17,7 @@ export class BorrowBookComponent implements OnInit {
   public model: any = {};
   public affiliateOptions: any[] = affiliates;
   public affiliateOptionsForBook: any[] = [];
-  public bookDetails: any;
+  public bookDetails!: BookDetails;
   public maxQuantity: number = 0;
   public title: string = '';
 
@@ -30,7 +32,8 @@ export class BorrowBookComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private userEnabledService: UserEnabledService,
-    public commonBookMethods: CommonBookMethodsService
+    public commonBookMethods: CommonBookMethodsService,
+    public commonRedirectsService: CommonRedirectsService
   ) { }
 
   ngOnInit(): void {

@@ -6,12 +6,11 @@ import com.system.libsystem.entities.newbook.NewBookEntity;
 import com.system.libsystem.entities.newbook.NewBookRepository;
 import com.system.libsystem.exceptions.newbook.NewBookNotFoundException;
 import com.system.libsystem.scheduler.SchedulerDateUtil;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.*;
 
 @Component

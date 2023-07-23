@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonBookMethodsService } from 'src/app/services/book/common-book-methods.service';
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
+import { BookDetails } from 'src/app/models/books/book-details';
 
 @Component({
   selector: 'app-book-details',
@@ -13,7 +14,7 @@ export class BookDetailsComponent implements OnInit {
 
   private bookId: string = '';
 
-  public bookDetails: any;
+  public bookDetails!: BookDetails;
   public booksOnStock: boolean = true;
   public isFavourite: boolean = false;
 

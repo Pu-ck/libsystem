@@ -12,17 +12,12 @@ export class BorrowedComponent implements OnInit {
   public borrowedBookValidated: boolean = false;
 
   constructor(
-    private router: Router,
-    private commonRedirectsService: CommonRedirectsService
+    public commonRedirectsService: CommonRedirectsService
   ) { }
 
   ngOnInit(): void {
     this.commonRedirectsService.checkSingleVisitPageLocalStorageCondition('hasBorrowedBook');
     this.borrowedBookValidated = true;
-  }
-
-  public redirectToBookCatalogue(): void {
-    this.router.navigateByUrl('/books');
   }
 
 }

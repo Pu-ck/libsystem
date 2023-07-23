@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 import { PaginationService } from 'src/app/services/pagination/pagination.service';
+import { Book } from 'src/app/models/books/book';
+import { CommonConstants } from 'src/app/utils/common-constants';
 
 @Component({
   selector: 'app-user-books',
@@ -10,17 +12,17 @@ import { PaginationService } from 'src/app/services/pagination/pagination.servic
 })
 export class UserBooksComponent implements OnInit {
 
-  public currentPage: number = 1;
-  public itemsPerPage: number = 20;
+  public currentPage: number = CommonConstants.DEFAULT_PAGE_NUMBER;
+  public itemsPerPage: number = CommonConstants.ITEMS_PER_PAGE;
 
   public bookExtended: boolean = false;
   public noBooksWithStatusFound: boolean = false;
 
   public displayedStatus: string = 'All';
   public hasSentBookExtensionRequest: string = 'false';
-  public display: string = 'none';
+  public display: string = CommonConstants.MODAL_DISPLAY_HIDE;
 
-  public books: any[] = [];
+  public books: Book[] = [];
   public borrowedBookId!: number;  
 
   constructor(
@@ -39,19 +41,19 @@ export class UserBooksComponent implements OnInit {
     this.http.put<any>(url, {
     }).subscribe(response => {
       this.bookExtended = true;
-      this.display = 'none'
+      this.display = CommonConstants.MODAL_DISPLAY_HIDE;
       localStorage.setItem('hasSentBookExtensionRequest', 'true');
       window.location.reload();
       console.log(response);
     }, error => {
       this.userEnabledService.validateIfUserIsEnabled(error);
-      this.display = 'none';
+      this.display = CommonConstants.MODAL_DISPLAY_HIDE;
     }
     );
   }
 
   public setDisplayedStatus(status: string): void {
-    this.currentPage = 1;
+    this.currentPage = CommonConstants.DEFAULT_PAGE_NUMBER;
     this.getUserBooks(status);
     if (status === 'Borrowed') {
       this.displayedStatus = 'Borrowed';
@@ -75,12 +77,12 @@ export class UserBooksComponent implements OnInit {
   }
 
   public openModal(): void {
-    this.display = "block";
+    this.display = CommonConstants.MODAL_DISPLAY_SHOW;
     this.bookExtended = false;
   }
 
   public onCloseHandled(): void {
-    this.display = "none";
+    this.display = CommonConstants.MODAL_DISPLAY_HIDE;
   }
 
   public onPageChange(page: number): void {
@@ -119,7 +121,7 @@ export class UserBooksComponent implements OnInit {
         }
 
         if (this.books.length === 1) {
-          this.currentPage = 1;
+          this.currentPage = CommonConstants.DEFAULT_PAGE_NUMBER;
         }
         if (this.books.length === 0) {
           this.noBooksWithStatusFound = true;

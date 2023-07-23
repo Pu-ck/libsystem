@@ -16,14 +16,16 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @AllArgsConstructor
 @Slf4j
 public class ExtendBookReturnDateService {
+
+    private static final int DEFAULT_BORROW_TIME = 31;
 
     private final BorrowedBookRepository borrowedBookRepository;
     private final UserService userService;
@@ -47,10 +49,17 @@ public class ExtendBookReturnDateService {
         if (!borrowedBookEntity.isAccepted()) {
             throw new UnableToExtendNotAcceptedBookException(borrowedBookEntity.getId());
         }
-        if (borrowedBookEntity.isExtended()) {
+        if (!isBorrowedBookFeasibleForExtension(borrowedBookEntity)) {
             throw new BookAlreadyExtendedException(borrowedBookEntity.getId());
         }
         saveBorrowedBookNewReturnDate(borrowedBookEntity, newReturnDate, userEntity, bookEntity);
+    }
+
+    private boolean isBorrowedBookFeasibleForExtension(BorrowedBookEntity borrowedBookEntity) {
+        final Date borrowDate = borrowedBookEntity.getBorrowDate();
+        final Date returnDate = borrowedBookEntity.getReturnDate();
+        long days = TimeUnit.DAYS.convert(returnDate.getTime() - borrowDate.getTime(), TimeUnit.MILLISECONDS);
+        return borrowedBookEntity.isExtended() && days <= DEFAULT_BORROW_TIME;
     }
 
     private void saveBorrowedBookNewReturnDate(BorrowedBookEntity borrowedBookEntity, Date newReturnDate,

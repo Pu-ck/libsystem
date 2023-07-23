@@ -53,7 +53,7 @@ export class ExtendBookComponent implements OnInit {
     this.http.get<any[]>(url, { params }).subscribe(
       response => {
         let borrowedBook = response[0];
-        if (borrowedBook.accepted === false || borrowedBook.extended === true || borrowedBook.closed === true || borrowedBook.ready === false) {
+        if (borrowedBook.accepted === false || borrowedBook.closed === true || borrowedBook.ready === false) {
           this.router.navigateByUrl('/');
         }
       },

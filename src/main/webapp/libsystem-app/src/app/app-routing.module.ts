@@ -34,7 +34,7 @@ const routes: Routes = [
       { path: 'registration', component: RegistrationComponent },
       { path: 'registered', component: RegisteredComponent },
       { path: 'password-reminder', component: PasswordReminderComponent },
-      { path: 'password-reminder/new-password/:token', component: NewPasswordComponent },
+      { path: 'password-reminder/new-password', component: NewPasswordComponent },
       { path: 'user-profile', component: UserProfileComponent },
       { path: 'user-profile/books', component: UserBooksComponent },
       { path: 'user-profile/change-password', component: ChangePasswordComponent },

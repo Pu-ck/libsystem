@@ -5,6 +5,9 @@ import { CommonBookMethodsService } from 'src/app/services/book/common-book-meth
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 import genres from 'src/config/genres.json';
 import affiliates from 'src/config/affiliates.json';
+import { Book } from 'src/app/models/books/book';
+import { Genre } from 'src/app/models/common-book-properties/genre';
+import { Affiliate } from 'src/app/models/common-book-properties/affiliate';
 
 @Component({
   selector: 'app-books',
@@ -13,7 +16,6 @@ import affiliates from 'src/config/affiliates.json';
 })
 export class BooksComponent implements OnInit {
 
-  public books: any[] = [];
   public noResultsFound: boolean = false;
   public title: string = '';
   public author: string = '';
@@ -23,10 +25,12 @@ export class BooksComponent implements OnInit {
   public sortType: string = '';
   public sortDirection: string = '';
 
-  public genres: string[] = [];
+  public books: Book[] = [];
+
+  public genres: Genre[] = [];
   public selectedGenres: any[] = genres;
 
-  public affiliates: string[] = [];
+  public affiliates: Affiliate[] = [];
   public selectedAffiliates: any[] = affiliates;
 
   private isFavourite: boolean = false;

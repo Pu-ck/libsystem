@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 import { PaginationService } from 'src/app/services/pagination/pagination.service';
+import { FavouriteBook } from 'src/app/models/books/favourite-book';
+import { CommonConstants } from 'src/app/utils/common-constants';
 
 @Component({
   selector: 'app-favourites',
@@ -11,9 +13,9 @@ import { PaginationService } from 'src/app/services/pagination/pagination.servic
 export class FavouritesComponent implements OnInit {
 
   public bookId!: number;
-  public currentPage: number = 1;
+  public currentPage: number = CommonConstants.DEFAULT_PAGE_NUMBER;
   public itemsPerPage: number = 6;
-  public favouriteBooks: any = [];
+  public favouriteBooks: FavouriteBook[] = [];
   public favouriteBooksListEmpty!: boolean;
 
   constructor(

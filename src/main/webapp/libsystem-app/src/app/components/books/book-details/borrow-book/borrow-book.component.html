@@ -1,33 +1,55 @@
-<p>Borrow book {{ title }}</p>
+<div class="borrow-book-form">
+    <div class="borrow-book-form-box">
 
-<form name="form" (ngSubmit)="borrow()" #borrowForm="ngForm">
-    <label for="affiliates">Choose affiliate</label>
-    <select name="affiliates" [(ngModel)]="model.affiliate" required (change)="specifyQuantityForChosenAffiliate()">
-        <ng-container *ngFor="let affiliateOptionForBook of affiliateOptionsForBook">
-            <option [value]="affiliateOptionForBook.label">{{ affiliateOptionForBook.label }}</option>
-        </ng-container>
-    </select>
+        <h1>Borrow book {{ title.length > 7 ? (title | slice:0:7) + '...' : title }}</h1>
 
-    <label for="quantity">Choose quantity</label>
-    <select name="quantity" [(ngModel)]="model.quantity" required>
-        <option *ngFor="let i of setQuantityRange(1, maxQuantity, 1)" [value]="i">{{ i }}</option>
-    </select>
+        <form name="form" (ngSubmit)="borrow()" #borrowForm="ngForm">
 
-    <label for="cardNumber">Card number</label>
-    <input appNumericOnly type="text" name="cardNumber" [(ngModel)]="model.cardNumber" #cardNumber="ngModel" required
-        minlength="10" maxlength="10" pattern="^[0-9]+$">
-    <div *ngIf="cardNumber?.invalid && (cardNumber?.dirty || cardNumber?.touched)">
-        <div *ngIf="cardNumber?.errors?.['required']">Card number is required</div>
-        <div *ngIf="cardNumber?.errors?.['minlength']">Invalid card number length</div>
-        <div *ngIf="cardNumber?.errors?.['maxlength']">Invalid card number length</div>
-        <div *ngIf="cardNumber.errors?.['pattern']">Invalid card number format</div>
+            <div class="form-group">
+                <label for="affiliates">Choose affiliate</label>
+                <select name="affiliates" [(ngModel)]="model.affiliate" required
+                    (change)="specifyQuantityForChosenAffiliate()" class="form-select search-select">
+                    <ng-container *ngFor="let affiliateOptionForBook of affiliateOptionsForBook">
+                        <option [value]="affiliateOptionForBook.label">{{ affiliateOptionForBook.label }}</option>
+                    </ng-container>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="quantity">Choose quantity</label>
+                <select [disabled]="!model.affiliate" name="quantity" [(ngModel)]="model.quantity" required class="form-select search-select">
+                    <option *ngFor="let i of setQuantityRange(1, maxQuantity, 1)" [value]="i">{{ i }}</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="cardNumber">Card number</label>
+                <input appNumericOnly type="text" name="cardNumber" [(ngModel)]="model.cardNumber" #cardNumber="ngModel"
+                    required minlength="10" maxlength="10" pattern="^[0-9]+$" class="form-control text-input">
+                <div *ngIf="cardNumber?.invalid && (cardNumber?.dirty || cardNumber?.touched)">
+                    <div *ngIf="cardNumber?.errors?.['required']" class="text-danger">Card number is required</div>
+                    <div *ngIf="cardNumber?.errors?.['minlength']" class="text-danger">Invalid card number length</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button class="btn button" type="submit" [disabled]="!borrowForm.valid">Borrow</button>
+                <div *ngIf="bookOutOfStock" class="text-danger">Book is out of stock</div>
+                <div *ngIf="invalidCardNumber" class="text-danger">Invalid card number</div>
+                <div *ngIf="tooManyBooks" class="text-danger">Orders limit reached</div>
+            </div>
+
+            <div class="divider">
+                <hr class="my-3">
+            </div>
+
+            <div class="redirect-buttons">
+                <div class="form-group">
+                    <button class="btn button" (click)="commonRedirectsService.redirectToBookCatalogue()">Back to book
+                        catalogue</button>
+                </div>
+            </div>
+
+        </form>
     </div>
-
-    <div>
-        <button type="submit" [disabled]="!borrowForm.valid">Borrow</button>
-        <div *ngIf="bookOutOfStock">This book is currently out of stock</div>
-        <div *ngIf="invalidCardNumber">Invalid card number</div>
-        <div *ngIf="tooManyBooks">You have reached the limit of your ordered or borrowed books</div>
-    </div>
-
-</form>
+</div>

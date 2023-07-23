@@ -3,6 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 import { PaginationService } from 'src/app/services/pagination/pagination.service';
+import { User } from 'src/app/models/users/user';
+import { CommonConstants } from 'src/app/utils/common-constants';
 
 @Component({
   selector: 'app-users',
@@ -11,10 +13,10 @@ import { PaginationService } from 'src/app/services/pagination/pagination.servic
 })
 export class UsersComponent implements OnInit {
 
-  public currentPage: number = 1;
-  public itemsPerPage: number = 20;
+  public currentPage: number = CommonConstants.DEFAULT_PAGE_NUMBER;
+  public itemsPerPage: number = CommonConstants.ITEMS_PER_PAGE;
 
-  public users: any[] = [];
+  public users: User[] = [];
   public userId: string = localStorage.getItem('enabledUserId') || '';
   public adminId: string = '';
 
@@ -27,7 +29,7 @@ export class UsersComponent implements OnInit {
   public userEnabled: boolean = false;
   public showAll: boolean = true;
 
-  public display = "none";
+  public display = CommonConstants.MODAL_DISPLAY_HIDE;
 
   constructor(
     private http: HttpClient,
@@ -49,12 +51,12 @@ export class UsersComponent implements OnInit {
   }
 
   public openModal(): void {
-    this.display = "block";
+    this.display = CommonConstants.MODAL_DISPLAY_SHOW;
     this.userEnabled = false;
   }
 
   public onCloseHandled(): void {
-    this.display = "none";
+    this.display = CommonConstants.MODAL_DISPLAY_HIDE;
   }
 
   public getUsers(status: string): void {
@@ -83,7 +85,7 @@ export class UsersComponent implements OnInit {
           this.userNotFound = false
         }
         if (this.users.length === 1) {
-          this.currentPage = 1;
+          this.currentPage = CommonConstants.DEFAULT_PAGE_NUMBER;
         }
       },
       error => {
@@ -97,7 +99,7 @@ export class UsersComponent implements OnInit {
   }
 
   public setDisplayedStatus(status: string): void {
-    this.currentPage = 1;
+    this.currentPage = CommonConstants.DEFAULT_PAGE_NUMBER;
     this.getUsers(status);
     if (status === 'Enabled') {
       this.showEnabled = true;

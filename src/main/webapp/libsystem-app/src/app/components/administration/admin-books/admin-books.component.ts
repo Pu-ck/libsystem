@@ -3,6 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 import { PaginationService } from 'src/app/services/pagination/pagination.service';
+import { BorrowedBook } from 'src/app/models/books/borrowed-book';
+import { CommonConstants } from 'src/app/utils/common-constants';
 
 @Component({
   selector: 'app-administration-books',
@@ -11,13 +13,14 @@ import { PaginationService } from 'src/app/services/pagination/pagination.servic
 })
 export class AdminBooksComponent implements OnInit {
 
-  public currentPage: number = 1;
-  public itemsPerPage: number = 20;
+  public currentPage: number = CommonConstants.DEFAULT_PAGE_NUMBER;
+  public itemsPerPage: number = CommonConstants.ITEMS_PER_PAGE;
 
-  public borrowedBooks: any[] = [];
+  public borrowedBooks: BorrowedBook[] = [];
 
   public showAccepted: boolean = false;
   public showExtended: boolean = false;
+  public showExtension: boolean = false;
   public showReady: boolean = false;
   public showClosed: boolean = false;
   public showAll: boolean = true;
@@ -37,10 +40,10 @@ export class AdminBooksComponent implements OnInit {
 
   public model: any = {};
 
-  public displayAcceptModal = "none";
-  public displayReadyModal = "none";
-  public displayRejectModal = "none";
-  public displayReturnModal = "none";
+  public displayAcceptModal = CommonConstants.MODAL_DISPLAY_HIDE;
+  public displayReadyModal = CommonConstants.MODAL_DISPLAY_HIDE;
+  public displayRejectModal = CommonConstants.MODAL_DISPLAY_HIDE;
+  public displayReturnModal = CommonConstants.MODAL_DISPLAY_HIDE;
 
   constructor(
     private http: HttpClient,
@@ -59,7 +62,7 @@ export class AdminBooksComponent implements OnInit {
     let params = this.getSearchType();
     this.http.get<any[]>(url, { params }).subscribe(
       response => {
-        
+
         if (status === 'All') {
           this.borrowedBooks = response;
         }
@@ -74,6 +77,21 @@ export class AdminBooksComponent implements OnInit {
         }
         if (status === 'Extended') {
           this.borrowedBooks = response.filter(borrowedBook => borrowedBook.extended === true);
+          for (let i = this.borrowedBooks.length - 1; i >= 0; i--) {
+            let borrowedBook = this.borrowedBooks[i];
+            if (this.isBorrowedBookRequestedForExtension(borrowedBook.borrowDate, borrowedBook.returnDate, borrowedBook.extended)) {
+              this.borrowedBooks.splice(i, 1);
+            }
+          }
+        }
+        if (status === 'Extension') {
+          this.borrowedBooks = response.filter(borrowedBook => borrowedBook.extended === true);
+          for (let i = this.borrowedBooks.length - 1; i >= 0; i--) {
+            let borrowedBook = this.borrowedBooks[i];
+            if (!this.isBorrowedBookRequestedForExtension(borrowedBook.borrowDate, borrowedBook.returnDate, borrowedBook.extended)) {
+              this.borrowedBooks.splice(i, 1);
+            }
+          }
         }
 
         let queryParams: { [key: string]: string } = {};
@@ -85,7 +103,7 @@ export class AdminBooksComponent implements OnInit {
           this.borrowedBookNotFound = false;
         }
         if (this.borrowedBooks.length === 1) {
-          this.currentPage = 1;
+          this.currentPage = CommonConstants.DEFAULT_PAGE_NUMBER;
         }
       },
       error => {
@@ -148,39 +166,51 @@ export class AdminBooksComponent implements OnInit {
     );
   }
 
-  public redirectToExtendBorrowedBookForm(id: number): void {
+  public redirectToExtendBorrowedBookForm(id: string): void {
     this.router.navigate([`administration/books/${id}/extend-book`]);
   }
 
   public setDisplayedStatus(status: string): void {
     this.clearAllSuccessfulActionsLabels();
-    this.currentPage = 1;
+    this.currentPage = CommonConstants.DEFAULT_PAGE_NUMBER;
     this.getBorrowedBooks(status);
     if (status === 'Accepted') {
+      this.showExtension = false;
       this.showAccepted = true;
       this.showClosed = false;
       this.showReady = false;
       this.showExtended = false;
       this.showAll = false;
     } else if (status === 'Closed') {
+      this.showExtension = false;
       this.showClosed = true;
       this.showAccepted = false;
       this.showReady = false;
       this.showExtended = false;
       this.showAll = false;
     } else if (status === 'Ready') {
+      this.showExtension = false;
       this.showReady = true;
       this.showClosed = false;
       this.showAccepted = false;
       this.showExtended = false;
       this.showAll = false;
     } else if (status === 'Extended') {
+      this.showExtension = false;
       this.showExtended = true;
       this.showClosed = false;
       this.showReady = false;
       this.showAccepted = false;
       this.showAll = false;
+    } else if (status === 'Extension') {
+      this.showExtension = true;
+      this.showExtended = false;
+      this.showClosed = false;
+      this.showReady = false;
+      this.showAccepted = false;
+      this.showAll = false;
     } else if (status === 'All') {
+      this.showExtension = false;
       this.showAll = true;
       this.showClosed = false;
       this.showReady = false;
@@ -192,16 +222,16 @@ export class AdminBooksComponent implements OnInit {
   public openModalByType(type: string): void {
     this.clearAllSuccessfulActionsLabels();
     if (type === 'accept') {
-      this.displayAcceptModal = 'block';
+      this.displayAcceptModal = CommonConstants.MODAL_DISPLAY_SHOW;
     }
     if (type === 'ready') {
-      this.displayReadyModal = 'block';
+      this.displayReadyModal = CommonConstants.MODAL_DISPLAY_SHOW;
     }
     if (type === 'reject') {
-      this.displayRejectModal = 'block';
+      this.displayRejectModal = CommonConstants.MODAL_DISPLAY_SHOW;
     }
     if (type === 'return') {
-      this.displayReturnModal = 'block';
+      this.displayReturnModal = CommonConstants.MODAL_DISPLAY_SHOW;
     }
   }
 
@@ -211,10 +241,19 @@ export class AdminBooksComponent implements OnInit {
   }
 
   public onCloseHandled(): void {
-    this.displayAcceptModal = 'none';
-    this.displayReadyModal = 'none';
-    this.displayRejectModal = 'none';
-    this.displayReturnModal = 'none';
+    this.displayAcceptModal = CommonConstants.MODAL_DISPLAY_HIDE;
+    this.displayReadyModal = CommonConstants.MODAL_DISPLAY_HIDE;
+    this.displayRejectModal = CommonConstants.MODAL_DISPLAY_HIDE;
+    this.displayReturnModal = CommonConstants.MODAL_DISPLAY_HIDE;
+  }
+
+  public isBorrowedBookRequestedForExtension(borrowDate: string, returnDate: string, extended: boolean): boolean {
+    const timeDifference = new Date(returnDate).getTime() - new Date(borrowDate).getTime();
+    const daysDifference = timeDifference / (1000 * 3600 * 24);
+    if (daysDifference <= CommonConstants.DEFAULT_BORROW_TIME && extended) {
+      return true;
+    }
+    return false;
   }
 
   private checkIfBookStatusHasBeenChanged(): void {

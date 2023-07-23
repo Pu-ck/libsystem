@@ -3,6 +3,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 import { PaginationService } from 'src/app/services/pagination/pagination.service';
+import { CardNumber } from 'src/app/models/book-properties/card-number';
+import { CommonConstants } from 'src/app/utils/common-constants';
 
 @Component({
   selector: 'app-card-numbers',
@@ -11,13 +13,13 @@ import { PaginationService } from 'src/app/services/pagination/pagination.servic
 })
 export class CardNumbersComponent implements OnInit {
 
-  public cardNumbers: any[] = [];
+  public cardNumbers: CardNumber[] = [];
 
   public searchType: string = '';
   public searchValue: string = '';
 
-  public currentPage: number = 1;
-  public itemsPerPage: number = 20;
+  public currentPage: number = CommonConstants.DEFAULT_PAGE_NUMBER;
+  public itemsPerPage: number = CommonConstants.ITEMS_PER_PAGE;
 
   public cardNumberNotFound: boolean = false;
 
@@ -48,7 +50,7 @@ export class CardNumbersComponent implements OnInit {
         this.setQueryParams(queryParams);
         this.router.navigate(['/administration/card-numbers'], { queryParams });
         if (this.cardNumbers.length === 1) {
-          this.currentPage = 1;
+          this.currentPage = CommonConstants.DEFAULT_PAGE_NUMBER;
         }
       },
       error => {

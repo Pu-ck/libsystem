@@ -1,5 +1,16 @@
-<p *ngIf="borrowedBookValidated">You have successfully placed your order - wait for an administrator to accept it. You
-    will be informed about your order status via email and you can check the status of your books in your books list, at
-    the user profile.</p>
+<div class="success-panel-form">
+    <div class="success-panel-form-box">
+        <div class="message-container text-success">
+            <p *ngIf="borrowedBookValidated">You have successfully placed your order - wait for an administrator to
+                accept it.
+            <p>You will be informed about your order status via email.</p>
+            <p>You can also check the status of your books in your books list, at the user profile panel.</p>
+        </div>
 
-<button *ngIf="borrowedBookValidated" (click)="redirectToBookCatalogue()">Back to book catalogue</button>
+        <div class="form-group">
+            <button class="btn button" *ngIf="borrowedBookValidated"
+                (click)="commonRedirectsService.redirectToBookCatalogue()">Back to book
+                catalogue</button>
+        </div>
+    </div>
+</div>

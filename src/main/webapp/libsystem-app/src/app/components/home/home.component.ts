@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
+import { NewBook } from 'src/app/models/books/new-book';
 
 @Component({
   selector: 'app-home',
@@ -9,7 +10,7 @@ import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 })
 export class HomeComponent implements OnInit {
 
-  public newBooks: any;
+  public newBooks: NewBook[] = [];
 
   constructor(
     private http: HttpClient,
