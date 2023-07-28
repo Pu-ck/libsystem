@@ -1,9 +1,9 @@
 <ng-container *ngIf="favouriteBooksListEmpty !== undefined"></ng-container>
 <div *ngIf="favouriteBooksListEmpty" class="favourite-books-empty-form">
   <div class="favourite-books-empty-form-box">
-    <h1>Favourites</h1>
+    <h1>{{ 'navigationMenu.favourites' | translate }}</h1>
     <div class="message-container">
-      <p class="text-danger">Your list of favourite books is currently empty</p>
+      <p class="text-danger">{{ 'favourites.favouritesEmpty' | translate }}</p>
     </div>
   </div>
 </div>
@@ -12,7 +12,7 @@
   <div class="favourite-books-form-box">
 
     <div class="d-flex align-items-center justify-content-between w-100">
-      <h1>Favourites</h1>
+      <h1>{{ 'navigationMenu.favourites' | translate }}</h1>
 
       <div class="pagination-container">
         <nav>
@@ -41,10 +41,10 @@
                   }}</a>
               </h5>
               <button class="btn table-button button card-remove-button"
-                (click)="removeFromFavourites($event, favouriteBook.bookId)">Remove</button>
+                (click)="removeFromFavourites($event, favouriteBook.bookId)">{{ 'favourites.remove' | translate }}</button>
             </div>
             <p class="card-text">
-              <a>by {{ favouriteBook.authors.length > 60 ? (favouriteBook.authors | slice:0:60) + '...' :
+              <a>{{ 'favourites.by' | translate }} {{ favouriteBook.authors.length > 60 ? (favouriteBook.authors | slice:0:60) + '...' :
                 favouriteBook.authors }}</a>
             </p>
           </div>

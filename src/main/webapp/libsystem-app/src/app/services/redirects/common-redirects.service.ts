@@ -41,7 +41,6 @@ export class CommonRedirectsService {
       if (logoutType === 'accountDisabled') {
         this.router.navigate(['/login'], { queryParams: { disabled: true } });
       }
-      localStorage.clear();
     });
   }
 

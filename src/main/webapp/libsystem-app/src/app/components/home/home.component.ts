@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 import { NewBook } from 'src/app/models/books/new-book';
+import { TranslationService } from 'src/app/services/translation/translation.service';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +15,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private userEnabledService: UserEnabledService
+    private userEnabledService: UserEnabledService,
+    private translation: TranslationService
   ) { }
 
   ngOnInit(): void {
@@ -25,6 +27,11 @@ export class HomeComponent implements OnInit {
     const url = '/api/home';
     this.http.get<any>(url, {}).subscribe(response => {
       this.newBooks = response;
+      for (let newBook of response) {
+        const genresArray = newBook.genres.split(',').map((genre: string) => genre.trim());
+        const translatedGenresArray = genresArray.map((genre: string) => this.translation.translateGenre(genre));
+        newBook.genres = translatedGenresArray.join(', ');
+      }
     }, error => {
       this.userEnabledService.validateIfUserIsEnabled(error);
     }

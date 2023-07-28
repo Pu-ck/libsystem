@@ -1,38 +1,38 @@
 <div class="user">
     <div class="user-box">
         <div *ngIf="userDetails">
-            <h1>User details</h1>
-            <p>Username: <b>{{userDetails[0]}}</b></p>
+            <h1>{{ 'userDetails.userDetails' | translate }}</h1>
+            <p>{{ 'credentials.username' | translate }}: <b>{{userDetails[0]}}</b></p>
 
             <div class="divider">
                 <hr class="my-3">
             </div>
 
-            <p>First name: <b>{{userDetails[1]}}</b></p>
+            <p>{{ 'credentials.firstName' | translate }}: <b>{{userDetails[1]}}</b></p>
 
             <div class="divider">
                 <hr class="my-3">
             </div>
 
-            <p>Last name: <b>{{userDetails[2]}}</b></p>
+            <p>{{ 'credentials.lastName' | translate }}: <b>{{userDetails[2]}}</b></p>
 
             <div class="divider">
                 <hr class="my-3">
             </div>
 
-            <p>Card number: <b>{{userDetails[3]}}</b></p>
+            <p>{{ 'credentials.cardNumber' | translate }}: <b>{{userDetails[3]}}</b></p>
 
             <div class="divider">
                 <hr class="my-3">
             </div>
 
-            <p>Borrowed books: <b>{{userDetails[4]}}/10</b></p>
+            <p>{{ 'userDetails.borrowedBooks' | translate }}: <b>{{userDetails[4]}}/10</b></p>
 
             <div class="divider">
                 <hr class="my-3">
             </div>
 
-            <p>Ordered books: <b>{{userDetails[5]}}/10</b></p>
+            <p>{{ 'userDetails.orderedBooks' | translate }}: <b>{{userDetails[5]}}/10</b></p>
         </div>
     </div>
 </div>

@@ -8,10 +8,10 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
+                        <a class="nav-link" href="/">{{ 'navigationMenu.home' | translate }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/books">Book catalogue</a>
+                        <a class="nav-link" href="/books">{{ 'navigationMenu.bookCatalogue' | translate }}</a>
                     </li>
 
 
@@ -19,14 +19,18 @@
 
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false" data-bs-toggle="dropdown">
-                            User profile
+                            {{ 'navigationMenu.userProfile' | translate }}
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/user-profile">User details</a>
-                            <a class="dropdown-item" href="/user-profile/books">Your books</a>
-                            <a class="dropdown-item" href="/user-profile/favourites">Favourites</a>
-                            <a class="dropdown-item" href="/user-profile/change-password">Change password</a>
+                            <a class="dropdown-item" href="/user-profile">{{ 'navigationMenu.userDetails' | translate
+                                }}</a>
+                            <a class="dropdown-item" href="/user-profile/books">{{ 'navigationMenu.yourBooks' |
+                                translate }}</a>
+                            <a class="dropdown-item" href="/user-profile/favourites">{{ 'navigationMenu.favourites' |
+                                translate }}</a>
+                            <a class="dropdown-item" href="/user-profile/change-password">{{
+                                'navigationMenu.changePassword' | translate }}</a>
                         </div>
                     </li>
 
@@ -34,18 +38,37 @@
 
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false" data-bs-toggle="dropdown">
-                            Administration
+                            {{ 'navigationMenu.administration' | translate }}
                         </a>
 
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="/administration/books">Ordered and borrowed books</a>
-                            <a class="dropdown-item" href="/administration/users">Users</a>
-                            <a class="dropdown-item" href="/administration/card-numbers">Card numbers</a>
+                            <a class="dropdown-item" href="/administration/books">{{ 'navigationMenu.orderedAndBorrowed'
+                                | translate }}</a>
+                            <a class="dropdown-item" href="/administration/users">{{ 'navigationMenu.users' | translate
+                                }}</a>
+                            <a class="dropdown-item" href="/administration/card-numbers">{{ 'navigationMenu.cardNumbers'
+                                | translate }}</a>
+                        </div>
+
+                    </li>
+                    <li class="nav-item dropdown">
+
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false" data-bs-toggle="dropdown">
+                            {{ 'navigationMenu.language' | translate }}
+                        </a>
+
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <button [disabled]="language === 'en'" class="dropdown-item" (click)="setAppLanguage('en')">{{ 'navigationMenu.english'
+                                | translate }}</button>
+                            <button [disabled]="language === 'pl'" class="dropdown-item" (click)="setAppLanguage('pl')">{{ 'navigationMenu.polish' | translate
+                                }}</button>
                         </div>
 
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link logout-link" (click)="commonRedirectsService.logout('normal')">Log out</a>
+                        <a class="nav-link logout-link" (click)="commonRedirectsService.logout('normal')">{{
+                            'navigationMenu.logOut' | translate }}</a>
                     </li>
                 </ul>
             </div>

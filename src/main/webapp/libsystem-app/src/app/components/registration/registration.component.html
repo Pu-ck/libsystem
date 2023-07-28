@@ -7,71 +7,84 @@
         <form name="form" (ngSubmit)="register()" #registrationForm="ngForm" class="form">
 
             <div class="form-group">
-                <label for="username">Username</label>
+                <label for="username">{{ 'credentials.username' | translate }}</label>
                 <input type="email" name="username" [(ngModel)]="model.username" #username="ngModel"
                     pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" required class="form-control text-input">
                 <div *ngIf="username?.invalid && (username?.dirty || username?.touched)">
-                    <div *ngIf="username?.errors?.['required']" class="text-danger">Username is required</div>
-                    <div *ngIf="username?.errors?.['pattern']" class="text-danger">Provide valid email address</div>
+                    <div *ngIf="username?.errors?.['required']" class="text-danger">{{ 'credentials.usernameRequired' |
+                        translate }}</div>
+                    <div *ngIf="username?.errors?.['pattern']" class="text-danger">{{ 'login.invalidEmail' | translate
+                        }}</div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password">{{ 'credentials.password' | translate }}</label>
                 <input type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required
                     minlength="8" maxlength="25" class="form-control text-input">
                 <div *ngIf="password?.invalid && (password?.dirty || password?.touched)">
-                    <div *ngIf="password?.errors?.['required']" class="text-danger">Password is required</div>
-                    <div *ngIf="password?.errors?.['minlength']" class="text-danger">Provided password is too short
+                    <div *ngIf="password?.errors?.['required']" class="text-danger">{{ 'credentials.passwordRequired' |
+                        translate }}</div>
+                    <div *ngIf="password?.errors?.['minlength']" class="text-danger">{{ 'credentials.passwordTooShort' |
+                        translate }}
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="firstName">First name</label>
+                <label for="firstName">{{ 'credentials.firstName' | translate }}</label>
                 <input type="text" name="firstName" [(ngModel)]="model.firstName" #firstName="ngModel" required
                     class="form-control text-input">
                 <div *ngIf="firstName?.invalid && (firstName?.dirty || firstName?.touched)">
-                    <div *ngIf="firstName?.errors?.['required']" class="text-danger">First name is required</div>
+                    <div *ngIf="firstName?.errors?.['required']" class="text-danger">{{ 'credentials.firstNameRequired'
+                        | translate }}</div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="lastName">Last name</label>
+                <label for="lastName">{{ 'credentials.lastName' | translate }}</label>
                 <input type="text" name="lastName" [(ngModel)]="model.lastName" #lastName="ngModel" required
                     class="form-control text-input">
                 <div *ngIf="lastName?.invalid && (lastName?.dirty || lastName?.touched)">
-                    <div *ngIf="lastName?.errors?.['required']" class="text-danger">Last name is required</div>
+                    <div *ngIf="lastName?.errors?.['required']" class="text-danger">{{ 'credentials.lastNameRequired' |
+                        translate }}</div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="cardNumber">Card number</label>
+                <label for="cardNumber">{{ 'credentials.cardNumber' | translate }}</label>
                 <input appNumericOnly type="text" name="cardNumber" [(ngModel)]="model.cardNumber" #cardNumber="ngModel"
                     required minlength="10" maxlength="10" class="form-control text-input">
                 <div *ngIf="cardNumber?.invalid && (cardNumber?.dirty || cardNumber?.touched)">
-                    <div *ngIf="cardNumber?.errors?.['required']" class="text-danger">Card number is required</div>
-                    <div *ngIf="cardNumber?.errors?.['minlength']" class="text-danger">Invalid card number length</div>
+                    <div *ngIf="cardNumber?.errors?.['required']" class="text-danger">{{
+                        'credentials.cardNumberRequired' | translate }}</div>
+                    <div *ngIf="cardNumber?.errors?.['minlength']" class="text-danger">{{
+                        'credentials.cardNumberTooShort' | translate }}</div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="peselNumber">PESEL number</label>
+                <label for="peselNumber">{{ 'credentials.peselNumber' | translate }}</label>
                 <input appNumericOnly type="text" name="peselNumber" [(ngModel)]="model.peselNumber"
                     #peselNumber="ngModel" required minlength="11" maxlength="11" class="form-control text-input">
                 <div *ngIf="peselNumber?.invalid && (peselNumber?.dirty || peselNumber?.touched)">
-                    <div *ngIf="peselNumber?.errors?.['required']" class="text-danger">PESEL is required</div>
-                    <div *ngIf="peselNumber?.errors?.['minlength']" class="text-danger">Invalid PESEL number length
+                    <div *ngIf="peselNumber?.errors?.['required']" class="text-danger">{{
+                        'credentials.peselNumberRequired' | translate }}</div>
+                    <div *ngIf="peselNumber?.errors?.['minlength']" class="text-danger">{{
+                        'credentials.peselNumberTooShort' | translate }}
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <button type="submit" [disabled]="!registrationForm.valid" class="btn button">Register</button>
-                <div *ngIf="usernameTaken" class="text-danger">Username is already taken</div>
-                <div *ngIf="cardNumberTaken" class="text-danger">Card number is already taken</div>
-                <div *ngIf="cardNumberNotFound" class="text-danger">Card number is not registered</div>
-                <div *ngIf="peselNumberNotAuthenticated" class="text-danger">PESEL number is not registered
+                <button type="submit" [disabled]="!registrationForm.valid" class="btn button">{{ 'registration.register'
+                    | translate }}</button>
+                <div *ngIf="usernameTaken" class="text-danger">{{ 'registration.usernameTaken' | translate }}</div>
+                <div *ngIf="cardNumberTaken" class="text-danger">{{ 'registration.cardNumberTaken' | translate }}</div>
+                <div *ngIf="cardNumberNotFound" class="text-danger">{{ 'registration.cardNumberNotRegistered' |
+                    translate }}</div>
+                <div *ngIf="peselNumberNotAuthenticated" class="text-danger">{{ 'registration.peselNumberNotRegistered'
+                    | translate }}
                 </div>
             </div>
         </form>
@@ -81,8 +94,8 @@
         </div>
 
         <div class="form-group">
-            <button (click)="commonRedirectsService.redirectToLoginForm()" class="btn button redirect-buttons">Login with existing
-                account</button>
+            <button (click)="commonRedirectsService.redirectToLoginForm()" class="btn button redirect-buttons">{{
+                'login.loginWithExistingAccount' | translate }}</button>
         </div>
     </div>
 </div>

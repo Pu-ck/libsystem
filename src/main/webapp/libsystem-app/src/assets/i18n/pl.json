@@ -1,0 +1,98 @@
+{
+    "credentials": {
+        "username": "Użytkownik",
+        "password": "Hasło",
+        "usernameRequired": "Użytkownik jest wymagany",
+        "passwordRequired": "Hasło jest wymagane",
+        "invalidEmail": "Podaj poprawny email",
+        "passwordTooShort": "Hasło jest za krótkie",
+        "firstNameRequired": "Imię jest wymagane",
+        "firstName": "Imię",
+        "lastName": "Nazwisko",
+        "lastNameRequired": "Nazwisko jest wymgane",
+        "cardNumber": "Numer karty",
+        "cardNumberRequired": "Numer karty jest wymagany",
+        "cardNumberTooShort": "Numer karty jest za krótki",
+        "peselNumber": "Numer PESEL",
+        "peselNumberRequired": "Numer PESEL jest wymagany",
+        "peselNumberTooShort": "Numer PESEL jest za krótki",
+        "oldPassword": "Stare hasło",
+        "newPassword": "Nowe hasło",
+        "oldPasswordRequired": "Stare hasło jest wymagane",
+        "newPasswordRequired": "Nowe hasło jest wymagane"
+    },
+    "login": {
+        "logIn": "Zaloguj",
+        "logoutSuccess": "Poprawnie wylogowano",
+        "accountDisabledLogout": "Konto zostało zablokowane",
+        "accountDisabled": "Konto jest zablokowane",
+        "loginWithExistingAccount": "Zaloguj się istniejącym kontem",
+        "wrongUsernameOrPassword": "Błędny użytkownik lub hasło"
+    },
+    "registration": {
+        "registerNewAccount": "Zarejestruj nowe konto",
+        "register": "Zarejestruj",
+        "usernameTaken": "Użytkown zajęty",
+        "cardNumberTaken": "Numer karty zajęty",
+        "cardNumberNotRegistered": "Numer karty niezarejestrowany",
+        "peselNumberNotRegistered": "Numer PESEL niezarejestrowany"
+    },
+    "registered": {
+        "registredSuccess1": "Wysłano prośbę o zarejestrowanie konta.",
+        "registredSuccess2": "Poczekaj aż administrator aktywuje twoje konto",
+        "registredSuccess3": "Informacja zostanie wysłana na twój adres email"
+    },
+    "passwordReminder": {
+        "forgotPassword": "Zapomniałem hasła",
+        "sendReminder": "Wyślij przypomnienie",
+        "cardNumberNotAuthenticated": "Numer karty nieuwierzytelniony",
+        "reminderSent": "Wysłano przypomnienie",
+        "reminderLinkExpired": "Link do zmiany hasła wygasł",
+        "resetPassword": "Ustaw hasło",
+        "passwordReset": "Hasło zostało zmienione"
+    },
+    "redirects": {
+        "backToLogin": "Powrót to logowania"
+    },
+    "home": {
+        "recentlyAddedBooks": "Ostatnio dodane książki"
+    },
+    "navigationMenu": {
+        "home": "Strona główna",
+        "bookCatalogue": "Katalog książek",
+        "userProfile": "Profil użytkownika",
+        "userDetails": "Detale użytkownika",
+        "yourBooks": "Twoje książki",
+        "favourites": "Ulubione",
+        "changePassword": "Zmień hasło",
+        "administration": "Administracja",
+        "orderedAndBorrowed": "Zamówione i pożyczone książki",
+        "users": "Użytkownicy",
+        "cardNumbers": "Numery karty",
+        "language": "Język",
+        "english": "Angielski",
+        "polish": "Polski",
+        "logOut": "Wyloguj"
+    },
+    "userDetails": {
+        "userDetails": "Detale użytkownika",
+        "borrowedBooks": "Pożyczone książki",
+        "orderedBooks": "Zamówione książki"
+    },
+    "favourites": {
+        "remove": "Usuń",
+        "by": "od",
+        "favouritesEmpty": "Twoja lista ulubionych książek jest aktualnie pusta"
+    },
+    "changePassword": {
+        "setNewPassword": "Ustaw nowe hasło",
+        "newPasswordSameAsOld": "Nowe hasło takie samo jak stare",
+        "oldPasswordNotCorrect": "Satre hasło niepoprawne",
+        "newPasswordSet": "Nowe hasło ustawione"
+    },
+    "genres": {
+        "Genre 1": "Genre 1 pl",
+        "Genre 2": "Genre 2 pl",
+        "Genre 3": "Genre 3 pl"
+    }
+}

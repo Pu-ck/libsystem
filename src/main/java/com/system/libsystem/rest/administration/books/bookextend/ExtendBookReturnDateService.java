@@ -58,7 +58,7 @@ public class ExtendBookReturnDateService {
     private boolean isBorrowedBookFeasibleForExtension(BorrowedBookEntity borrowedBookEntity) {
         final Date borrowDate = borrowedBookEntity.getBorrowDate();
         final Date returnDate = borrowedBookEntity.getReturnDate();
-        long days = TimeUnit.DAYS.convert(returnDate.getTime() - borrowDate.getTime(), TimeUnit.MILLISECONDS);
+        final long days = TimeUnit.DAYS.convert(returnDate.getTime() - borrowDate.getTime(), TimeUnit.MILLISECONDS);
         return borrowedBookEntity.isExtended() && days <= DEFAULT_BORROW_TIME;
     }
 

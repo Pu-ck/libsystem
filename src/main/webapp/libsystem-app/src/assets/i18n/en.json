@@ -1,0 +1,98 @@
+{
+    "credentials": {
+        "username": "Username",
+        "password": "Password",
+        "usernameRequired": "Username is required",
+        "passwordRequired": "Password is required",
+        "invalidEmail": "Provide valid email address",
+        "passwordTooShort": "Provided password is too short",
+        "firstNameRequired": "First name is required",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "lastNameRequired": "Last name is required",
+        "cardNumber": "Card number",
+        "cardNumberRequired": "Card number is required",
+        "cardNumberTooShort": "Invalid card number length",
+        "peselNumber": "PESEL number",
+        "peselNumberRequired": "PESEL number is required",
+        "peselNumberTooShort": "Invalid PESEL number length",
+        "oldPassword": "Old password",
+        "newPassword": "New password",
+        "oldPasswordRequired": "Old password is required",
+        "newPasswordRequired": "New password is required"
+    },
+    "login": {
+        "logIn": "Log in",
+        "logoutSuccess": "Logged out successfuly",
+        "accountDisabledLogout": "Your account has been disabled",
+        "accountDisabled": "You account is currently disabled",
+        "loginWithExistingAccount": "Login with existing account",
+        "wrongUsernameOrPassword": "Wrong username or password"
+    },
+    "registration": {
+        "registerNewAccount": "Register new account",
+        "register": "Register",
+        "usernameTaken": "Username is already taken",
+        "cardNumberTaken": "Card number is already taken",
+        "cardNumberNotRegistered": "Card number is not registered",
+        "peselNumberNotRegistered": "PESEL number is not registered"
+    },
+    "registered": {
+        "registredSuccess1": "Your registration request has been created.",
+        "registredSuccess2": "Wait until the administrator enables your account.",
+        "registredSuccess3": "Information will be sent on your email address."
+    },
+    "passwordReminder": {
+        "forgotPassword": "I forgot password",
+        "sendReminder": "Send password reminder",
+        "cardNumberNotAuthenticated": "Card number unauthenticated",
+        "reminderSent": "Reminder has been sent",
+        "reminderLinkExpired": "The password reset link has expired",
+        "resetPassword": "Reset password",
+        "passwordReset": "The password has been reset"
+    },
+    "redirects": {
+        "backToLogin": "Back to login page"
+    },
+    "home": {
+        "recentlyAddedBooks": "Recently added books"
+    },
+    "navigationMenu": {
+        "home": "Home",
+        "bookCatalogue": "Book catalogue",
+        "userProfile": "User profile",
+        "userDetails": "User details",
+        "yourBooks": "Your books",
+        "favourites": "Favourites",
+        "changePassword": "Change password",
+        "administration": "Administration",
+        "orderedAndBorrowed": "Ordered and borrowed books",
+        "users": "Users",
+        "cardNumbers": "Card numbers",
+        "language": "Language",
+        "english": "English",
+        "polish": "Polish",
+        "logOut": "Log out"
+    },
+    "userDetails": {
+        "userDetails": "User details",
+        "borrowedBooks": "Borrowed books",
+        "orderedBooks": "Ordered books"
+    },
+    "favourites": {
+        "remove": "Remove",
+        "by": "by",
+        "favouritesEmpty": "Your list of favourite books is currently empty"
+    },
+    "changePassword": {
+        "setNewPassword": "Set new password",
+        "newPasswordSameAsOld": "New password same as old one",
+        "oldPasswordNotCorrect": "Old password is not correct",
+        "newPasswordSet": "New password set"
+    },
+    "genres": {
+        "Genre 1": "Genre 1",
+        "Genre 2": "Genre 2",
+        "Genre 3": "Genre 3"
+    }
+}

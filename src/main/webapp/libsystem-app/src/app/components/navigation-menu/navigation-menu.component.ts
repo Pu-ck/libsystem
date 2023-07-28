@@ -12,6 +12,7 @@ export class NavigationMenuComponent implements OnInit {
 
   public loggedIn: boolean = false;
   public userType: string = '';
+  public language: string = localStorage.getItem('language') || 'en';
 
   constructor(
     private route: ActivatedRoute,
@@ -24,6 +25,11 @@ export class NavigationMenuComponent implements OnInit {
     this.checkIfUserIsLoggedIn();
     this.userTypeService.validateIfAdminIsLoggedIn();
     this.userType = localStorage.getItem('userType') || '';
+  }
+
+  public setAppLanguage(language: string): void {
+      localStorage.setItem('language', language);
+      window.location.reload();
   }
 
   private checkIfUserIsLoggedIn(): void {

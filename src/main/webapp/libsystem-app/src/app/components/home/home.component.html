@@ -1,7 +1,7 @@
 <div class="new-books-form">
   <div class="new-books-form-box">
     <div class="card-container">
-      <h1>Recently added books</h1>
+      <h1>{{ 'home.recentlyAddedBooks' | translate }}</h1>
 
       <div class="card-group">
         <div class="card card-hover new-book-card" [routerLink]="'/books/' + newBook.bookId"
@@ -12,21 +12,22 @@
               <a>{{ newBook.title.length > 25 ? (newBook.title | slice:0:25) + '...' : newBook.title }}</a>
             </h5>
 
-            <p class="card-text text-center new-book-card-element">{{ newBook.authors.length > 30 ? (newBook.authors |
-              slice:0:30) + '...' : newBook.authors }}</p>
+            <p class="card-text text-center new-book-card-element">{{ newBook.authors.length > 25 ? (newBook.authors |
+              slice:0:25) + '...' : newBook.authors }}</p>
 
             <div class="divider">
               <hr class="my-3">
             </div>
 
-            <p class="card-text text-center new-book-card-element">{{ newBook.genres.length > 30 ? (newBook.genres |
-              slice:0:30) + '...' : newBook.genres }}</p>
+            <p class="card-text text-center new-book-card-element">{{ newBook.genres.length > 25 ? (newBook.genres |
+              slice:0:25) + '...' : newBook.genres }}</p>
 
             <div class="divider">
               <hr class="my-3">
             </div>
 
-            <p class="card-text text-center new-book-card-element">{{ newBook.publisher.length > 20 ? (newBook.publisher |
+            <p class="card-text text-center new-book-card-element">{{ newBook.publisher.length > 20 ? (newBook.publisher
+              |
               slice:0:20) + '...' : newBook.publisher }}</p>
 
             <div class="divider">
