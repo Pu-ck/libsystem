@@ -52,7 +52,10 @@
         "passwordReset": "The password has been reset"
     },
     "redirects": {
-        "backToLogin": "Back to login page"
+        "backToLogin": "Back to login page",
+        "backToCardNumbers": "Back to card numbers list",
+        "backToUsers": "Back to users list",
+        "backToBooks": "Back to books list"
     },
     "home": {
         "recentlyAddedBooks": "Recently added books"
@@ -81,7 +84,6 @@
     },
     "favourites": {
         "remove": "Remove",
-        "by": "by",
         "favouritesEmpty": "Your list of favourite books is currently empty"
     },
     "changePassword": {
@@ -94,5 +96,104 @@
         "Genre 1": "Genre 1",
         "Genre 2": "Genre 2",
         "Genre 3": "Genre 3"
+    },
+    "books": {
+        "yourBooks": "Your books",
+        "ordered": "Ordered",
+        "borrowed": "Borrowed",
+        "returned": "Returned",
+        "rejected": "Rejected",
+        "ready": "Ready",
+        "accepted": "Accepted",
+        "closed": "Closed",
+        "extended": "Extended",
+        "extension": "Extension",
+        "bookID": "Book ID",
+        "orderID": "Order ID",
+        "orderNumber": "Order number",
+        "title": "Title",
+        "borrowDate": "Borrow date",
+        "returnDate": "Return date",
+        "readyDate": "Ready date",
+        "remainingDays": "Remaining days",
+        "penalty": "Penalty",
+        "affiliate": "Affiliate",
+        "status": "Status",
+        "extend": "Extend",
+        "showInCatalogue": "Show in catalogue",
+        "overdue": "Overdue",
+        "extensionWarning": "Are you sure you want to send a return date extension request for this book? You can extend the borrowed book only once.",
+        "extensionSuccess": "Book extension request sent successfully - wait until the administrator extends the requested borrowed book return date",
+        "noBooksFound": "No books found",
+        "readyOrder": "Ready order",
+        "rejectOrder": "Reject order",
+        "acceptOrder": "Accept order",
+        "extendBook": "Extend book",
+        "returnBook": "Return book"
+    },
+    "statuses": {
+        "Ready": "Ready",
+        "Borrowed": "Borrowed",
+        "Returned": "Returned",
+        "Rejected": "Rejected",
+        "Ordered": "Ordered"
+    },
+    "search": {
+        "searchWith": "Search with",
+        "search": "Search"
+    },
+    "cardNumbers": {
+        "cardNumbers": "Card numbers",
+        "registerCardNumber": "Register card number",
+        "cardNumberID": "Card number ID",
+        "cardNumber": "Card number",
+        "cardNumberNotFound": "Unable to find specified card number",
+        "registerNewCardNumber": "Register new card number",
+        "cardNumberAlreadyRegistered": "Card number already registered",
+        "peselNumberAlreadyRegistered": "PESEL number already registered",
+        "cardNumberRegistered": "New card number has been successfully registered"
+    },
+    "common": {
+        "no": "No",
+        "yes": "Yes",
+        "options": "Options",
+        "all": "All",
+        "cancel": "Cancel"
+    },
+    "users": {
+        "users": "Users",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "userID": "User ID",
+        "userType": "User type",
+        "enable": "Enable",
+        "disable": "Disable",
+        "noUsersFound": "No users found",
+        "userEnableWarning": "Are you sure you want to enable this user?",
+        "userEnableSuccess": "Successfully enabled user with ID"
+    },
+    "disableUser": {
+        "disableUser": "Disable user with ID",
+        "reason": "Reason",
+        "reasonRequired": "Reason is required",
+        "userDisabledSuccess": "Successfully disabled user with id"
+    },
+    "orderedAndBorrowedBooks": {
+        "orderedAndBorrowedBooks": "Ordered and borrowed books",
+        "noOrdersFound": "No orders found",
+        "readyOrderWarning": "Are you sure you want to set this order as ready?",
+        "acceptOrderWarning": "Are you sure you want to accept this order?",
+        "rejectOrderWarning": "Are you sure you want to reject this order?",
+        "returnBookWarning": "Are you sure you want to return this book?",
+        "orderReadySuccess": "Successfully set as ready order with ID",
+        "orderAcceptSuccess": "Successfully accepted order with ID",
+        "orderRejectSuccess": "Successfully rejected order with ID",
+        "bookReturnSuccess": "Successfully returned book with ID"
+    },
+    "extendBook": {
+        "extendBook": "Extend book with ID",
+        "days": "Days",
+        "daysRequired": "Days are required",
+        "extensionSuccess": "Successfuly extended the book with ID"
     }
 }

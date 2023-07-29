@@ -4,6 +4,7 @@ import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 import { PaginationService } from 'src/app/services/pagination/pagination.service';
 import { FavouriteBook } from 'src/app/models/books/favourite-book';
 import { CommonConstants } from 'src/app/utils/common-constants';
+import { Observer } from 'rxjs';
 
 @Component({
   selector: 'app-favourites',
@@ -35,28 +36,36 @@ export class FavouritesComponent implements OnInit {
   public removeFromFavourites(event: Event, bookId: number): void {
     event.stopPropagation();
     const url = `/api/books/${bookId}/remove-from-favourites`;
-    this.http.delete<any>(url, {}).subscribe(response => {
-      console.log(response);
-      window.location.reload();
-    }, error => {
-      this.userEnabledService.validateIfUserIsEnabled(error);
-    }
-    );
+    const observer: Observer<any> = {
+      next: (response) => {
+        console.log(response);
+        window.location.reload();
+      },
+      error: (error) => {
+        this.userEnabledService.validateIfUserIsEnabled(error);
+      },
+      complete: () => {
+      },
+    };
+  
+    this.http.delete<any>(url, {}).subscribe(observer);
   }
 
   private getUserFavouriteBooks(): void {
     const url = 'api/userprofile/favourites';
-    this.http.get<any>(url, {}).subscribe(response => {
-      this.favouriteBooks = response;
-      if (this.favouriteBooks.length === 0) {
-        this.favouriteBooksListEmpty = true;
-      } else {
-        this.favouriteBooksListEmpty = false;
-      }
-    }, error => {
-      this.userEnabledService.validateIfUserIsEnabled(error);
-    }
-    );
+    const observer: Observer<any> = {
+      next: (response) => {
+        this.favouriteBooks = response;
+        this.favouriteBooksListEmpty = this.favouriteBooks.length === 0;
+      },
+      error: (error) => {
+        this.userEnabledService.validateIfUserIsEnabled(error);
+      },
+      complete: () => {
+      },
+    };
+  
+    this.http.get<any>(url, {}).subscribe(observer);
   }
 
 }

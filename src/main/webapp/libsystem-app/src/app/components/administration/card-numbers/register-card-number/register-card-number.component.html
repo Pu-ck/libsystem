@@ -1,38 +1,45 @@
 <div class="register-card-number-form">
     <div class="register-card-number-form-box">
-        <h1>Register new card number</h1>
+        <h1>{{ 'cardNumbers.registerNewCardNumber' | translate }}</h1>
 
         <form name="form" (ngSubmit)="registerCardNumber()" #registerCardNumberForm="ngForm">
 
             <div class="form-group">
-                <label for="cardNumber">Card number</label>
+                <label for="cardNumber">{{ 'credentials.cardNumber' | translate }}</label>
                 <input appNumericOnly type="text" name="cardNumber" [(ngModel)]="model.cardNumber" #cardNumber="ngModel"
                     required minlength="10" maxlength="10" class="form-control text-input">
                 <div *ngIf="cardNumber?.invalid && (cardNumber?.dirty || cardNumber?.touched)">
-                    <div *ngIf="cardNumber?.errors?.['required']" class="text-danger">Card number is required</div>
-                    <div *ngIf="cardNumber?.errors?.['minlength']" class="text-danger">Invalid card number length
+                    <div *ngIf="cardNumber?.errors?.['required']" class="text-danger">{{
+                        'credentials.cardNumberRequired' | translate }}</div>
+                    <div *ngIf="cardNumber?.errors?.['minlength']" class="text-danger">{{
+                        'credentials.cardNumberTooShort' | translate }}
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="peselNumber">PESEL number</label>
+                <label for="peselNumber">{{ 'credentials.peselNumber' | translate }}</label>
                 <input appNumericOnly type="text" name="peselNumber" [(ngModel)]="model.peselNumber"
                     #peselNumber="ngModel" required minlength="11" maxlength="11" class="form-control text-input">
                 <div *ngIf="peselNumber?.invalid && (peselNumber?.dirty || peselNumber?.touched)">
-                    <div *ngIf="peselNumber?.errors?.['required']" class="text-danger">PESEL is required</div>
-                    <div *ngIf="peselNumber?.errors?.['minlength']" class="text-danger">Invalid PESEL number length
+                    <div *ngIf="peselNumber?.errors?.['required']" class="text-danger">{{
+                        'credentials.peselNumberRequired' | translate }}</div>
+                    <div *ngIf="peselNumber?.errors?.['minlength']" class="text-danger">{{
+                        'credentials.peselNumberTooShort' | translate }}
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <button class="btn button" type="submit" [disabled]="!registerCardNumberForm.valid">Register</button>
+                <button class="btn button" type="submit" [disabled]="!registerCardNumberForm.valid">{{
+                    'registration.register' | translate }}</button>
             </div>
 
             <div class="message-container">
-                <div *ngIf="cardNumberAlreadyRegistered" class="text-danger">Card number already registered</div>
-                <div *ngIf="peselNumberAlreadyRegistered" class="text-danger">PESEL number already registered</div>
+                <div *ngIf="cardNumberAlreadyRegistered" class="text-danger">{{
+                    'cardNumbers.cardNumberAlreadyRegistered' | translate }}</div>
+                <div *ngIf="peselNumberAlreadyRegistered" class="text-danger">{{
+                    'cardNumbers.peselNumberAlreadyRegistered' | translate }}</div>
             </div>
         </form>
 
@@ -42,9 +49,8 @@
 
         <div class="redirect-buttons">
             <div class="form-group">
-                <button class="btn button" (click)="commonRedirectsService.redirectToCardNumbersList()">Back to card
-                    numbers
-                    list</button>
+                <button class="btn button" (click)="commonRedirectsService.redirectToCardNumbersList()">{{
+                    'redirects.backToCardNumbers' | translate }}</button>
             </div>
         </div>
 

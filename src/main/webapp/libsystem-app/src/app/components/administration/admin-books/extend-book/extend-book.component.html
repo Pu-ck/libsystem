@@ -1,21 +1,23 @@
 <div class="extend-book-form">
     <div class="extend-book-form-box">
 
-        <h1>Extend book with id {{ borrowedBookId }}</h1>
+        <h1>{{ 'extendBook.extendBook' | translate }} {{ borrowedBookId }}</h1>
 
         <form name="form" (ngSubmit)="extendBorrowedBook()" #extendBorrowedBookForm="ngForm">
 
             <div class="form-group">
-                <label for="days">Days (1-90)</label>
+                <label for="days">{{ 'extendBook.days' | translate }} (1-90)</label>
                 <input appNumericOnly type="number" name="days" [(ngModel)]="model.days" #days="ngModel" [min]="1"
                     [max]="90" required class="form-control text-input">
                 <div *ngIf="days?.invalid && (days?.dirty || days?.touched)">
-                    <div *ngIf="days?.errors?.['required']" class="text-danger">Days are required</div>
+                    <div *ngIf="days?.errors?.['required']" class="text-danger">{{ 'extendBook.daysRequired' | translate
+                        }}</div>
                 </div>
             </div>
 
             <div class="form-group">
-                <button class="btn button" type="submit" [disabled]="!extendBorrowedBookForm.valid">Extend</button>
+                <button class="btn button" type="submit" [disabled]="!extendBorrowedBookForm.valid">{{ 'books.extend' |
+                    translate }}</button>
             </div>
 
         </form>
@@ -26,8 +28,8 @@
 
         <div class="redirect-buttons">
             <div class="form-group">
-                <button class="btn button" (click)="commonRedirectsService.redirectToBorrowedAndOrderedBooks()">Back to
-                    books list</button>
+                <button class="btn button" (click)="commonRedirectsService.redirectToBorrowedAndOrderedBooks()">{{
+                    'redirects.backToBooks' | translate }}</button>
             </div>
         </div>
 

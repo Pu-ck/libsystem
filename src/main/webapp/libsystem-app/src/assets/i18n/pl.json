@@ -9,7 +9,7 @@
         "firstNameRequired": "Imię jest wymagane",
         "firstName": "Imię",
         "lastName": "Nazwisko",
-        "lastNameRequired": "Nazwisko jest wymgane",
+        "lastNameRequired": "Nazwisko jest wymagane",
         "cardNumber": "Numer karty",
         "cardNumberRequired": "Numer karty jest wymagany",
         "cardNumberTooShort": "Numer karty jest za krótki",
@@ -23,7 +23,7 @@
     },
     "login": {
         "logIn": "Zaloguj",
-        "logoutSuccess": "Poprawnie wylogowano",
+        "logoutSuccess": "Wylogowano pomyślnie",
         "accountDisabledLogout": "Konto zostało zablokowane",
         "accountDisabled": "Konto jest zablokowane",
         "loginWithExistingAccount": "Zaloguj się istniejącym kontem",
@@ -32,13 +32,13 @@
     "registration": {
         "registerNewAccount": "Zarejestruj nowe konto",
         "register": "Zarejestruj",
-        "usernameTaken": "Użytkown zajęty",
+        "usernameTaken": "Użytkownik zajęty",
         "cardNumberTaken": "Numer karty zajęty",
         "cardNumberNotRegistered": "Numer karty niezarejestrowany",
         "peselNumberNotRegistered": "Numer PESEL niezarejestrowany"
     },
     "registered": {
-        "registredSuccess1": "Wysłano prośbę o zarejestrowanie konta.",
+        "registredSuccess1": "Pomyślnie wysłano prośbę o zarejestrowanie konta.",
         "registredSuccess2": "Poczekaj aż administrator aktywuje twoje konto",
         "registredSuccess3": "Informacja zostanie wysłana na twój adres email"
     },
@@ -52,7 +52,10 @@
         "passwordReset": "Hasło zostało zmienione"
     },
     "redirects": {
-        "backToLogin": "Powrót to logowania"
+        "backToLogin": "Powrót to logowania",
+        "backToCardNumbers": "Powrót do numerów kart",
+        "backToUsers": "Powrót do użytkowników",
+        "backToBooks": "Powrót do książek"
     },
     "home": {
         "recentlyAddedBooks": "Ostatnio dodane książki"
@@ -81,18 +84,116 @@
     },
     "favourites": {
         "remove": "Usuń",
-        "by": "od",
         "favouritesEmpty": "Twoja lista ulubionych książek jest aktualnie pusta"
     },
     "changePassword": {
         "setNewPassword": "Ustaw nowe hasło",
-        "newPasswordSameAsOld": "Nowe hasło takie samo jak stare",
-        "oldPasswordNotCorrect": "Satre hasło niepoprawne",
+        "newPasswordSameAsOld": "Nowe hasło musi być nowe",
+        "oldPasswordNotCorrect": "Stare hasło jest niepoprawne",
         "newPasswordSet": "Nowe hasło ustawione"
     },
     "genres": {
         "Genre 1": "Genre 1 pl",
         "Genre 2": "Genre 2 pl",
         "Genre 3": "Genre 3 pl"
+    },
+    "books": {
+        "yourBooks": "Twoje książki",
+        "ordered": "Zamówione",
+        "borrowed": "Wypożczyone",
+        "returned": "Oddane",
+        "rejected": "Odrzucone",
+        "ready": "Gotowe",
+        "accepted": "Potwierdzone",
+        "closed": "Zamknięte",
+        "extended": "Przedłużone",
+        "extension": "Przedłużenie",
+        "bookID": "ID książki",
+        "orderID": "ID zamówienia",
+        "orderNumber": "Numer zamówienia",
+        "title": "Tytuł",
+        "borrowDate": "Data wypożyczenia",
+        "returnDate": "Data oddania",
+        "readyDate": "Data do odbioru",
+        "remainingDays": "Pozostałe dni",
+        "penalty": "Kara",
+        "affiliate": "Filia",
+        "status": "Status",
+        "extend": "Przedłuż",
+        "showInCatalogue": "Pokaż w katalogu",
+        "overdue": "Opóźnienie",
+        "extensionWarning": "Czy jesteś pewien, że chcesz przedłużyć datę oddania tej książki? Daną wypożyczoną książkę możesz przedłużyć tylko raz.",
+        "extensionSuccess": "Prośba o przedłużenie książki wysłana pomyślnie - poczekaj aż administrator potwierdzi przedłużenie daty oddania książki",
+        "noBooksFound": "Nie znaleziono książek",
+        "readyOrder": "Przygotuj zamówienie",
+        "rejectOrder": "Odrzuć zamówienie",
+        "acceptOrder": "Potwierdź zamówienie",
+        "extendBook": "Przedłuż książkę",
+        "returnBook": "Oddaj książkę"
+    },
+    "statuses": {
+        "Ready": "Gotowe",
+        "Borrowed": "Wypożyczone",
+        "Returned": "Oddane",
+        "Rejected": "Odrzucone",
+        "Ordered": "Zamówione"
+    },
+    "search": {
+        "searchWith": "Szukaj za pomocą",
+        "search": "Szukaj"
+    },
+    "cardNumbers": {
+        "cardNumbers": "Numery kart",
+        "registerCardNumber": "Zarejestruj numer karty",
+        "cardNumberID": "ID numeru karty",
+        "cardNumber": "Numer karty",
+        "cardNumberNotFound": "Nie znaleziono szukanego numeru karty",
+        "registerNewCardNumber": "Zarejestruj numer karty",
+        "cardNumberAlreadyRegistered": "Numer karty jest zarejestrowany",
+        "peselNumberAlreadyRegistered": "Numer PESEL jest zarejestrowany",
+        "cardNumberRegistered": "Numer karty został poprawnie zarejestrowany"
+    },
+    "common": {
+        "no": "Nie",
+        "yes": "Tak",
+        "options": "Opcje",
+        "all": "Wszystko",
+        "cancel": "Anuluj"
+    },
+    "users": {
+        "users": "Użytkownicy",
+        "enabled": "Aktywny",
+        "disabled": "Nieaktywny",
+        "userID": "ID użytkownika",
+        "userType": "Typ użytkownika",
+        "enable": "Aktywuj",
+        "disable": "Zablokuj",
+        "noUsersFound": "Nie znaleziono użytkowników",
+        "userEnableWarning": "Czy jesteś pewien, że chcesz aktywować tego użytkownika?",
+        "userEnableSuccess": "Pomyślnie aktywowano użytkownika o ID"
+    },
+    "disableUser": {
+        "disableUser": "Zablokuj użytkownika o ID",
+        "reason": "Powód",
+        "reasonRequired": "Powód jest wymagany",
+        "userDisabledSuccess": "Pomyślnie zablokowano użytkownika o ID"
+    },
+    "orderedAndBorrowedBooks": {
+        "orderedAndBorrowedBooks": "Zamówione i wypożyczone książki",
+        "noOrdersFound": "Nie znaleziono zamówień",
+        "readyOrderWarning": "Czy jesteś pewien, że chcesz oznaczyć to zamówienie jako gotowe?",
+        "acceptOrderWarning": "Czy jesteś pewien, że chcesz potwierdzić to zamówienie?",
+        "rejectOrderWarning": "Czy jesteś pewien, że chcesz odrzucić to zamówienie?",
+        "returnBookWarning": "Czy jesteś pewien, że chcesz oddać tę książkę?",
+        "orderReadySuccess": "Pomyślnie przygotowano zamówienie o ID",
+        "orderAcceptSuccess": "Pomyślnie potwierdzono zamówienie od ID",
+        "orderRejectSuccess": "Pomyślnie odrzucono zamówienie od ID",
+        "bookReturnSuccess": "Pomyślnie oddano zamówioną książkę od ID"
+    },
+    "extendBook": {
+        "extendBook": "Przedłuż książkę o ID",
+        "days": "Dni",
+        "daysRequired": "Dni są wymagane",
+        "extensionSuccess": "Pomyślnie przedłużono książkę o ID"
     }
 }

@@ -1,9 +1,9 @@
 <div class="table-form">
     <div class="table-form-box">
 
-        <p class="text-success" *ngIf="userEnabled">Successfully enabled user with id {{ userId }}</p>
+        <p class="text-success" *ngIf="userEnabled">{{ 'users.userEnableSuccess' | translate }} {{ userId }}</p>
 
-        <h1>Users</h1>
+        <h1>{{ 'users.users' | translate }}</h1>
 
         <div class="divider">
             <hr class="my-3">
@@ -13,11 +13,11 @@
             <div class="d-flex align-items-center justify-content-between w-100">
                 <div class="table-order-buttons" role="group">
                     <button class="btn button" [disabled]="showEnabled == true"
-                        (click)="setDisplayedStatus('Enabled')">Enabled</button>
+                        (click)="setDisplayedStatus('Enabled')">{{ 'users.enabled' | translate }}</button>
                     <button class="btn button" [disabled]="showDisabled == true"
-                        (click)="setDisplayedStatus('Disabled')">Disabled</button>
+                        (click)="setDisplayedStatus('Disabled')">{{ 'users.disabled' | translate }}</button>
                     <button class="btn button" [disabled]="showAll == true"
-                        (click)="setDisplayedStatus('All')">All</button>
+                        (click)="setDisplayedStatus('All')">{{ 'common.all' | translate }}</button>
                 </div>
 
                 <div class="pagination-container">
@@ -44,21 +44,21 @@
 
             <div class="search-container">
 
-                <label for="searchType">Search with</label>
+                <label for="searchType">{{ 'search.searchWith' | translate }}</label>
                 <div class="search-input-group">
 
                     <select name="searchType" [(ngModel)]="searchType" class="form-select search-select"
                         id="searchTypeSelect">
-                        <option value="userId">User ID</option>
-                        <option value="username">Username</option>
-                        <option value="cardNumber">Card number</option>
+                        <option value="userId">{{ 'users.userID' | translate }}</option>
+                        <option value="username">{{ 'credentials.username' | translate }}</option>
+                        <option value="cardNumber">{{ 'cardNumbers.cardNumber' | translate }}</option>
                     </select>
 
                     <input class="form-control text-input search-input" *ngIf="searchType !== 'username'" appNumericOnly
                         type="text" name="searchValue" [(ngModel)]="searchValue">
                     <input class="form-control text-input search-input" *ngIf="searchType === 'username'" type="text"
                         name="searchValue" [(ngModel)]="searchValue">
-                    <button class="btn button table-search-button search-button" type="submit">Search</button>
+                    <button class="btn button table-search-button search-button" type="submit">{{ 'search.search' | translate }}</button>
 
                 </div>
             </div>
@@ -67,15 +67,15 @@
         <table class="table table-hover common-table">
             <thead>
                 <tr>
-                    <th class="table-column">User ID</th>
-                    <th class="table-column">Card number</th>
-                    <th class="table-column">Username</th>
-                    <th class="table-column">First name</th>
-                    <th class="table-column">Last name</th>
-                    <th class="table-column">Enabled</th>
-                    <th class="table-column">Ordered books</th>
-                    <th class="table-column">Borrowed books</th>
-                    <th class="table-column">User type</th>
+                    <th class="table-column">{{ 'users.userID' | translate }}</th>
+                    <th class="table-column">{{ 'cardNumbers.cardNumber' | translate }}</th>
+                    <th class="table-column">{{ 'credentials.username' | translate }}</th>
+                    <th class="table-column">{{ 'credentials.firstName' | translate }}</th>
+                    <th class="table-column">{{ 'credentials.lastName' | translate }}</th>
+                    <th class="table-column">{{ 'users.enabled' | translate }}</th>
+                    <th class="table-column">{{ 'userDetails.orderedBooks' | translate }}</th>
+                    <th class="table-column">{{ 'userDetails.borrowedBooks' | translate }}</th>
+                    <th class="table-column">{{ 'users.userType' | translate }}</th>
                     <th class="table-column"></th>
                 </tr>
             </thead>
@@ -100,7 +100,7 @@
                             {{ user.lastName.length > 20 ? (user.lastName | slice:0:20) + '...' : user.lastName }}
                         </td>
                         <td class="table-cell">
-                            {{ user.enabled ? 'Yes' : 'No' }}
+                            {{ user.enabled ? ('common.yes' | translate) : ('common.no' | translate) }}
                         </td>
                         <td class="table-cell">
                             {{ user.orderedBooks }}
@@ -117,19 +117,19 @@
                                 <li class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                     data-bs-toggle="dropdown">
-                                    Options
+                                    {{ 'common.options' | translate }}
                                 </li>
 
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <button class="dropdown-item"
                                         [disabled]="user.id.toString() === adminId || user.enabled"
                                         (click)="redirectToUserUpdateEnabledStatusForm(user.id, user.enabled)">
-                                        Enable
+                                        {{ 'users.enable' | translate }}
                                     </button>
                                     <button class="dropdown-item"
                                         [disabled]="user.id.toString() === adminId || !user.enabled"
                                         (click)="redirectToUserUpdateEnabledStatusForm(user.id, user.enabled)">
-                                        Disable
+                                        {{ 'users.disable' | translate }}
                                     </button>
                                 </div>
                             </a>
@@ -139,7 +139,7 @@
                 </tr>
             </tbody>
         </table>
-        <p *ngIf="userNotFound" class="item-not-found-label text-danger">No users found</p>
+        <p *ngIf="userNotFound" class="item-not-found-label text-danger">{{ 'users.noUsersFound' | translate }}</p>
     </div>
 </div>
 
@@ -147,11 +147,11 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body modal-text">
-                <p>Are you sure you want to enable this user?</p>
+                <p>{{ 'users.userEnableWarning' | translate }}</p>
             </div>
             <button type="button" class="btn button modal-button"
-                (click)="userEnabledService.enableUser(userId, '')">Enable</button>
-            <button type="button" class="btn button modal-button" (click)="onCloseHandled()">Cancel</button>
+                (click)="userEnabledService.enableUser(userId, '')">{{ 'users.enable' | translate }}</button>
+            <button type="button" class="btn button modal-button" (click)="onCloseHandled()">{{ 'common.cancel' | translate }}</button>
         </div>
     </div>
 </div>

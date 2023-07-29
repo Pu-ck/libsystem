@@ -6,6 +6,7 @@ import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 import affiliates from 'src/config/affiliates.json';
 import { BookDetails } from 'src/app/models/books/book-details';
 import { CommonRedirectsService } from 'src/app/services/redirects/common-redirects.service';
+import { Observer } from 'rxjs';
 
 @Component({
   selector: 'app-borrow-book',
@@ -42,35 +43,41 @@ export class BorrowBookComponent implements OnInit {
 
   public borrow(): void {
     const url = `/api/books/${this.bookId}/borrow-book`;
+    const observer: Observer<any> = {
+      next: (response) => {
+        console.log(response);
+        localStorage.setItem('hasBorrowedBook', 'true');
+        this.router.navigateByUrl(`/books/${this.bookId}/borrow-book/borrowed`);
+      },
+      error: (error) => {
+        this.userEnabledService.validateIfUserIsEnabled(error);
+        if (error.status === 404 && error.error.message === 'Book out of stock') {
+          this.bookOutOfStock = true;
+          this.invalidCardNumber = false;
+          this.tooManyBooks = false;
+        }
+        if (error.status === 400) {
+          if (error.error.message === 'Card number not authenticated') {
+            this.invalidCardNumber = true;
+            this.bookOutOfStock = false;
+            this.tooManyBooks = false;
+          }
+          if (error.error.message === 'Too many books borrowed') {
+            this.tooManyBooks = true;
+            this.invalidCardNumber = false;
+            this.bookOutOfStock = false;
+          }
+        }
+      },
+      complete: () => {
+      },
+    };
+  
     this.http.put<any>(url, {
       cardNumber: this.model.cardNumber,
       quantity: this.model.quantity,
       affiliate: this.model.affiliate
-    }).subscribe(response => {
-      console.log(response);
-      localStorage.setItem('hasBorrowedBook', 'true');
-      this.router.navigateByUrl(`/books/${this.bookId}/borrow-book/borrowed`);
-    }, error => {
-      this.userEnabledService.validateIfUserIsEnabled(error);
-      if (error.status === 404 && error.error.message === 'Book out of stock') {
-        this.bookOutOfStock = true;
-        this.invalidCardNumber = false;
-        this.tooManyBooks = false;
-      }
-      if (error.status === 400) {
-        if (error.error.message === 'Card number not authenticated') {
-          this.invalidCardNumber = true;
-          this.bookOutOfStock = false;
-          this.tooManyBooks = false;
-        }
-        if (error.error.message === 'Too many books borrowed') {
-          this.tooManyBooks = true;
-          this.invalidCardNumber = false;
-          this.bookOutOfStock = false;
-        }
-      }
-    }
-    );
+    }).subscribe(observer);
   }
 
   public setQuantityRange(start: number, end: number, step: number): number[] {
@@ -96,18 +103,23 @@ export class BorrowBookComponent implements OnInit {
     });
 
     const url = `api/books/${this.bookId}`;
-    this.http.get<any>(url, {}).subscribe(
-      response => {
+    const observer: Observer<any> = {
+      next: (response) => {
         this.title = response.title;
         this.bookDetails = response;
         this.redirectIfNoBooksOnStock();
         this.chooseAffiliateOptionsForBook();
-      }, error => {
+      },
+      error: (error) => {
         if (error.status === 404 && error.error.message === 'Book not found' || error.status === 400) {
           this.router.navigate(['/']);
         }
-      }
-    );
+      },
+      complete: () => {
+      },
+    };
+
+    this.http.get<any>(url, {}).subscribe(observer);
   }
 
   private redirectIfNoBooksOnStock(): void {

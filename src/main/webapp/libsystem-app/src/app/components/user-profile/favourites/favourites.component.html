@@ -41,10 +41,11 @@
                   }}</a>
               </h5>
               <button class="btn table-button button card-remove-button"
-                (click)="removeFromFavourites($event, favouriteBook.bookId)">{{ 'favourites.remove' | translate }}</button>
+                (click)="removeFromFavourites($event, favouriteBook.bookId)">{{ 'favourites.remove' | translate
+                }}</button>
             </div>
             <p class="card-text">
-              <a>{{ 'favourites.by' | translate }} {{ favouriteBook.authors.length > 60 ? (favouriteBook.authors | slice:0:60) + '...' :
+              <a>{{ favouriteBook.authors.length > 60 ? (favouriteBook.authors | slice:0:60) + '...' :
                 favouriteBook.authors }}</a>
             </p>
           </div>

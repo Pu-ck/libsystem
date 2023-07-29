@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
+import { Observer } from 'rxjs';
 
 @Component({
   selector: 'app-user-profile',
@@ -22,14 +23,18 @@ export class UserProfileComponent implements OnInit {
 
   private getUserDetails(): void {
     const url = '/api/userprofile';
-    this.http.get<any>(url, {}).subscribe(
-      response => {
+    const observer: Observer<any> = {
+      next: (response) => {
         this.userDetails = response;
       },
-      error => {
+      error: (error) => {
         this.userEnabledService.validateIfUserIsEnabled(error);
-      }
-    );
+      },
+      complete: () => {
+      },
+    };
+
+    this.http.get<any>(url, {}).subscribe(observer);
   }
 
 }

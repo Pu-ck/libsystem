@@ -5,6 +5,7 @@ import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 import { PaginationService } from 'src/app/services/pagination/pagination.service';
 import { User } from 'src/app/models/users/user';
 import { CommonConstants } from 'src/app/utils/common-constants';
+import { Observer } from 'rxjs';
 
 @Component({
   selector: 'app-users',
@@ -63,9 +64,8 @@ export class UsersComponent implements OnInit {
     this.userEnabled = false;
     const url = '/api/administration/users';
     let params = this.getSearchType();
-    this.http.get<any[]>(url, { params }).subscribe(
-      response => {
-
+    const observer: Observer<any[]> = {
+      next: (response) => {
         if (status === 'All') {
           this.users = response;
         }
@@ -79,24 +79,23 @@ export class UsersComponent implements OnInit {
         let queryParams: { [key: string]: string } = {};
         this.setQueryParams(queryParams);
         this.router.navigate(['/administration/users'], { queryParams });
-        if (this.users.length === 0) {
-          this.userNotFound = true;
-        } else {
-          this.userNotFound = false
-        }
-        if (this.users.length === 1) {
-          this.currentPage = CommonConstants.DEFAULT_PAGE_NUMBER;
-        }
+        this.userNotFound = this.users.length === 0;
+        this.currentPage = this.users.length === 1 ? CommonConstants.DEFAULT_PAGE_NUMBER : this.currentPage;
       },
-      error => {
+      error: (error) => {
         this.userEnabledService.validateIfUserIsEnabled(error);
         if (error.status === 404 && error.error.message === 'User not found') {
           this.userNotFound = true;
           this.users = [];
         }
-      }
-    );
+      },
+      complete: () => {
+      },
+    };
+
+    this.http.get<any[]>(url, { params }).subscribe(observer);
   }
+
 
   public setDisplayedStatus(status: string): void {
     this.currentPage = CommonConstants.DEFAULT_PAGE_NUMBER;
@@ -152,19 +151,23 @@ export class UsersComponent implements OnInit {
   private getUser(userId: string): void {
     const url = '/api/administration/users';
     let params = new HttpParams().set('userId', userId);
-    this.http.get<any[]>(url, { params }).subscribe(
-      response => {
+    const observer: Observer<any[]> = {
+      next: (response) => {
         this.users = response;
         this.userNotFound = false;
       },
-      error => {
+      error: (error) => {
         this.userEnabledService.validateIfUserIsEnabled(error);
         if (error.status === 404 && error.error.message === 'User not found') {
           this.userNotFound = true;
           this.users = [];
         }
-      }
-    );
+      },
+      complete: () => {
+      },
+    };
+
+    this.http.get<any[]>(url, { params }).subscribe(observer);
   }
 
   private getSearchType(): HttpParams {

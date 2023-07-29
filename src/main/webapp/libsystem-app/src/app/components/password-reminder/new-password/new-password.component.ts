@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CommonRedirectsService } from 'src/app/services/redirects/common-redirects.service';
+import { Observer } from 'rxjs';
 
 @Component({
   selector: 'app-new-password',
@@ -30,37 +31,47 @@ export class NewPasswordComponent implements OnInit {
 
   private verifyToken(): void {
     const url = '/api/password-reminder/new-password';
-    let params = new HttpParams().set('token', this.token);
-    this.http.get<any>(url, {
-      params,
-    }).subscribe(response => {
-      console.log(response);
-      this.tokenVerified = true;
-    }, error => {
-      if (error.status === 404) {
-        if (error.error.message === 'Password reminder token expired') {
-          this.tokenVerified = false;
-          this.tokenExpired = true;
+    const params = new HttpParams().set('token', this.token);
+    const observer: Observer<any> = {
+      next: (response) => {
+        console.log(response);
+        this.tokenVerified = true;
+      },
+      error: (error) => {
+        if (error.status === 404) {
+          if (error.error.message === 'Password reminder token expired') {
+            this.tokenVerified = false;
+            this.tokenExpired = true;
+          }
+          if (error.error.message === 'Password reminder token not found') {
+            this.router.navigate(['/login']);
+          }
         }
-        if (error.error.message === 'Password reminder token not found') {
-          this.router.navigate(['/login']);
-        }
-      }
-    }
-    );
+      },
+      complete: () => {
+      },
+    };
+
+    this.http.get<any>(url, { params }).subscribe(observer);
   }
 
   public resetPassword(): void {
-    const url = `/api/password-reminder/${this.token}/reset-password`
+    const url = `/api/password-reminder/${this.token}/reset-password`;
+    const observer: Observer<any> = {
+      next: (response) => {
+        console.log(response);
+        this.passwordReset = true;
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+      },
+    };
+
     this.http.put<any>(url, {
       password: this.model.password
-    }).subscribe(response => {
-      console.log(response);
-      this.passwordReset = true;
-    }, error => {
-      console.log(error);
-    }
-    );
+    }).subscribe(observer);
   }
 
 }

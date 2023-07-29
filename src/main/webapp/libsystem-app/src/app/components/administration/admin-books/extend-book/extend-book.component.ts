@@ -3,6 +3,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 import { CommonRedirectsService } from 'src/app/services/redirects/common-redirects.service';
+import { Observer } from 'rxjs';
 
 @Component({
   selector: 'app-extend-book',
@@ -28,17 +29,23 @@ export class ExtendBookComponent implements OnInit {
   }
 
   public extendBorrowedBook(): void {
-    const url = `/api/administration/books/${this.borrowedBookId}/extend-book`
+    const url = `/api/administration/books/${this.borrowedBookId}/extend-book`;
+    const observer: Observer<any> = {
+      next: (response) => {
+        console.log(response);
+        localStorage.setItem('hasExtendedBorrowedBook', 'true');
+        this.router.navigate([`administration/books/${this.borrowedBookId}/extend-book/extended-book`]);
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+      },
+    };
+  
     this.http.put<any>(url, {
       extendTime: this.model.days
-    }).subscribe(response => {
-      console.log(response);
-      localStorage.setItem('hasExtendedBorrowedBook', 'true');
-      this.router.navigate([`administration/books/${this.borrowedBookId}/extend-book/extended-book`]);
-    }, error => {
-      console.log(error);
-    }
-    );
+    }).subscribe(observer);
   }
 
   private setBorrowedBookId(): void {
@@ -50,20 +57,24 @@ export class ExtendBookComponent implements OnInit {
   private validateBorrowedBook(): void {
     const url = '/api/administration/books';
     const params = { borrowedBookId: this.borrowedBookId };
-    this.http.get<any[]>(url, { params }).subscribe(
-      response => {
+    const observer: Observer<any[]> = {
+      next: (response) => {
         let borrowedBook = response[0];
         if (borrowedBook.accepted === false || borrowedBook.closed === true || borrowedBook.ready === false) {
           this.router.navigateByUrl('/');
         }
       },
-      error => {
+      error: (error) => {
         this.userEnabledService.validateIfUserIsEnabled(error);
         if (error.status === 404 && error.error.message === 'Borrowed book not found' || error.status === 400) {
           this.router.navigateByUrl('/');
         }
-      }
-    );
+      },
+      complete: () => {
+      },
+    };
+  
+    this.http.get<any[]>(url, { params }).subscribe(observer);
   }
 
 }

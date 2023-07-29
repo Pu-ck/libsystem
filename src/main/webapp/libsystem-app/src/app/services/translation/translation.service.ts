@@ -14,4 +14,8 @@ export class TranslationService {
     return this.translate.instant(`genres.${genre}`);
   }
 
+  public translateStatus(status: string): string {
+    return this.translate.instant(`statuses.${status}`);
+  }
+
 }

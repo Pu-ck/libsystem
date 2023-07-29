@@ -42,6 +42,7 @@ export class CommonRedirectsService {
         this.router.navigate(['/login'], { queryParams: { disabled: true } });
       }
     });
+    localStorage.removeItem('token');
   }
 
   public checkSingleVisitPageLocalStorageCondition(localStorageItem: string): void {

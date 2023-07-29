@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Observer } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -29,28 +30,34 @@ export class LoginComponent implements OnInit {
 
   public login(): void {
     const url = '/api/login';
+    const observer: Observer<any> = {
+      next: (response) => {
+        this.sessionID = response.sessionID;
+        this.userType = response.userType;
+        localStorage.setItem('token', this.sessionID);
+        localStorage.setItem('userType', this.userType);
+        window.location.href = '/';
+      },
+      error: (error) => {
+        if (error.status === 403 && error.error.message === 'User not enabled') {
+          this.notEnabled = true;
+          this.unauthorized = false;
+          this.loggedOut = false;
+        }
+        if (error.status === 401) {
+          this.unauthorized = true;
+          this.notEnabled = false;
+          this.loggedOut = false;
+        }
+      },
+      complete: () => {
+      },
+    };
+  
     this.http.post<any>(url, {
       username: this.model.username,
       password: this.model.password
-    }).subscribe(response => {
-      this.sessionID = response.sessionID;
-      this.userType = response.userType;
-      localStorage.setItem('token', this.sessionID);
-      localStorage.setItem('userType', this.userType);
-      window.location.href = '/';
-    }, error => {
-      if (error.status === 403 && error.error.message === 'User not enabled') {
-        this.notEnabled = true;
-        this.unauthorized = false;
-        this.loggedOut = false;
-      }
-      if (error.status === 401) {
-        this.unauthorized = true;
-        this.notEnabled = false;
-        this.loggedOut = false;
-      }
-    }
-    );
+    }).subscribe(observer);
   }
 
   public redirectToRegistrationForm(): void {

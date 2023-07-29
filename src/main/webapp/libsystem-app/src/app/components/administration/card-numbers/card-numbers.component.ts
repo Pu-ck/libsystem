@@ -5,6 +5,7 @@ import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 import { PaginationService } from 'src/app/services/pagination/pagination.service';
 import { CardNumber } from 'src/app/models/book-properties/card-number';
 import { CommonConstants } from 'src/app/utils/common-constants';
+import { Observer } from 'rxjs';
 
 @Component({
   selector: 'app-card-numbers',
@@ -42,26 +43,28 @@ export class CardNumbersComponent implements OnInit {
   public getCardNumbers(): void {
     const url = '/api/administration/card-numbers';
     let params = this.getSearchType();
-    this.http.get<any[]>(url, { params }).subscribe(
-      response => {
+    const observer: Observer<any[]> = {
+      next: (response) => {
         this.cardNumbers = response;
         this.cardNumberNotFound = false;
         let queryParams: { [key: string]: string } = {};
         this.setQueryParams(queryParams);
         this.router.navigate(['/administration/card-numbers'], { queryParams });
-        if (this.cardNumbers.length === 1) {
-          this.currentPage = CommonConstants.DEFAULT_PAGE_NUMBER;
-        }
+        this.currentPage = this.cardNumbers.length === 1 ? CommonConstants.DEFAULT_PAGE_NUMBER : this.currentPage;
       },
-      error => {
+      error: (error) => {
         this.userEnabledService.validateIfUserIsEnabled(error);
         if (error.status === 404 && error.error.message === 'Card number not found') {
           this.cardNumberNotFound = true;
           this.cardNumbers = [];
           console.log(error);
         }
-      }
-    );
+      },
+      complete: () => {
+      },
+    };
+
+    this.http.get<any[]>(url, { params }).subscribe(observer);
   }
 
   public redirectToRegisterNewCardNumberForm(): void {
@@ -81,20 +84,24 @@ export class CardNumbersComponent implements OnInit {
   private getCardNumber(cardNumber: string): void {
     const url = '/api/administration/card-numbers';
     let params = new HttpParams().set('cardNumber', cardNumber);
-    this.http.get<any[]>(url, { params }).subscribe(
-      response => {
+    const observer: Observer<any[]> = {
+      next: (response) => {
         this.cardNumbers = response;
         this.cardNumberNotFound = false;
       },
-      error => {
+      error: (error) => {
         this.userEnabledService.validateIfUserIsEnabled(error);
         if (error.status === 404 && error.error.message === 'Card number not found') {
           this.cardNumberNotFound = true;
           this.cardNumbers = [];
           console.log(error);
         }
-      }
-    );
+      },
+      complete: () => {
+      },
+    };
+
+    this.http.get<any[]>(url, { params }).subscribe(observer);
   }
 
   private getSearchType(): HttpParams {

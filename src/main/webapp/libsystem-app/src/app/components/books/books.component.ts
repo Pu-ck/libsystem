@@ -8,6 +8,7 @@ import affiliates from 'src/config/affiliates.json';
 import { Book } from 'src/app/models/books/book';
 import { Genre } from 'src/app/models/common-book-properties/genre';
 import { Affiliate } from 'src/app/models/common-book-properties/affiliate';
+import { Observer } from 'rxjs';
 
 @Component({
   selector: 'app-books',
@@ -62,26 +63,35 @@ export class BooksComponent implements OnInit {
     this.updateGenres();
     this.updateAffiliates();
     const url = '/api/books';
-    let params = new HttpParams().set('title', this.title).set('author', this.author).set('genres', this.genres.join(',')).set('publisher', this.publisher).set('startYear', this.startYear).set('endYear', this.endYear).set('affiliates', this.affiliates.join(',')).set('sortType', this.sortType).set('sortDirection', this.sortDirection);
+    let params = new HttpParams()
+      .set('title', this.title)
+      .set('author', this.author)
+      .set('genres', this.genres.join(','))
+      .set('publisher', this.publisher)
+      .set('startYear', this.startYear)
+      .set('endYear', this.endYear)
+      .set('affiliates', this.affiliates.join(','))
+      .set('sortType', this.sortType)
+      .set('sortDirection', this.sortDirection);
 
-    this.http.get<any[]>(url, { params }).subscribe(
-      response => {
+    const observer: Observer<any[]> = {
+      next: (response) => {
         this.books = response;
-        if (this.books.length === 0) {
-          this.noResultsFound = true;
-        } else {
-          this.noResultsFound = false;
-        }
+        this.noResultsFound = this.books.length === 0;
         let queryParams: { [key: string]: string } = {};
         this.setQueryParams(queryParams);
         this.router.navigate(['/books'], { queryParams });
       },
-      error => {
+      error: (error) => {
         this.userEnabledService.validateIfUserIsEnabled(error);
         this.noResultsFound = true;
         this.books = [];
-      }
-    );
+      },
+      complete: () => {
+      },
+    };
+
+    this.http.get<any[]>(url, { params }).subscribe(observer);
   }
 
   public redirectToBookDetails(id: number): void {
@@ -115,16 +125,23 @@ export class BooksComponent implements OnInit {
 
   public checkIfBookIsInUsersFavourites(bookId: string): boolean {
     const url = 'api/userprofile/favourites';
-    this.http.get<any>(url, {}).subscribe(response => {
-      for (let favouriteBook of response) {
-        if (favouriteBook.bookId.toString() === bookId) {
-          this.isFavourite = true;
+    const observer: Observer<any> = {
+      next: (response) => {
+        for (let favouriteBook of response) {
+          if (favouriteBook.bookId.toString() === bookId) {
+            this.isFavourite = true;
+            break;
+          }
         }
-      }
-    }, error => {
-      console.log(error);
-    }
-    );
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+      },
+    };
+
+    this.http.get<any>(url, {}).subscribe(observer);
     console.log(this.isFavourite);
     return this.isFavourite;
   }

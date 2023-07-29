@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { CommonBookMethodsService } from 'src/app/services/book/common-book-methods.service';
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 import { BookDetails } from 'src/app/models/books/book-details';
+import { Observer } from 'rxjs';
 
 @Component({
   selector: 'app-book-details',
@@ -37,43 +38,59 @@ export class BookDetailsComponent implements OnInit {
 
   public addToFavourites(): void {
     const url = `/api/books/${this.bookId}/add-to-favourites`;
-    this.http.post<any>(url, {
-    }).subscribe(response => {
-      console.log(response);
-      this.isFavourite = true;
-    }, error => {
-      this.userEnabledService.validateIfUserIsEnabled(error);
-    }
-    );
+    const observer: Observer<any> = {
+      next: (response) => {
+        console.log(response);
+        this.isFavourite = true;
+      },
+      error: (error) => {
+        this.userEnabledService.validateIfUserIsEnabled(error);
+      },
+      complete: () => {
+      },
+    };
+
+    this.http.post<any>(url, {}).subscribe(observer);
   }
 
   public removeFromFavourites(): void {
     const url = `/api/books/${this.bookId}/remove-from-favourites`;
-    this.http.delete<any>(url, {}).subscribe(response => {
-      console.log(response);
-      this.isFavourite = false;
-    }, error => {
-      this.userEnabledService.validateIfUserIsEnabled(error);
-    }
-    );
+    const observer: Observer<any> = {
+      next: (response) => {
+        console.log(response);
+        this.isFavourite = false;
+      },
+      error: (error) => {
+        this.userEnabledService.validateIfUserIsEnabled(error);
+      },
+      complete: () => {
+      },
+    };
+
+    this.http.delete<any>(url, {}).subscribe(observer);
   }
 
   private getBookDetails(): void {
     this.route.paramMap.subscribe((params: ParamMap) => {
       this.bookId = params.get('id')!;
     });
-
     const url = `api/books/${this.bookId}`;
-    this.http.get<any>(url, {}).subscribe(response => {
-      this.bookDetails = response;
-      this.checkIfBooksOnStock();
-    }, error => {
-      if (error.status === 404 && error.error.message === 'Book not found' || error.status === 400) {
-        console.log(error);
-        this.router.navigate(['/']);
-      }
-    }
-    );
+    const observer: Observer<any> = {
+      next: (response) => {
+        this.bookDetails = response;
+        this.checkIfBooksOnStock();
+      },
+      error: (error) => {
+        if (error.status === 404 && error.error.message === 'Book not found' || error.status === 400) {
+          console.log(error);
+          this.router.navigate(['/']);
+        }
+      },
+      complete: () => {
+      },
+    };
+
+    this.http.get<any>(url, {}).subscribe(observer);
   }
 
   private checkIfBooksOnStock(): void {
@@ -83,16 +100,22 @@ export class BookDetailsComponent implements OnInit {
 
   private checkIfBookIsInUsersFavourites(): void {
     const url = 'api/userprofile/favourites';
-    this.http.get<any>(url, {}).subscribe(response => {
-      for (let favouriteBook of response) {
-        if (favouriteBook.bookId.toString() === this.bookId) {
-          this.isFavourite = true;
+    const observer: Observer<any> = {
+      next: (response) => {
+        for (let favouriteBook of response) {
+          if (favouriteBook.bookId.toString() === this.bookId) {
+            this.isFavourite = true;
+          }
         }
-      }
-    }, error => {
-      console.log(error);
-    }
-    );
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+      },
+    };
+
+    this.http.get<any>(url, {}).subscribe(observer);
   }
 
 }

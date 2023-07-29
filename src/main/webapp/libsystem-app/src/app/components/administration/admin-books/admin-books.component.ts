@@ -5,6 +5,7 @@ import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 import { PaginationService } from 'src/app/services/pagination/pagination.service';
 import { BorrowedBook } from 'src/app/models/books/borrowed-book';
 import { CommonConstants } from 'src/app/utils/common-constants';
+import { Observer } from 'rxjs';
 
 @Component({
   selector: 'app-administration-books',
@@ -60,9 +61,8 @@ export class AdminBooksComponent implements OnInit {
   public getBorrowedBooks(status: string): void {
     const url = '/api/administration/books';
     let params = this.getSearchType();
-    this.http.get<any[]>(url, { params }).subscribe(
-      response => {
-
+    const observer: Observer<any[]> = {
+      next: (response) => {
         if (status === 'All') {
           this.borrowedBooks = response;
         }
@@ -97,73 +97,89 @@ export class AdminBooksComponent implements OnInit {
         let queryParams: { [key: string]: string } = {};
         this.setQueryParams(queryParams);
         this.router.navigate(['/administration/books'], { queryParams });
-        if (this.borrowedBooks.length === 0) {
-          this.borrowedBookNotFound = true;
-        } else {
-          this.borrowedBookNotFound = false;
-        }
-        if (this.borrowedBooks.length === 1) {
-          this.currentPage = CommonConstants.DEFAULT_PAGE_NUMBER;
-        }
+        this.borrowedBookNotFound = this.borrowedBooks.length === 0;
+        this.currentPage = this.borrowedBooks.length === 1 ? CommonConstants.DEFAULT_PAGE_NUMBER : this.currentPage;
       },
-      error => {
+      error: (error) => {
         this.userEnabledService.validateIfUserIsEnabled(error);
         if (error.status === 404 && error.error.message === 'Borrowed book not found') {
           this.borrowedBookNotFound = true;
           this.borrowedBooks = [];
           console.log(error);
         }
-      }
-    );
+      },
+      complete: () => {
+      },
+    };
+
+    this.http.get<any[]>(url, { params }).subscribe(observer);
   }
 
   public updateOrderReadyStatus(borrowedBookId: string, accepted: boolean): void {
-    const url = `/api/administration/books/${borrowedBookId}/ready-order`
+    const url = `/api/administration/books/${borrowedBookId}/ready-order`;
+    const observer: Observer<any> = {
+      next: (response) => {
+        console.log(response);
+        if (accepted) {
+          localStorage.setItem('bookReady', 'true');
+        } else {
+          localStorage.setItem('bookRejected', 'true');
+        }
+        localStorage.setItem('borrowedBookId', borrowedBookId);
+        window.location.reload();
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+      },
+    };
+
     this.http.put<any>(url, {
       accepted: accepted
-    }).subscribe(response => {
-      console.log(response);
-      if (accepted) {
-        localStorage.setItem('bookReady', 'true');
-      } else {
-        localStorage.setItem('bookRejected', 'true');
-      }
-      localStorage.setItem('borrowedBookId', borrowedBookId);
-      window.location.reload();
-    }, error => {
-      console.log(error);
-    }
-    );
+    }).subscribe(observer);
   }
 
   public acceptOrder(borrowedBookId: string, cardNumber: string): void {
-    const url = `/api/administration/books/${borrowedBookId}/accept-order`
+    const url = `/api/administration/books/${borrowedBookId}/accept-order`;
+    const observer: Observer<any> = {
+      next: (response) => {
+        console.log(response);
+        localStorage.setItem('bookAccepted', 'true');
+        localStorage.setItem('borrowedBookId', borrowedBookId);
+        window.location.reload();
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+      },
+    };
+
     this.http.put<any>(url, {
       cardNumber: cardNumber
-    }).subscribe(response => {
-      console.log(response);
-      localStorage.setItem('bookAccepted', 'true');
-      localStorage.setItem('borrowedBookId', borrowedBookId);
-      window.location.reload();
-    }, error => {
-      console.log(error);
-    }
-    );
+    }).subscribe(observer);
   }
 
   public returnBook(borrowedBookId: string, cardNumber: string): void {
-    const url = `/api/administration/books/${borrowedBookId}/return-book`
+    const url = `/api/administration/books/${borrowedBookId}/return-book`;
+    const observer: Observer<any> = {
+      next: (response) => {
+        console.log(response);
+        localStorage.setItem('bookReturned', 'true');
+        localStorage.setItem('borrowedBookId', borrowedBookId);
+        window.location.reload();
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+      },
+    };
+
     this.http.put<any>(url, {
       cardNumber: cardNumber
-    }).subscribe(response => {
-      console.log(response);
-      localStorage.setItem('bookReturned', 'true');
-      localStorage.setItem('borrowedBookId', borrowedBookId);
-      window.location.reload();
-    }, error => {
-      console.log(error);
-    }
-    );
+    }).subscribe(observer);
   }
 
   public redirectToExtendBorrowedBookForm(id: string): void {

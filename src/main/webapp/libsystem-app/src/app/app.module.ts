@@ -75,7 +75,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     RouterModule,
     FormsModule,
     TranslateModule.forRoot({
-      defaultLanguage: localStorage.getItem('language') || '',
+      defaultLanguage: localStorage.getItem('language') || 'en',
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,

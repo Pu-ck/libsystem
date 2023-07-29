@@ -1,23 +1,25 @@
 <div class="disable-user-form">
     <div class="disable-user-form-box">
 
-        <h1>Disable user with ID {{ userId }}</h1>
+        <h1>{{ 'disableUser.disableUser' | translate }} {{ userId }}</h1>
 
         <form name="form" (ngSubmit)="userEnabledService.disableUser(userId, model.reason)" #userEnableForm="ngForm">
 
             <div class="form-group">
-                <label for="reason">Reason</label>
-                <textarea type="text" name="reason" [(ngModel)]="model.reason" #reason="ngModel" maxlength="140" required
-                    class="form-control text-input"></textarea>
+                <label for="reason">{{ 'disableUser.reason' | translate }}</label>
+                <textarea type="text" name="reason" [(ngModel)]="model.reason" #reason="ngModel" maxlength="140"
+                    required class="form-control text-input"></textarea>
 
                 <div *ngIf="reason?.invalid && (reason?.dirty || reason?.touched)">
-                    <div *ngIf="reason?.errors?.['required']" class="text-danger">Reason is required</div>
+                    <div *ngIf="reason?.errors?.['required']" class="text-danger">{{ 'disableUser.reasonRequired' |
+                        translate }}</div>
                 </div>
             </div>
 
             <div class="form-group">
 
-                <button class="btn button" type="submit" [disabled]="!userEnableForm.valid">Disable</button>
+                <button class="btn button" type="submit" [disabled]="!userEnableForm.valid">{{ 'users.disable' |
+                    translate }}</button>
 
             </div>
 
@@ -29,8 +31,8 @@
 
         <div class="redirect-buttons">
             <div class="form-group">
-                <button class="btn button" (click)="commonRedirectsService.redirectToUsersList()">Back to users
-                    list</button>
+                <button class="btn button" (click)="commonRedirectsService.redirectToUsersList()">{{
+                    'redirects.backToUsers' | translate }}</button>
             </div>
         </div>
     </div>

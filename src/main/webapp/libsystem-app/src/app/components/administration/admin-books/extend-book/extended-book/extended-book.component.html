@@ -2,14 +2,14 @@
     <div class="success-panel-form-box">
 
         <div class="message-container">
-            <p class="text-success" *ngIf="borrowedBookExtended">Book with ID {{ borrowedBookId }} has been
-                successfully extended</p>
+            <p class="text-success" *ngIf="borrowedBookExtended">{{ 'extendBook.extensionSuccess' | translate
+                }} {{ borrowedBookId }}</p>
         </div>
 
         <div class="form-group">
             <button class="btn button" *ngIf="borrowedBookExtended"
-                (click)="commonRedirectsService.redirectToBorrowedAndOrderedBooks()">Back to
-                books list</button>
+                (click)="commonRedirectsService.redirectToBorrowedAndOrderedBooks()">{{
+                'redirects.backToBooks' | translate }}</button>
         </div>
     </div>
 </div>

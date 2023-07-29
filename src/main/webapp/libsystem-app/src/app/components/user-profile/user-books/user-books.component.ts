@@ -4,6 +4,8 @@ import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 import { PaginationService } from 'src/app/services/pagination/pagination.service';
 import { Book } from 'src/app/models/books/book';
 import { CommonConstants } from 'src/app/utils/common-constants';
+import { TranslationService } from 'src/app/services/translation/translation.service';
+import { Observer } from 'rxjs';
 
 @Component({
   selector: 'app-user-books',
@@ -23,11 +25,12 @@ export class UserBooksComponent implements OnInit {
   public display: string = CommonConstants.MODAL_DISPLAY_HIDE;
 
   public books: Book[] = [];
-  public borrowedBookId!: number;  
+  public borrowedBookId!: number;
 
   constructor(
     private http: HttpClient,
     private userEnabledService: UserEnabledService,
+    public translation: TranslationService,
     public pagination: PaginationService
   ) { }
 
@@ -37,19 +40,23 @@ export class UserBooksComponent implements OnInit {
   }
 
   public requestBookExtension(borrowedBookId: number): void {
-    const url = `/api/userprofile/books/${borrowedBookId}/extend-book`
-    this.http.put<any>(url, {
-    }).subscribe(response => {
-      this.bookExtended = true;
-      this.display = CommonConstants.MODAL_DISPLAY_HIDE;
-      localStorage.setItem('hasSentBookExtensionRequest', 'true');
-      window.location.reload();
-      console.log(response);
-    }, error => {
-      this.userEnabledService.validateIfUserIsEnabled(error);
-      this.display = CommonConstants.MODAL_DISPLAY_HIDE;
-    }
-    );
+    const url = `/api/userprofile/books/${borrowedBookId}/extend-book`;
+    const observer: Observer<any> = {
+      next: (response) => {
+        this.bookExtended = true;
+        this.display = CommonConstants.MODAL_DISPLAY_HIDE;
+        localStorage.setItem('hasSentBookExtensionRequest', 'true');
+        window.location.reload();
+        console.log(response);
+      },
+      error: (error) => {
+        this.userEnabledService.validateIfUserIsEnabled(error);
+        this.display = CommonConstants.MODAL_DISPLAY_HIDE;
+      },
+      complete: () => {
+      },
+    };
+    this.http.put<any>(url, {}).subscribe(observer);
   }
 
   public setDisplayedStatus(status: string): void {
@@ -98,9 +105,8 @@ export class UserBooksComponent implements OnInit {
 
   private getUserBooks(status: string): void {
     const url = '/api/userprofile/books';
-    this.http.get<any[]>(url, {}).subscribe(
-      response => {
-
+    const observer: Observer<any[]> = {
+      next: (response) => {
         if (status === 'All') {
           this.books = response;
         }
@@ -111,7 +117,7 @@ export class UserBooksComponent implements OnInit {
           this.books = response.filter(book => book.status === 'Borrowed');
         }
         if (status === 'Returned') {
-          this.books = response.filter(book => book.statu === 'Returned');
+          this.books = response.filter(book => book.status === 'Returned');
         }
         if (status === 'Rejected') {
           this.books = response.filter(book => book.status === 'Rejected');
@@ -120,20 +126,17 @@ export class UserBooksComponent implements OnInit {
           this.books = response.filter(book => book.status === 'Ready');
         }
 
-        if (this.books.length === 1) {
-          this.currentPage = CommonConstants.DEFAULT_PAGE_NUMBER;
-        }
-        if (this.books.length === 0) {
-          this.noBooksWithStatusFound = true;
-        } else {
-          this.noBooksWithStatusFound = false;
-        }
-
+        this.currentPage = this.books.length === 1 ? CommonConstants.DEFAULT_PAGE_NUMBER : this.currentPage;
+        this.noBooksWithStatusFound = this.books.length === 0;
       },
-      error => {
+      error: (error) => {
         this.userEnabledService.validateIfUserIsEnabled(error);
-      }
-    );
+      },
+      complete: () => {
+      },
+    };
+
+    this.http.get<any[]>(url, {}).subscribe(observer);
   }
 
   private checkIfTheBookHasBeenSuccessfullyExtended(): void {

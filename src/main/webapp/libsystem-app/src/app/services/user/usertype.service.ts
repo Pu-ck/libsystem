@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observer } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -20,14 +21,18 @@ export class UsertypeService {
 
   private setAdminId(): void {
     const url = '/api/administration/users/admin-id';
-    this.http.get<any[]>(url, {}).subscribe(
-      response => {
+    const observer: Observer<any> = {
+      next: (response) => {
         localStorage.setItem('adminId', response.toString());
       },
-      error => {
+      error: (error) => {
         console.log(error);
-      }
-    );
+      },
+      complete: () => {
+      },
+    };
+
+    this.http.get<any[]>(url, {}).subscribe(observer);
   }
 
 }

@@ -2,15 +2,12 @@
     <div class="success-panel-form-box">
 
         <div class="message-container">
-            <p class="text-success">New card number has been successfully
-                registered</p>
+            <p class="text-success">{{ 'cardNumbers.cardNumberRegistered' | translate }}</p>
         </div>
 
         <div class="form-group">
-            <button class="btn button" (click)="commonRedirectsService.redirectToCardNumbersList()">Back
-                to card
-                numbers
-                list</button>
+            <button class="btn button" (click)="commonRedirectsService.redirectToCardNumbersList()">{{
+                'redirects.backToCardNumbers' | translate }}</button>
         </div>
 
     </div>

@@ -1,6 +1,6 @@
 <div class="table-form">
   <div class="table-form-box">
-    <h1>Card numbers</h1>
+    <h1>{{ 'cardNumbers.cardNumbers' | translate }}</h1>
 
     <div class="divider">
       <hr class="my-3">
@@ -8,8 +8,8 @@
 
     <div class="d-flex align-items-center justify-content-between w-100">
       <div>
-        <button class="btn button card-number-table-button" (click)="redirectToRegisterNewCardNumberForm()">Register
-          card number</button>
+        <button class="btn button table-search-button" (click)="redirectToRegisterNewCardNumberForm()">{{
+          'cardNumbers.registerCardNumber' | translate }}</button>
       </div>
 
 
@@ -32,15 +32,16 @@
 
     <form name="form" (submit)="getCardNumbers()" #searchForm="ngForm">
       <div class="search-container">
-        <label for="searchType">Search with</label>
+        <label for="searchType">{{ 'search.searchWith' | translate }}</label>
         <div class="search-input-group">
           <select name="searchType" [(ngModel)]="searchType" class="form-select search-select" id="searchTypeSelect">
-            <option value="cardNumberId">Card number ID</option>
-            <option value="cardNumber">Card number</option>
+            <option value="cardNumberId">{{ 'cardNumbers.cardNumberID' | translate }}</option>
+            <option value="cardNumber">{{ 'cardNumbers.cardNumber' | translate }}</option>
           </select>
           <input class="form-control text-input search-input" appNumericOnly type="text" name="searchValue"
             [(ngModel)]="searchValue">
-          <button class="btn button table-search-button search-button" type="submit">Search</button>
+          <button class="btn button table-search-button search-button" type="submit">{{ 'search.search' | translate
+            }}</button>
         </div>
       </div>
     </form>
@@ -48,9 +49,9 @@
     <table class="table table-hover common-table">
       <thead>
         <tr>
-          <th class="table-column">Card number ID</th>
-          <th class="table-column">User ID</th>
-          <th class="table-column">Card number</th>
+          <th class="table-column">{{ 'cardNumbers.cardNumberID' | translate }}</th>
+          <th class="table-column">{{ 'users.userID' | translate }}</th>
+          <th class="table-column">{{ 'cardNumbers.cardNumber' | translate }}</th>
         </tr>
       </thead>
       <tbody>
@@ -74,6 +75,7 @@
       </tbody>
     </table>
 
-    <p *ngIf="cardNumberNotFound" class="item-not-found-label text-danger">Unable to find specified card number</p>
+    <p *ngIf="cardNumberNotFound" class="item-not-found-label text-danger">{{ 'cardNumbers.cardNumberNotFound' |
+      translate }}</p>
   </div>
 </div>

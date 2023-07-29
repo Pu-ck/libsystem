@@ -1,10 +1,9 @@
 <div class="container table-form">
   <div class="table-form-box">
 
-    <p class="text-success" *ngIf="bookExtended">Book extension request sent successfully - wait until the administrator
-      extends the requested borrowed book return date</p>
+    <p class="text-success" *ngIf="bookExtended">{{ 'books.extensionSuccess' | translate }}</p>
 
-    <h1>Your books</h1>
+    <h1>{{ 'books.yourBooks' | translate }}</h1>
 
     <div class="divider">
       <hr class="my-3">
@@ -14,17 +13,17 @@
       <div class="d-flex align-items-center justify-content-between w-100">
         <div class="table-order-buttons" role="group">
           <button class="btn button" [disabled]="displayedStatus == 'Ordered'"
-            (click)="setDisplayedStatus('Ordered')">Ordered</button>
+            (click)="setDisplayedStatus('Ordered')">{{ 'books.ordered' | translate }}</button>
           <button class="btn button" [disabled]="displayedStatus == 'Borrowed'"
-            (click)="setDisplayedStatus('Borrowed')">Borrowed</button>
+            (click)="setDisplayedStatus('Borrowed')">{{ 'books.borrowed' | translate }}</button>
           <button class="btn button" [disabled]="displayedStatus == 'Returned'"
-            (click)="setDisplayedStatus('Returned')">Returned</button>
+            (click)="setDisplayedStatus('Returned')">{{ 'books.returned' | translate }}</button>
           <button class="btn button" [disabled]="displayedStatus == 'Rejected'"
-            (click)="setDisplayedStatus('Rejected')">Rejected</button>
-          <button class="btn button" [disabled]="displayedStatus == 'Ready'"
-            (click)="setDisplayedStatus('Ready')">Ready</button>
-          <button class="btn button" [disabled]="displayedStatus == 'All'"
-            (click)="setDisplayedStatus('All')">All</button>
+            (click)="setDisplayedStatus('Rejected')">{{ 'books.rejected' | translate }}</button>
+          <button class="btn button" [disabled]="displayedStatus == 'Ready'" (click)="setDisplayedStatus('Ready')">{{
+            'books.ready' | translate }}</button>
+          <button class="btn button" [disabled]="displayedStatus == 'All'" (click)="setDisplayedStatus('All')">{{
+            'common.all' | translate }}</button>
         </div>
 
         <div class="pagination-container">
@@ -47,16 +46,16 @@
     <table class="table table-hover common-table">
       <thead>
         <tr>
-          <th class="table-column">Order number</th>
-          <th class="table-column">Title</th>
-          <th class="table-column">Borrow date</th>
-          <th class="table-column">Return date</th>
-          <th class="table-column">Ready date</th>
-          <th class="table-column">Remaining days</th>
-          <th class="table-column">Current penalty</th>
-          <th class="table-column">Affiliate</th>
-          <th class="table-column">Status</th>
-          <th class="table-column">Extended</th>
+          <th class="table-column">{{ 'books.orderNumber' | translate }}</th>
+          <th class="table-column">{{ 'books.title' | translate }}</th>
+          <th class="table-column">{{ 'books.borrowDate' | translate }}</th>
+          <th class="table-column">{{ 'books.returnDate' | translate }}</th>
+          <th class="table-column">{{ 'books.readyDate' | translate }}</th>
+          <th class="table-column">{{ 'books.remainingDays' | translate }}</th>
+          <th class="table-column">{{ 'books.penalty' | translate }}</th>
+          <th class="table-column">{{ 'books.affiliate' | translate }}</th>
+          <th class="table-column">{{ 'books.status' | translate }}</th>
+          <th class="table-column">{{ 'books.extended' | translate }}</th>
           <th></th>
         </tr>
       </thead>
@@ -83,8 +82,8 @@
               <span [ngClass]="{
                 'text-danger': getRemainingDays(book.returnDate) <= 0 && book.status !== 'Returned'
               }">
-                {{ book.status !== 'Borrowed' ? '━' : getRemainingDays(book.returnDate) <= 0 ? 'Overdue' :
-                  getRemainingDays(book.returnDate) }} </span>
+                {{ book.status !== 'Borrowed' ? '━' : getRemainingDays(book.returnDate) <= 0 ? ('books.overdue' |
+                  translate) : getRemainingDays(book.returnDate) }} </span>
             </td>
             <td class="table-cell">
               {{ book.penalty === '' ? '━' : book.penalty }}
@@ -93,10 +92,10 @@
               {{ book.affiliate }}
             </td>
             <td class="table-cell">
-              {{ book.status }}
+              {{ this.translation.translateStatus(book.status) }}
             </td>
             <td class="table-cell">
-              {{ book.extended ? 'Yes' : 'No' }}
+              {{ book.extended ? ('common.yes' | translate) : ('common.no' | translate) }}
             </td>
 
             <td class="table-cell">
@@ -104,13 +103,15 @@
 
                 <li class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false" data-bs-toggle="dropdown">
-                  Options
+                  {{ 'common.options' | translate }}
                 </li>
 
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <button class="dropdown-item" [disabled]="book.extended || book.closed || !book.accepted"
-                    (click)="openModal(); borrowedBookId = book.borrowedBookId">Extend</button>
-                  <button class="dropdown-item" [routerLink]="book.bookDetailsLink">Show in catalogue</button>
+                    (click)="openModal(); borrowedBookId = book.borrowedBookId">{{ 'books.extend' | translate
+                    }}</button>
+                  <button class="dropdown-item" [routerLink]="book.bookDetailsLink">{{ 'books.showInCatalogue' |
+                    translate }}</button>
                 </div>
 
               </a>
@@ -121,7 +122,8 @@
       </tbody>
     </table>
 
-    <p class="item-not-found-label text-danger" *ngIf="noBooksWithStatusFound">No books found</p>
+    <p class="item-not-found-label text-danger" *ngIf="noBooksWithStatusFound">{{ 'books.noBooksFound' | translate }}
+    </p>
 
   </div>
 </div>
@@ -130,12 +132,12 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-body modal-text">
-        <p>Are you sure you want to send a return date extension request for this book? You can extend the borrowed book
-          only once.</p>
+        <p>{{ 'books.extensionWarning' | translate }}</p>
       </div>
-      <button type="button" class="btn button modal-button"
-        (click)="requestBookExtension(borrowedBookId)">Extend</button>
-      <button type="button" class="btn button modal-button" (click)="onCloseHandled()">Cancel</button>
+      <button type="button" class="btn button modal-button" (click)="requestBookExtension(borrowedBookId)">{{
+        'books.extend' | translate }}</button>
+      <button type="button" class="btn button modal-button" (click)="onCloseHandled()">{{ 'common.cancel' | translate
+        }}</button>
     </div>
   </div>
 </div>
