@@ -129,7 +129,17 @@
         "rejectOrder": "Reject order",
         "acceptOrder": "Accept order",
         "extendBook": "Extend book",
-        "returnBook": "Return book"
+        "returnBook": "Return book",
+        "genres": "Genres",
+        "authors": "Authors",
+        "quantity": "Quantity",
+        "affiliates": "Affiliates",
+        "synopsis": "Synopsis",
+        "borrowBook": "Borrow book",
+        "addToFavourites": "Add to favourites",
+        "removeFromFavourties": "Remove from favourties",
+        "address": "Address",
+        "phoneNumber": "Phone number"
     },
     "statuses": {
         "Ready": "Ready",

@@ -129,7 +129,17 @@
         "rejectOrder": "Odrzuć zamówienie",
         "acceptOrder": "Potwierdź zamówienie",
         "extendBook": "Przedłuż książkę",
-        "returnBook": "Oddaj książkę"
+        "returnBook": "Oddaj książkę",
+        "genres": "Gatunki",
+        "authors": "Autorzy",
+        "quantity": "Ilość",
+        "affiliates": "Filie",
+        "synopsis": "Streszczenie",
+        "borrowBook": "Wypożycz",
+        "addToFavourites": "Dodaj do ulubionych",
+        "removeFromFavourties": "Usuń z ulubionych",
+        "address": "Adres",
+        "phoneNumber": "Numer telefonu"
     },
     "statuses": {
         "Ready": "Gotowe",

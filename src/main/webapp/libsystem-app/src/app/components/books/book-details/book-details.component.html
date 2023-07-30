@@ -1,36 +1,84 @@
-<p>Book details</p>
+<div class="book-details-form">
+    <div class="book-details-form-box">
 
-<div *ngIf="bookDetails">
-    <p>Title: {{bookDetails.title}}</p>
-    <p>Authors:
-        <li *ngFor="let author of bookDetails.authors">
-            {{author.name}}
-        </li>
-    </p>
-    <p>Publisher: {{bookDetails.publisherEntity.name}}</p>
-    <p>Year of print: {{bookDetails.yearOfPrintEntity.yearOfPrint}}</p>
-    <p>Genres:
-        <li *ngFor="let genre of bookDetails.genres">
-            {{genre.name}}
-        </li>
-    </p>
-    <p>Affiliates:
-        <li *ngFor="let affiliate of bookDetails.affiliates">
-            {{affiliate.name}}
-            <ul>
-                <li>Address: {{affiliate.address}}</li>
-                <li>Phone number: {{affiliate.phoneNumber}}</li>
-            </ul>
-        </li>
-    </p>
-    <p>Descripton: {{bookDetails.description}}</p>
-    <p>Quantity:
-        <li *ngFor="let affiliate of bookDetails.affiliates">
-            {{ affiliate.name }} {{ commonBookMethodsService.getAffiliateBookQuantity(bookDetails, affiliate.id) }}
-        </li>
-    </p>
+        <div class="details-buttons">
+            <h1>{{bookDetails.title}}</h1>
+            <div>
+                <button (click)="redirectToOrderForm()" [disabled]="!booksOnStock" class="btn button detail-button">{{
+                    'books.borrowBook' | translate }}</button>
+                <button (click)="addToFavourites()" *ngIf="!isFavourite" class="btn button detail-button">{{
+                    'books.addToFavourites' | translate }}</button>
+                <button (click)="removeFromFavourites()" *ngIf="isFavourite" class="btn button detail-button">{{
+                    'books.removeFromFavourties' | translate }}</button>
+            </div>
+        </div>
+
+        <div class="divider">
+            <hr class="my-3">
+        </div>
+
+        <div *ngIf="bookDetails">
+
+            <div class="row">
+                <div class="col">
+                    <p>{{bookDetails.publisherEntity.name}}, {{bookDetails.yearOfPrintEntity.yearOfPrint}}</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <p><strong>{{ 'books.authors' | translate }}:</strong></p>
+                    <ul>
+                        <li *ngFor="let author of bookDetails.authors">
+                            {{author.name}}
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col">
+                    <p><strong>{{ 'books.genres' | translate }}:</strong></p>
+                    <ul>
+                        <li *ngFor="let genre of bookDetails.genres">
+                            {{genre.name}}
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col">
+                    <p><strong>{{ 'books.quantity' | translate }}:</strong></p>
+                    <ul>
+                        <li *ngFor="let affiliate of bookDetails.affiliates">
+                            {{ affiliate.name }} {{ commonBookMethodsService.getAffiliateBookQuantity(bookDetails,
+                            affiliate.id) }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <p><strong>{{ 'books.affiliates' | translate }}:</strong></p>
+                    <ul>
+                        <li *ngFor="let affiliate of bookDetails.affiliates">
+                            {{affiliate.name}}
+                            <ul>
+                                <li>{{ 'books.address' | translate }}: {{affiliate.address}}</li>
+                                <li>{{ 'books.phoneNumber' | translate }}: {{affiliate.phoneNumber}}</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="divider">
+                <hr class="my-3">
+            </div>
+
+            <strong>{{ 'books.synopsis' | translate }}:</strong>
+            <p class="synopsis-paragraph">
+                {{bookDetails.description}}
+            </p>
+        </div>
+
+    </div>
 </div>
-
-<button (click)="redirectToOrderForm()" [disabled]="!booksOnStock">Borrow book</button>
-<button (click)="addToFavourites()" *ngIf="!isFavourite">Add to favourites</button>
-<button (click)="removeFromFavourites()" *ngIf="isFavourite">Remove from favourites</button>

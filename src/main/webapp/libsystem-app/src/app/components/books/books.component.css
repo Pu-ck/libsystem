@@ -1,0 +1,112 @@
+.books-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.books-form-box {
+    background-color: rgb(252, 252, 252);
+    padding: 60px;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px lightblue;
+    margin-top: 45px;
+    padding-bottom: 50px;
+    padding-top: 50px;
+    margin-bottom: 50px;
+    min-height: 510px;
+}
+
+h1 {
+    font-size: 20px;
+    text-align: left;
+}
+
+.form-container {
+    display: flex;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-right: 765px;
+}
+
+.form-group {
+    flex: 1;
+    margin-right: 10px;
+    margin-bottom: -5px;
+}
+
+.form-group:last-child {
+    margin-right: 0;
+}
+
+.form-group label {
+    margin-right: 5px;
+}
+
+.form-group select {
+    width: 150px;
+    border-radius: 0;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.form-row .form-group {
+    flex: 1;
+    margin-right: -745px;
+}
+
+.form-row .form-group:last-child {
+    margin-right: 0;
+}
+
+.form-row .form-group input {
+    width: 150px;
+    border-radius: 0;
+}
+
+.year-row .year-group {
+    flex: 1;
+    margin-right: -910px;
+}
+
+.year-row .year-group:last-child {
+    margin-right: 0;
+}
+
+.year-row .year-group input {
+    width: 150px;
+    border-radius: 0;
+}
+
+.search-button {
+    width: 150px;
+    margin-top: 29px;
+}
+
+.form-check-input:checked {
+    border-color: lightblue;
+    background-color: lightblue;
+}
+
+.form-check-input:not(:checked) {
+    background-color: white;
+}
+
+.form-check-input:focus {
+    border-color: lightblue;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px lightblue;
+}
+
+.nav-link:hover {
+    color: black;
+    background-color: inherit;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: lightblue;
+    color: white;
+}

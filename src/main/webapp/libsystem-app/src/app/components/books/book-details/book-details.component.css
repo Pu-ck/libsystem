@@ -1,0 +1,39 @@
+.book-details-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.book-details-form-box {
+    background-color: rgb(252, 252, 252);
+    padding: 60px;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px lightblue;
+    margin-top: 45px;
+    padding-bottom: 50px;
+    padding-top: 50px;
+    width: 950px;
+    margin-bottom: 50px;
+    min-height: 510px;
+}
+
+h1 {
+    font-size: 20px;
+    text-align: left;
+}
+
+.details-buttons {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+}
+
+.detail-button {
+    border-radius: 0;
+}
+
+.synopsis-paragraph {
+    inline-size: 900px;
+    overflow-wrap: break-word;
+}

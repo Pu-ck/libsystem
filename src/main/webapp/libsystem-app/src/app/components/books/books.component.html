@@ -1,114 +1,158 @@
-<form name="form" (submit)="getBooks()" #searchForm="ngForm">
-    <div>
-        <label for="title">Title</label>
-        <input type="text" name="title" [(ngModel)]="title">
+<div class="books-form">
+    <div class="books-form-box">
 
-        <label for="author">Author</label>
-        <input type="text" name="author" [(ngModel)]="author">
+        <h1>Book catalogue</h1>
 
-        <label for="publisher">Publisher</label>
-        <input type="text" name="publisher" [(ngModel)]="publisher">
-
-        <label for="yearOfPrint">Year of print</label>
-        <div name="yearOfPrint">
-            <label for="startYear">From:</label>
-            <input appNumericOnly type="text" name="startYear" [(ngModel)]="startYear">
-            <label for="endYear">To:</label>
-            <input appNumericOnly type="text" name="endYear" [(ngModel)]="endYear">
+        <div class="divider">
+            <hr class="my-3">
         </div>
 
-        <label for="genres">Genres</label>
-        <form name="genres">
-            <ng-container *ngFor="let selectedGenre of selectedGenres">
-                <input type="checkbox" name="myCheckbox" [(ngModel)]="selectedGenre.value">{{ selectedGenre.label }}
-            </ng-container>
+        <form name="form" (submit)="getBooks()" #searchForm="ngForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" name="title" [(ngModel)]="title" class="form-control text-input search-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="author">Author</label>
+                    <input type="text" name="author" [(ngModel)]="author" class="form-control text-input search-input">
+                </div>
+
+                <div class="form-group">
+                    <label for="publisher">Publisher</label>
+                    <input type="text" name="publisher" [(ngModel)]="publisher"
+                        class="form-control text-input search-input">
+                </div>
+            </div>
+
+            <div class="year-group year-row">
+                <label for="yearOfPrint">Year of print</label>
+                <div class="input-group">
+                    <div class="year-group">
+                        <label for="startYear">From:</label>
+                        <input appNumericOnly type="text" name="startYear" [(ngModel)]="startYear"
+                            class="form-control text-input search-input">
+                    </div>
+                    <div class="year-group">
+                        <label for="endYear">To:</label>
+                        <input appNumericOnly type="text" name="endYear" [(ngModel)]="endYear"
+                            class="form-control text-input search-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="genres">Genres:</label>
+                    <form name="genres">
+                        <ng-container *ngFor="let selectedGenre of selectedGenres">
+                            <input type="checkbox" name="myCheckbox" [(ngModel)]="selectedGenre.value"
+                                class="form-check-input me-2">{{ selectedGenre.label }}
+                            <br>
+                        </ng-container>
+                    </form>
+                </div>
+
+                <div class="form-group">
+                    <label for="affiliates">Affiliates:</label>
+                    <form name="affiliates">
+                        <ng-container *ngFor="let selectedAffiliate of selectedAffiliates">
+                            <input type="checkbox" name="myCheckbox" [(ngModel)]="selectedAffiliate.value"
+                                class="form-check-input me-2">{{ selectedAffiliate.label }}
+                            <br>
+                        </ng-container>
+                    </form>
+                </div>
+            </div>
+
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="sortBy">Sort by</label>
+                    <select name="sortBy" [(ngModel)]="sortType" class="text-input form-select search-select">
+                        <option value=""></option>
+                        <option value="title">Title</option>
+                        <option value="author">Author</option>
+                        <option value="genre">Genre</option>
+                        <option value="publisher">Publisher</option>
+                        <option value="year">Year of print</option>
+                        <option value="currentQuantity">Current quantity</option>
+                        <option value="generalQuantity">General quantity</option>
+                        <option value="date">Date added</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="sortDirection">Sort direction</label>
+                    <select name="sortDirection" [(ngModel)]="sortDirection"
+                        class="text-input form-select search-select">
+                        <option value=""></option>
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn button table-search-button search-button">Search</button>
+            </div>
         </form>
 
-        <label for="affiliates">Affiliates</label>
-        <form name="affiliates">
-            <ng-container *ngFor="let selectedAffiliate of selectedAffiliates">
-                <input type="checkbox" name="myCheckbox" [(ngModel)]="selectedAffiliate.value">{{
-                selectedAffiliate.label }}
-            </ng-container>
-        </form>
+        <div class="divider">
+            <hr class="my-3">
+        </div>
 
-        <label for="sortBy">Sort by</label>
-        <select name="sortBy" [(ngModel)]="sortType">
-            <option value=""></option>
-            <option value="title">Title</option>
-            <option value="author">Author</option>
-            <option value="genre">Genre</option>
-            <option value="publisher">Publisher</option>
-            <option value="year">Year of print</option>
-            <option value="currentQuantity">Current quantity</option>
-            <option value="generalQuantity">General quantity</option>
-            <option value="date">Date added</option>
-        </select>
+        <table class="table table-hover common-table">
+            <thead>
+                <tr>
+                    <th class="table-column">Title</th>
+                    <th class="table-column">Authors</th>
+                    <th class="table-column">Genres</th>
+                    <th class="table-column">Affiliates and quantity</th>
+                    <th class="table-column">Publisher</th>
+                    <th class="table-column">Year of print</th>
+                    <th class="table-column">Date added</th>
+                    <th class="table-column"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let book of books">
+                    <td class="table-cell">{{ book.title }}</td>
+                    <td class="table-cell">
+                        <div *ngFor="let author of book.authors">
+                            {{ author.name }}
+                        </div>
+                    </td>
+                    <td class="table-cell">
+                        <div *ngFor="let genre of book.genres">
+                            {{ genre.name }}
+                        </div>
+                    </td>
+                    <td class="table-cell">
+                        <div *ngFor="let affiliate of book.affiliates">
+                            {{ affiliate.name }} {{ commonBookMethodsService.getAffiliateBookQuantity(book,
+                            affiliate.id) }}
+                        </div>
+                    </td>
+                    <td class="table-cell">{{ book.publisherEntity.name }}</td>
+                    <td class="table-cell">{{ book.yearOfPrintEntity.yearOfPrint }}</td>
+                    <td class="table-cell">{{ book.addDate.split('T')[0] }}</td>
+                    <td class="table-cell">
+                        <a class="nav-item">
+                            <li class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                data-bs-toggle="dropdown">
+                                {{ 'common.options' | translate }}
+                            </li>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <button class="dropdown-item" (click)="redirectToBookDetails(book.id)">Details</button>
 
-        <label for="sortDirection">Sort direction</label>
-        <select name="sortDirection" [(ngModel)]="sortDirection">
-            <option value=""></option>
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
-        </select>
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-        <button type="submit">Search</button>
+        <p *ngIf="noResultsFound" class="item-not-found-label text-danger">No results found</p>
+
     </div>
-</form>
-
-<table>
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Authors</th>
-            <th>Genres</th>
-            <th>Affiliates and quantity</th>
-            <th>Publisher</th>
-            <th>Year of print</th>
-            <th>Date added</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let book of books">
-            <td>
-                {{ book.title }}
-            </td>
-            <td>
-                <ul>
-                    <li *ngFor="let author of book.authors">
-                        {{ author.name }}
-                    </li>
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    <li *ngFor="let genre of book.genres">
-                        {{ genre.name }}
-                    </li>
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    <li *ngFor="let affiliate of book.affiliates">
-                        {{ affiliate.name }} {{ commonBookMethodsService.getAffiliateBookQuantity(book, affiliate.id) }}
-                    </li>
-                </ul>
-            </td>
-            <td>
-                {{ book.publisherEntity.name }}
-            </td>
-            <td>
-                {{ book.yearOfPrintEntity.yearOfPrint }}
-            </td>
-            <td>
-                {{ book.addDate.split('T')[0] }}
-            </td>
-            <td>
-                <button (click)="redirectToBookDetails(book.id)">Details</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-<p *ngIf="noResultsFound">No results found</p>
+</div>
