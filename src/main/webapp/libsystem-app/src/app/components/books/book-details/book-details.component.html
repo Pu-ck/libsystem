@@ -39,7 +39,7 @@
                     <p><strong>{{ 'books.genres' | translate }}:</strong></p>
                     <ul>
                         <li *ngFor="let genre of bookDetails.genres">
-                            {{genre.name}}
+                            {{ this.translation.translateGenre(genre.name) }}
                         </li>
                     </ul>
                 </div>

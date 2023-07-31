@@ -5,6 +5,7 @@ import { CommonBookMethodsService } from 'src/app/services/book/common-book-meth
 import { UserEnabledService } from 'src/app/services/user/user-enabled.service';
 import { BookDetails } from 'src/app/models/books/book-details';
 import { Observer } from 'rxjs';
+import { TranslationService } from 'src/app/services/translation/translation.service';
 
 @Component({
   selector: 'app-book-details',
@@ -24,6 +25,7 @@ export class BookDetailsComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private userEnabledService: UserEnabledService,
+    public translation: TranslationService,
     public commonBookMethodsService: CommonBookMethodsService
   ) { }
 

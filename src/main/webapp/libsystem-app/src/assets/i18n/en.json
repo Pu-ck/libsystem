@@ -13,6 +13,7 @@
         "cardNumber": "Card number",
         "cardNumberRequired": "Card number is required",
         "cardNumberTooShort": "Invalid card number length",
+        "invalidCardNumber": "Invalid card number",
         "peselNumber": "PESEL number",
         "peselNumberRequired": "PESEL number is required",
         "peselNumberTooShort": "Invalid PESEL number length",
@@ -55,7 +56,8 @@
         "backToLogin": "Back to login page",
         "backToCardNumbers": "Back to card numbers list",
         "backToUsers": "Back to users list",
-        "backToBooks": "Back to books list"
+        "backToBooks": "Back to books list",
+        "backToCatalogue": "Back to catalogue"
     },
     "home": {
         "recentlyAddedBooks": "Recently added books"
@@ -78,7 +80,6 @@
         "logOut": "Log out"
     },
     "userDetails": {
-        "userDetails": "User details",
         "borrowedBooks": "Borrowed books",
         "orderedBooks": "Ordered books"
     },
@@ -93,9 +94,17 @@
         "newPasswordSet": "New password set"
     },
     "genres": {
-        "Genre 1": "Genre 1",
-        "Genre 2": "Genre 2",
-        "Genre 3": "Genre 3"
+        "Historical": "Historical",
+        "Poem": "Poem",
+        "Scientific": "Scientific",
+        "Thriller": "Thriller",
+        "Children": "Children",
+        "Fantasy": "Fantasy",
+        "Science-fiction": "Science-fiction",
+        "Horror": "Horror",
+        "Comic": "Comic",
+        "Drama": "Drama",
+        "Romance": "Romance"
     },
     "books": {
         "yourBooks": "Your books",
@@ -131,7 +140,9 @@
         "extendBook": "Extend book",
         "returnBook": "Return book",
         "genres": "Genres",
+        "genre": "Genre",
         "authors": "Authors",
+        "author": "Author",
         "quantity": "Quantity",
         "affiliates": "Affiliates",
         "synopsis": "Synopsis",
@@ -139,7 +150,14 @@
         "addToFavourites": "Add to favourites",
         "removeFromFavourties": "Remove from favourties",
         "address": "Address",
-        "phoneNumber": "Phone number"
+        "phoneNumber": "Phone number",
+        "affiliatesAndQuantity": "Affiliates and quantity",
+        "publisher": "Publisher",
+        "yearOfPrint": "Year of print",
+        "addDate": "Add date",
+        "details": "Details",
+        "currentQuantity": "Current quantity",
+        "generalQuantity": "General quantity"
     },
     "statuses": {
         "Ready": "Ready",
@@ -150,7 +168,13 @@
     },
     "search": {
         "searchWith": "Search with",
-        "search": "Search"
+        "search": "Search",
+        "sortBy": "Sort by",
+        "sortDirection": "Sort direction",
+        "from": "From",
+        "to": "To",
+        "ascending": "Ascending",
+        "descending": "Descending"
     },
     "cardNumbers": {
         "cardNumbers": "Card numbers",
@@ -205,5 +229,14 @@
         "days": "Days",
         "daysRequired": "Days are required",
         "extensionSuccess": "Successfuly extended the book with ID"
+    },
+    "borrowBook": {
+        "chooseAffiliate": "Choose affiliate",
+        "chooseQuantity": "Choose quantity",
+        "bookOutOfStock": "Book is out of stock",
+        "ordersLimitReached": "Orders limit reached",
+        "borrowed1": "You have successfully placed your order - wait for an administrator to accept it.",
+        "borrowed2": "You will be informed about your order status via email.",
+        "borrowed3": "You can also check the status of your books in your books list, at the user profile panel."
     }
 }

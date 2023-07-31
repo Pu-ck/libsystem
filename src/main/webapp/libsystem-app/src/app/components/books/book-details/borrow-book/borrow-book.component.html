@@ -1,12 +1,12 @@
 <div class="borrow-book-form">
     <div class="borrow-book-form-box">
 
-        <h1>Borrow book {{ title.length > 7 ? (title | slice:0:7) + '...' : title }}</h1>
+        <h1>{{ 'books.borrowBook' | translate }} "{{ title }}"</h1>
 
         <form name="form" (ngSubmit)="borrow()" #borrowForm="ngForm">
 
             <div class="form-group">
-                <label for="affiliates">Choose affiliate</label>
+                <label for="affiliates">{{ 'borrowBook.chooseAffiliate' | translate }}</label>
                 <select name="affiliates" [(ngModel)]="model.affiliate" required
                     (change)="specifyQuantityForChosenAffiliate()" class="form-select search-select">
                     <ng-container *ngFor="let affiliateOptionForBook of affiliateOptionsForBook">
@@ -16,27 +16,27 @@
             </div>
 
             <div class="form-group">
-                <label for="quantity">Choose quantity</label>
+                <label for="quantity">{{ 'borrowBook.chooseQuantity' | translate }}</label>
                 <select [disabled]="!model.affiliate" name="quantity" [(ngModel)]="model.quantity" required class="form-select search-select">
                     <option *ngFor="let i of setQuantityRange(1, maxQuantity, 1)" [value]="i">{{ i }}</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label for="cardNumber">Card number</label>
+                <label for="cardNumber">{{ 'credentials.cardNumber' | translate }}</label>
                 <input appNumericOnly type="text" name="cardNumber" [(ngModel)]="model.cardNumber" #cardNumber="ngModel"
                     required minlength="10" maxlength="10" pattern="^[0-9]+$" class="form-control text-input">
                 <div *ngIf="cardNumber?.invalid && (cardNumber?.dirty || cardNumber?.touched)">
-                    <div *ngIf="cardNumber?.errors?.['required']" class="text-danger">Card number is required</div>
-                    <div *ngIf="cardNumber?.errors?.['minlength']" class="text-danger">Invalid card number length</div>
+                    <div *ngIf="cardNumber?.errors?.['required']" class="text-danger">{{ 'credentials.cardNumberRequired' | translate }}</div>
+                    <div *ngIf="cardNumber?.errors?.['minlength']" class="text-danger">{{ 'credentials.cardNumberTooShort' | translate }}</div>
                 </div>
             </div>
 
             <div class="form-group">
-                <button class="btn button" type="submit" [disabled]="!borrowForm.valid">Borrow</button>
-                <div *ngIf="bookOutOfStock" class="text-danger">Book is out of stock</div>
-                <div *ngIf="invalidCardNumber" class="text-danger">Invalid card number</div>
-                <div *ngIf="tooManyBooks" class="text-danger">Orders limit reached</div>
+                <button class="btn button" type="submit" [disabled]="!borrowForm.valid">{{ 'books.borrowBook' | translate }}</button>
+                <div *ngIf="bookOutOfStock" class="text-danger">{{ 'borrowBook.bookOutOfStock' | translate }}</div>
+                <div *ngIf="invalidCardNumber" class="text-danger">{{ 'credentials.invalidCardNumber' | translate }}</div>
+                <div *ngIf="tooManyBooks" class="text-danger">{{ 'borrowBook.ordersLimitReached' | translate }}</div>
             </div>
 
             <div class="divider">
@@ -45,8 +45,7 @@
 
             <div class="redirect-buttons">
                 <div class="form-group">
-                    <button class="btn button" (click)="commonRedirectsService.redirectToBookCatalogue()">Back to book
-                        catalogue</button>
+                    <button class="btn button" (click)="commonRedirectsService.redirectToBookCatalogue()">{{ 'redirects.backToCatalogue' | translate }}</button>
                 </div>
             </div>
 

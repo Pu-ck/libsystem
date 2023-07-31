@@ -1,16 +1,14 @@
 <div class="success-panel-form">
     <div class="success-panel-form-box">
         <div class="message-container text-success">
-            <p *ngIf="borrowedBookValidated">You have successfully placed your order - wait for an administrator to
-                accept it.
-            <p>You will be informed about your order status via email.</p>
-            <p>You can also check the status of your books in your books list, at the user profile panel.</p>
+            <p *ngIf="borrowedBookValidated">{{ 'borrowBook.borrowed1' | translate }}
+            <p>{{ 'borrowBook.borrowed2' | translate }}</p>
+            <p>{{ 'borrowBook.borrowed3' | translate }}</p>
         </div>
 
         <div class="form-group">
             <button class="btn button" *ngIf="borrowedBookValidated"
-                (click)="commonRedirectsService.redirectToBookCatalogue()">Back to book
-                catalogue</button>
+                (click)="commonRedirectsService.redirectToBookCatalogue()">{{ 'redirects.backToCatalogue' | translate }}</button>
         </div>
     </div>
 </div>

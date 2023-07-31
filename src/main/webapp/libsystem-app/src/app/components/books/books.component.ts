@@ -9,6 +9,9 @@ import { Book } from 'src/app/models/books/book';
 import { Genre } from 'src/app/models/common-book-properties/genre';
 import { Affiliate } from 'src/app/models/common-book-properties/affiliate';
 import { Observer } from 'rxjs';
+import { CommonConstants } from 'src/app/utils/common-constants';
+import { PaginationService } from 'src/app/services/pagination/pagination.service';
+import { TranslationService } from 'src/app/services/translation/translation.service';
 
 @Component({
   selector: 'app-books',
@@ -16,6 +19,9 @@ import { Observer } from 'rxjs';
   styleUrls: ['./books.component.css']
 })
 export class BooksComponent implements OnInit {
+
+  public currentPage: number = CommonConstants.DEFAULT_PAGE_NUMBER;
+  public itemsPerPage: number = CommonConstants.ITEMS_PER_PAGE;
 
   public noResultsFound: boolean = false;
   public title: string = '';
@@ -41,7 +47,9 @@ export class BooksComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private userEnabledService: UserEnabledService,
-    public commonBookMethodsService: CommonBookMethodsService
+    public translation: TranslationService,
+    public commonBookMethodsService: CommonBookMethodsService,
+    public pagination: PaginationService
   ) { }
 
   ngOnInit(): void {
@@ -81,6 +89,14 @@ export class BooksComponent implements OnInit {
         let queryParams: { [key: string]: string } = {};
         this.setQueryParams(queryParams);
         this.router.navigate(['/books'], { queryParams });
+        this.currentPage = this.books.length === 1 ? CommonConstants.DEFAULT_PAGE_NUMBER : this.currentPage;
+
+        for (let book of this.books) {
+          for (let genre of book.genres) {
+            genre.name = this.translation.translateGenre(genre.name);
+          }
+        }
+
       },
       error: (error) => {
         this.userEnabledService.validateIfUserIsEnabled(error);
@@ -144,6 +160,10 @@ export class BooksComponent implements OnInit {
     this.http.get<any>(url, {}).subscribe(observer);
     console.log(this.isFavourite);
     return this.isFavourite;
+  }
+
+  public onPageChange(page: number): void {
+    this.currentPage = page;
   }
 
   private setQueryParams(queryParams: { [key: string]: string }): void {

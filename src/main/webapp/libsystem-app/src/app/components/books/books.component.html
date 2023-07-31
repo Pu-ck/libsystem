@@ -1,7 +1,7 @@
 <div class="books-form">
     <div class="books-form-box">
 
-        <h1>Book catalogue</h1>
+        <h1>{{ 'navigationMenu.bookCatalogue' | translate }}</h1>
 
         <div class="divider">
             <hr class="my-3">
@@ -10,52 +10,52 @@
         <form name="form" (submit)="getBooks()" #searchForm="ngForm">
             <div class="form-row">
                 <div class="form-group">
-                    <label for="title">Title</label>
+                    <label for="title">{{ 'books.title' | translate }}</label>
                     <input type="text" name="title" [(ngModel)]="title" class="form-control text-input search-input">
                 </div>
 
                 <div class="form-group">
-                    <label for="author">Author</label>
+                    <label for="author">{{ 'books.author' | translate }}</label>
                     <input type="text" name="author" [(ngModel)]="author" class="form-control text-input search-input">
                 </div>
 
                 <div class="form-group">
-                    <label for="publisher">Publisher</label>
+                    <label for="publisher">{{ 'books.publisher' | translate }}</label>
                     <input type="text" name="publisher" [(ngModel)]="publisher"
                         class="form-control text-input search-input">
                 </div>
             </div>
 
             <div class="year-group year-row">
-                <label for="yearOfPrint">Year of print</label>
+                <label for="yearOfPrint">{{ 'books.yearOfPrint' | translate }}</label>
                 <div class="input-group">
                     <div class="year-group">
-                        <label for="startYear">From:</label>
+                        <label for="startYear">{{ 'search.from' | translate }}:</label>
                         <input appNumericOnly type="text" name="startYear" [(ngModel)]="startYear"
                             class="form-control text-input search-input">
                     </div>
                     <div class="year-group">
-                        <label for="endYear">To:</label>
+                        <label for="endYear">{{ 'search.to' | translate }}:</label>
                         <input appNumericOnly type="text" name="endYear" [(ngModel)]="endYear"
                             class="form-control text-input search-input">
                     </div>
                 </div>
             </div>
-
-            <div class="form-container">
-                <div class="form-group">
-                    <label for="genres">Genres:</label>
+            
+            <div class="checkbox-container">
+                <div class="checkbox-group">
+                    <label for="genres">{{ 'books.genres' | translate }}:</label>
                     <form name="genres">
                         <ng-container *ngFor="let selectedGenre of selectedGenres">
                             <input type="checkbox" name="myCheckbox" [(ngModel)]="selectedGenre.value"
-                                class="form-check-input me-2">{{ selectedGenre.label }}
+                                class="form-check-input me-2">{{ this.translation.translateGenre(selectedGenre.label) }}
                             <br>
                         </ng-container>
                     </form>
                 </div>
 
-                <div class="form-group">
-                    <label for="affiliates">Affiliates:</label>
+                <div class="checkbox-group">
+                    <label for="affiliates">{{ 'books.affiliates' | translate }}:</label>
                     <form name="affiliates">
                         <ng-container *ngFor="let selectedAffiliate of selectedAffiliates">
                             <input type="checkbox" name="myCheckbox" [(ngModel)]="selectedAffiliate.value"
@@ -66,33 +66,35 @@
                 </div>
             </div>
 
+
             <div class="form-container">
                 <div class="form-group">
-                    <label for="sortBy">Sort by</label>
+                    <label for="sortBy">{{ 'search.sortBy' | translate }}</label>
                     <select name="sortBy" [(ngModel)]="sortType" class="text-input form-select search-select">
                         <option value=""></option>
-                        <option value="title">Title</option>
-                        <option value="author">Author</option>
-                        <option value="genre">Genre</option>
-                        <option value="publisher">Publisher</option>
-                        <option value="year">Year of print</option>
-                        <option value="currentQuantity">Current quantity</option>
-                        <option value="generalQuantity">General quantity</option>
-                        <option value="date">Date added</option>
+                        <option value="title">{{ 'books.title' | translate }}</option>
+                        <option value="author">{{ 'books.author' | translate }}</option>
+                        <option value="genre">{{ 'books.genre' | translate }}</option>
+                        <option value="publisher">{{ 'books.publisher' | translate }}</option>
+                        <option value="year">{{ 'books.yearOfPrint' | translate }}</option>
+                        <option value="currentQuantity">{{ 'books.currentQuantity' | translate }}</option>
+                        <option value="generalQuantity">{{ 'books.generalQuantity' | translate }}</option>
+                        <option value="date">{{ 'books.addDate' | translate }}</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="sortDirection">Sort direction</label>
+                    <label for="sortDirection">{{ 'search.sortDirection' | translate }}</label>
                     <select name="sortDirection" [(ngModel)]="sortDirection"
                         class="text-input form-select search-select">
                         <option value=""></option>
-                        <option value="asc">Ascending</option>
-                        <option value="desc">Descending</option>
+                        <option value="asc">{{ 'search.ascending' | translate }}</option>
+                        <option value="desc">{{ 'search.descending' | translate }}</option>
                     </select>
                 </div>
 
-                <button type="submit" class="btn button table-search-button search-button">Search</button>
+                <button type="submit" class="btn button table-search-button search-button">{{ 'search.search' | translate }}</button>
+
             </div>
         </form>
 
@@ -100,21 +102,38 @@
             <hr class="my-3">
         </div>
 
+        <div class="pagination-container">
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item">
+                        <button [disabled]="currentPage === 1 || noResultsFound" class="btn button pagination-button"
+                            (click)="onPageChange(currentPage - 1)">←</button>
+                    </li>
+                    <li class="page-item">
+                        <button
+                            [disabled]="currentPage === pagination.getTotalPages(books, itemsPerPage) || noResultsFound"
+                            class="btn button pagination-button" (click)="onPageChange(currentPage + 1)">→</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
         <table class="table table-hover common-table">
             <thead>
                 <tr>
-                    <th class="table-column">Title</th>
-                    <th class="table-column">Authors</th>
-                    <th class="table-column">Genres</th>
-                    <th class="table-column">Affiliates and quantity</th>
-                    <th class="table-column">Publisher</th>
-                    <th class="table-column">Year of print</th>
-                    <th class="table-column">Date added</th>
+                    <th class="table-column">{{ 'books.title' | translate }}</th>
+                    <th class="table-column">{{ 'books.authors' | translate }}</th>
+                    <th class="table-column">{{ 'books.genres' | translate }}</th>
+                    <th class="table-column">{{ 'books.affiliatesAndQuantity' | translate }}</th>
+                    <th class="table-column">{{ 'books.publisher' | translate }}</th>
+                    <th class="table-column">{{ 'books.yearOfPrint' | translate }}</th>
+                    <th class="table-column">{{ 'books.addDate' | translate }}</th>
                     <th class="table-column"></th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let book of books">
+                <tr
+                    *ngFor="let book of books.slice(pagination.getFirstItemIndex(currentPage, itemsPerPage), pagination.getLastItemIndex(currentPage, itemsPerPage, books) + 1)">
                     <td class="table-cell">{{ book.title }}</td>
                     <td class="table-cell">
                         <div *ngFor="let author of book.authors">
@@ -143,7 +162,7 @@
                                 {{ 'common.options' | translate }}
                             </li>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <button class="dropdown-item" (click)="redirectToBookDetails(book.id)">Details</button>
+                                <button class="dropdown-item" (click)="redirectToBookDetails(book.id)">{{ 'books.details' | translate }}</button>
 
                             </div>
                         </a>
@@ -152,7 +171,7 @@
             </tbody>
         </table>
 
-        <p *ngIf="noResultsFound" class="item-not-found-label text-danger">No results found</p>
+        <p *ngIf="noResultsFound" class="item-not-found-label text-danger">{{ 'books.noBooksFound' | translate }}</p>
 
     </div>
 </div>

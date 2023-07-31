@@ -13,6 +13,7 @@
         "cardNumber": "Numer karty",
         "cardNumberRequired": "Numer karty jest wymagany",
         "cardNumberTooShort": "Numer karty jest za krótki",
+        "invalidCardNumber": "Nieprawidłowy numer karty",
         "peselNumber": "Numer PESEL",
         "peselNumberRequired": "Numer PESEL jest wymagany",
         "peselNumberTooShort": "Numer PESEL jest za krótki",
@@ -55,7 +56,8 @@
         "backToLogin": "Powrót to logowania",
         "backToCardNumbers": "Powrót do numerów kart",
         "backToUsers": "Powrót do użytkowników",
-        "backToBooks": "Powrót do książek"
+        "backToBooks": "Powrót do książek",
+        "backToCatalogue": "Powrót do katalogu"
     },
     "home": {
         "recentlyAddedBooks": "Ostatnio dodane książki"
@@ -88,14 +90,22 @@
     },
     "changePassword": {
         "setNewPassword": "Ustaw nowe hasło",
-        "newPasswordSameAsOld": "Nowe hasło musi być nowe",
+        "newPasswordSameAsOld": "Hasło musi być nowe",
         "oldPasswordNotCorrect": "Stare hasło jest niepoprawne",
         "newPasswordSet": "Nowe hasło ustawione"
     },
     "genres": {
-        "Genre 1": "Genre 1 pl",
-        "Genre 2": "Genre 2 pl",
-        "Genre 3": "Genre 3 pl"
+        "Historical": "Historyczne",
+        "Poem": "Poemat",
+        "Scientific": "Naukowe",
+        "Thriller": "Kryminał",
+        "Children": "Dla dzieci",
+        "Fantasy": "Fantasy",
+        "Science-fiction": "Science-fiction",
+        "Horror": "Horror",
+        "Comic": "Komiks",
+        "Drama": "Dramat",
+        "Romance": "Romans"
     },
     "books": {
         "yourBooks": "Twoje książki",
@@ -131,7 +141,9 @@
         "extendBook": "Przedłuż książkę",
         "returnBook": "Oddaj książkę",
         "genres": "Gatunki",
+        "genre": "Gatunek",
         "authors": "Autorzy",
+        "author": "Autor",
         "quantity": "Ilość",
         "affiliates": "Filie",
         "synopsis": "Streszczenie",
@@ -139,7 +151,14 @@
         "addToFavourites": "Dodaj do ulubionych",
         "removeFromFavourties": "Usuń z ulubionych",
         "address": "Adres",
-        "phoneNumber": "Numer telefonu"
+        "phoneNumber": "Numer telefonu",
+        "affiliatesAndQuantity": "Filie i ilość",
+        "publisher": "Wydawca",
+        "yearOfPrint": "Rok wydania",
+        "addDate": "Data dodania",
+        "details": "Detale",
+        "currentQuantity": "Aktualna ilość",
+        "generalQuantity": "Ogólna ilość"
     },
     "statuses": {
         "Ready": "Gotowe",
@@ -150,7 +169,13 @@
     },
     "search": {
         "searchWith": "Szukaj za pomocą",
-        "search": "Szukaj"
+        "search": "Szukaj",
+        "sortBy": "Sortuj po",
+        "sortDirection": "Kierunek sortowania",
+        "from": "Od",
+        "to": "Do",
+        "ascending": "Rosnąco",
+        "descending": "Malejąco"
     },
     "cardNumbers": {
         "cardNumbers": "Numery kart",
@@ -205,5 +230,14 @@
         "days": "Dni",
         "daysRequired": "Dni są wymagane",
         "extensionSuccess": "Pomyślnie przedłużono książkę o ID"
+    },
+    "borrowBook": {
+        "chooseAffiliate": "Wybierz filię",
+        "chooseQuantity": "Wybierz ilość",
+        "bookOutOfStock": "Brak książek na stanie",
+        "ordersLimitReached": "Przekroczono limit zamówień",
+        "borrowed1": "Pomyślnie złożono zamówienie na książkę - poczekaj na akceptację po stronie administratora.",
+        "borrowed2": "O statusie zamówienia zostaniesz poinformowany drogą mailową.",
+        "borrowed3": "Status zamówienia możesz również sprawdzić na liście książek, pod profilem użytkownika."
     }
 }

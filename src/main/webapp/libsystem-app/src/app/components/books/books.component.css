@@ -31,8 +31,21 @@ h1 {
 
 .form-group {
     flex: 1;
+    margin-right: 20px;
+    margin-bottom: -5px;
+}
+
+.checkbox-group {
+    flex: 1;
     margin-right: 10px;
     margin-bottom: -5px;
+}
+
+.checkbox-container {
+    display: flex;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-right: 910px;
 }
 
 .form-group:last-child {
@@ -109,4 +122,8 @@ h1 {
 .dropdown-menu .dropdown-item:hover {
     background-color: lightblue;
     color: white;
+}
+
+.pagination-container {
+    margin-left: 1200px;
 }
