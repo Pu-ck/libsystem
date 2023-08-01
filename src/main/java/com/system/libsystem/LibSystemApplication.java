@@ -18,6 +18,7 @@ public class LibSystemApplication implements WebMvcConfigurer {
 
     private static final String[] EXCLUDED_INTERCEPTOR_PATHS = {"/api/login",
             "/api/password-reminder/**", "/api/registration/**", "/api/logout", "/api/registered/**"};
+
     private final UserService userService;
 
     public static void main(String[] args) {

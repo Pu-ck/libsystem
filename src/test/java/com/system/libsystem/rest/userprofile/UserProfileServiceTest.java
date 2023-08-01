@@ -4,7 +4,7 @@ import com.system.libsystem.entities.affiliate.AffiliateEntity;
 import com.system.libsystem.entities.affiliatebook.AffiliateBook;
 import com.system.libsystem.entities.author.AuthorEntity;
 import com.system.libsystem.entities.book.BookEntity;
-import com.system.libsystem.entities.book.BookService;
+import com.system.libsystem.entities.book.BookServiceImpl;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookEntity;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookRepository;
 import com.system.libsystem.entities.borrowedbook.BorrowedBookService;
@@ -12,7 +12,7 @@ import com.system.libsystem.entities.genre.GenreEntity;
 import com.system.libsystem.entities.publisher.PublisherEntity;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
-import com.system.libsystem.entities.user.UserService;
+import com.system.libsystem.entities.user.UserServiceImpl;
 import com.system.libsystem.entities.yearofprint.YearOfPrintEntity;
 import com.system.libsystem.helpermodels.UserBook;
 import com.system.libsystem.mail.MailSender;
@@ -49,11 +49,11 @@ class UserProfileServiceTest {
     @Mock
     SessionRegistry sessionRegistry;
     @Mock
-    UserService userService;
+    UserServiceImpl userService;
     @Mock
     BorrowedBookRepository borrowedBookRepository;
     @Mock
-    BookService bookService;
+    BookServiceImpl bookService;
     @Mock
     BCryptPasswordEncoder bCryptPasswordEncoder;
     @Mock
@@ -64,7 +64,7 @@ class UserProfileServiceTest {
     BorrowedBookService borrowedBookService;
 
     @InjectMocks
-    UserProfileService userProfileService;
+    UserProfileServiceImpl userProfileService;
 
     @BeforeEach
     void commonSetupForTests() {

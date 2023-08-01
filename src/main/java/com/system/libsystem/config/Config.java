@@ -1,6 +1,6 @@
 package com.system.libsystem.config;
 
-import com.system.libsystem.entities.user.UserService;
+import com.system.libsystem.entities.user.UserServiceImpl;
 import com.system.libsystem.session.SessionFilter;
 import com.system.libsystem.util.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class Config {
 
     @Autowired
     @Lazy
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
     @Autowired
     @Lazy
     private SessionFilter sessionFilter;

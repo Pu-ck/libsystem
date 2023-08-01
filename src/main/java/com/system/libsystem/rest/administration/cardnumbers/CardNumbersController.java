@@ -13,23 +13,23 @@ import java.util.List;
 @RequestMapping("/api/administration/card-numbers")
 public class CardNumbersController {
 
-    private final CardNumbersService cardNumbersService;
+    private final CardNumbersServiceImpl cardNumbersServiceImpl;
 
     @GetMapping
     public List<CardNumberDTO> getCardNumbers() {
-        return cardNumbersService.getCardNumbers();
+        return cardNumbersServiceImpl.getCardNumbers();
     }
 
     @GetMapping
     @RequestMapping(params = "cardNumberId")
     public List<CardNumberDTO> getCardNumberById(@RequestParam(required = false) Long cardNumberId) {
-        return cardNumbersService.getCardNumberById(cardNumberId);
+        return cardNumbersServiceImpl.getCardNumberById(cardNumberId);
     }
 
     @GetMapping
     @RequestMapping(params = "cardNumber")
     public List<CardNumberDTO> getCardNumberByCardNumber(@RequestParam(required = false) Long cardNumber) {
-        return cardNumbersService.getCardNumberByCardNumber(cardNumber);
+        return cardNumbersServiceImpl.getCardNumberByCardNumber(cardNumber);
     }
 
 }

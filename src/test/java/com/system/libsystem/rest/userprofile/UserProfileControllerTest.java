@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserProfileControllerTest {
 
     @Mock
-    private UserProfileService userProfileService;
+    private UserProfileServiceImpl userProfileService;
 
     @InjectMocks
     private UserProfileController userProfileController;

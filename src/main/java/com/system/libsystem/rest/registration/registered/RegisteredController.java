@@ -16,7 +16,7 @@ public class RegisteredController {
 
     @GetMapping()
     public ResponseEntity<Void> validateRegistrationToken(@RequestParam("token") String token,
-                                                       @RequestParam("username") String username) {
+                                                          @RequestParam("username") String username) {
         return registeredService.validateRegistrationToken(token, username);
     }
 

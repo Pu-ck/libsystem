@@ -116,14 +116,10 @@ export class BooksComponent implements OnInit {
 
   public updateGenres(): void {
     let genres = [];
-    if (this.selectedGenres[0].value) {
-      genres.push(this.selectedGenres[0].label);
-    }
-    if (this.selectedGenres[1].value) {
-      genres.push(this.selectedGenres[1].label);
-    }
-    if (this.selectedGenres[2].value) {
-      genres.push(this.selectedGenres[2].label);
+    for (let selectedGenre of this.selectedGenres) {
+      if (selectedGenre.value) {
+        genres.push(selectedGenre.label);
+      }
     }
     this.genres = genres;
   }

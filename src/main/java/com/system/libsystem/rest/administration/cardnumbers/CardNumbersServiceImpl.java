@@ -13,15 +13,17 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CardNumbersService {
+public class CardNumbersServiceImpl implements CardNumberService {
 
     private final CardNumberRepository cardNumberRepository;
     private final UserRepository userRepository;
 
+    @Override
     public List<CardNumberDTO> getCardNumbers() {
         return getCardNumberDTOs();
     }
 
+    @Override
     public List<CardNumberDTO> getCardNumberById(Long cardNumberId) {
         if (cardNumberId == null) {
             return getCardNumbers();
@@ -29,6 +31,7 @@ public class CardNumbersService {
         return getCardNumberDTOById(cardNumberId);
     }
 
+    @Override
     public List<CardNumberDTO> getCardNumberByCardNumber(Long cardNumber) {
         if (cardNumber == null) {
             return getCardNumbers();

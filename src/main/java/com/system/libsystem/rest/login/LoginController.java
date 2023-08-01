@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class LoginController {
 
-    private final LoginService loginService;
+    private final LoginServiceImpl loginService;
 
     @PostMapping
     public ResponseEntity<LoginSessionResponse> login(@RequestBody LoginRequest loginRequest) {
