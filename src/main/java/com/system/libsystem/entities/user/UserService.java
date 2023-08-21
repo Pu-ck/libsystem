@@ -1,10 +1,11 @@
 package com.system.libsystem.entities.user;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     UserEntity loadUserByUsername(String username) throws UsernameNotFoundException;
 

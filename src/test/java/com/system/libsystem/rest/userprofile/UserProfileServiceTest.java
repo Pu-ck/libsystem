@@ -12,7 +12,7 @@ import com.system.libsystem.entities.genre.GenreEntity;
 import com.system.libsystem.entities.publisher.PublisherEntity;
 import com.system.libsystem.entities.user.UserEntity;
 import com.system.libsystem.entities.user.UserRepository;
-import com.system.libsystem.entities.user.UserServiceImpl;
+import com.system.libsystem.entities.user.UserService;
 import com.system.libsystem.entities.yearofprint.YearOfPrintEntity;
 import com.system.libsystem.helpermodels.UserBook;
 import com.system.libsystem.mail.MailSender;
@@ -49,7 +49,7 @@ class UserProfileServiceTest {
     @Mock
     SessionRegistry sessionRegistry;
     @Mock
-    UserServiceImpl userService;
+    UserService userService;
     @Mock
     BorrowedBookRepository borrowedBookRepository;
     @Mock
@@ -64,7 +64,7 @@ class UserProfileServiceTest {
     BorrowedBookService borrowedBookService;
 
     @InjectMocks
-    UserProfileServiceImpl userProfileService;
+    UserProfileService userProfileService;
 
     @BeforeEach
     void commonSetupForTests() {
@@ -191,8 +191,6 @@ class UserProfileServiceTest {
         borrowedBookEntity.setPenalty(BigDecimal.valueOf(0.00));
 
         final ExtendBookRequest extendBookRequest = new ExtendBookRequest(1L, 11234567890L);
-        when(borrowedBookService.getBorrowedBookById(1L)).thenReturn(borrowedBookEntity);
-
         when(borrowedBookService.getBorrowedBookById(1L)).thenReturn(borrowedBookEntity);
         userProfileService.extendBookReturnDate(extendBookRequest, getMockedHttpServletRequest());
 
